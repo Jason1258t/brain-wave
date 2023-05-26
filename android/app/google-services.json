@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "524180079517",
+    "project_id": "brain-wave-e0b54",
+    "storage_bucket": "brain-wave-e0b54.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524180079517:android:082a291d801bd48afce574",
+        "android_client_info": {
+          "package_name": "com.example.brain_wave_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB0RH8ko9jEbD-MCFP1V4dN0yqw-1UNSM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
