@@ -1,5 +1,7 @@
+import 'package:brain_wave_2/auth/ui/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 
 void main()  async {
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
-        // application has a blflutter pub add firebase_coreue toolbar. Then, without quitting the app, try
+        // application has a bl toolbar. Then, without quitting the app, try
         // changing the primarySwatch below to Colors.green and then invoke
         // "hot reload" (press "r" in the console where you ran "flutter run",
         // or simply save your changes to "hot reload" in a Flutter IDE).
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const LoginScreen(),
     );
   }
 }
