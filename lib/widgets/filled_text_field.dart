@@ -6,13 +6,17 @@ class CustomFilledTextField extends StatelessWidget {
   final double height;
   final String hintText;
   final TextEditingController controller;
+  final TextInputType keyBoardType;
+  final bool obscureText;
 
   CustomFilledTextField(
       {Key? key,
       this.width = 290,
       this.height = 50,
       required this.hintText,
-      required this.controller})
+      required this.controller,
+      this.obscureText = false,
+      this.keyBoardType = TextInputType.text})
       : super(key: key);
 
   @override
