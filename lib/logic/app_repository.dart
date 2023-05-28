@@ -8,6 +8,7 @@ enum AuthStateEnum { loading, logged, registered, fail, wait }
 
 class AppRepository {
   final FirebaseAuthService _firebaseAuthService;
+  late AuthData authData;
 
   AppRepository({required FirebaseAuthService firebaseAuthService})
       : _firebaseAuthService = firebaseAuthService;
@@ -20,7 +21,7 @@ class AppRepository {
     try {
       final SharedPreferences  prefs = await SharedPreferences.getInstance();
 
-      final userId = prefs.getInt('id');
+      final userId = prefs.getInt('uid');
       if (userId == null) {
         appState.add(AppStateEnum.unAuth);
       } else {
@@ -33,7 +34,17 @@ class AppRepository {
 
 
   Future loadSavedData() async {
-    
+    final SharedPreferences  prefs = await SharedPreferences.getInstance();
+    final uid = await prefs.getInt('uid');
+    final email = await prefs.getString('email');
+    final password = await prefs.getString('password');
+    try {
+      final user = _firebaseAuthService.sighInWithEmailAndPassword(email!, password!);
+      authData = AuthData(userId: uid!, email: email);
+    } catch (e) {
+      appState.add(AppStateEnum.unAuth);
+    }
+
   }
 
 
@@ -45,4 +56,10 @@ class AppRepository {
 }
 
 
+class AuthData {
+  final int userId;
+  final String email;
+  //final String password;
 
+  AuthData({required this.userId, required this.email});
+}
