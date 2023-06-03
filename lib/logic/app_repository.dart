@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:brain_wave_2/services/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 enum AppStateEnum { auth, unAuth, start }
 
@@ -9,80 +10,103 @@ enum AuthStateEnum { loading, logged, registered, fail, wait }
 
 class AppRepository {
   final FirebaseAuthService _firebaseAuthService;
-  late AuthData authData;
+  late User _user;
+  late StreamSubscription _userUpdateState;
 
   AppRepository({required FirebaseAuthService firebaseAuthService})
       : _firebaseAuthService = firebaseAuthService;
   BehaviorSubject<AppStateEnum> appState =
-      BehaviorSubject<AppStateEnum>.seeded(AppStateEnum.start);
+  BehaviorSubject<AppStateEnum>.seeded(AppStateEnum.start);
   BehaviorSubject<AuthStateEnum> authState =
-      BehaviorSubject<AuthStateEnum>.seeded(AuthStateEnum.wait);
+  BehaviorSubject<AuthStateEnum>.seeded(AuthStateEnum.wait);
 
   void logout() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    await _firebaseAuthService.logout();
     appState.add(AppStateEnum.unAuth);
     authState.add(AuthStateEnum.wait);
   }
 
+  User getCurrentUser() => _user;
+
+  void updateUser() async {
+    _userUpdateState =
+        _firebaseAuthService.userUpdateState.stream.listen((event) {
+          if (event != null) _user = event;
+        });
+  }
+
   void checkLogin() async {
     try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      final userId = prefs.getString('uid');
+      final user = await _firebaseAuthService.checkLoginWithFirebase();
+      final userId = user.uid;
       if (userId == null) {
+        _user = user;
         appState.add(AppStateEnum.unAuth);
       } else {
         loadSavedData().then((value) => loadSavedData());
       }
     } catch (e) {
+      appState.add(AppStateEnum.unAuth);
       rethrow;
     }
   }
 
   Future loadSavedData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final uid = prefs.getString('uid');
-    final email = prefs.getString('email');
-    final password = prefs.getString('password');
     try {
-      final user =
-          _firebaseAuthService.sighInWithEmailAndPassword(email!, password!);
-      authData = AuthData(userId: uid!.toString(), email: email);
-      appState.add(AppStateEnum.auth);
+      final user = await _firebaseAuthService.checkLoginWithFirebase();
+      if (user != null) {
+        _user = user;
+        appState.add(AppStateEnum.auth);
+      } else {
+        appState.add(AppStateEnum.unAuth);
+      }
     } catch (e) {
       appState.add(AppStateEnum.unAuth);
     }
   }
 
-  Future saveAuthData(String email, String uid, String password) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('uid', uid);
-    await prefs.setString('email', email);
-    await prefs.setString('password', password);
-  }
-
-  void firebaseLoginUserWithEmailAndPassword(
-      String email, String password) async {
+  void firebaseLoginUserWithEmailAndPassword(String email,
+      String password) async {
     authState.add(AuthStateEnum.loading);
     try {
       final User user = await _firebaseAuthService.sighInWithEmailAndPassword(
           email, password);
-      authData = AuthData(userId: user.uid, email: email);
-      saveAuthData(email, user.uid, password);
+      _user = user;
       authState.add(AuthStateEnum.logged);
       appState.add(AppStateEnum.auth);
     } catch (e) {
       rethrow;
     }
   }
-}
 
-class AuthData {
-  final String userId;
-  final String email;
+  void firebaseLoginWithGoogle() async {
+    authState.add(AuthStateEnum.loading);
+    try {
+      final User user = await _firebaseAuthService.signInWithGoogle();
+      _user = user;
+      authState.add(AuthStateEnum.logged);
+      appState.add(AppStateEnum.auth);
+    } catch (e) {
+      authState.add(AuthStateEnum.fail);
+      rethrow;
+    }
+  }
 
-  //final String password;
+  void firebaseRegisterUserWithEmailAndPassword(String email, String password,
+      String name) async {
+    authState.add(AuthStateEnum.loading);
+    try {
+      final User user = await _firebaseAuthService.registerWithEmailAndPassword(
+          email, password, name);
+      _user = user;
+      authState.add(AuthStateEnum.registered);
+      appState.add(AppStateEnum.auth);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-  AuthData({required this.userId, required this.email});
+  void completeRegistration() {
+    appState.add(AppStateEnum.auth);
+  }
 }

@@ -1,11 +1,13 @@
-import 'package:brain_wave_2/auth/bloc/auth_bloc.dart';
+import 'package:brain_wave_2/feature/auth/bloc/auth_bloc.dart';
+import 'package:brain_wave_2/feature/auth/bloc/registration_bloc/registration_bloc.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
-import 'package:brain_wave_2/widgets/elevated_button.dart';
+import 'package:brain_wave_2/widgets/buttons/elevated_button.dart';
+import 'package:brain_wave_2/widgets/buttons/google_button.dart';
 import 'package:brain_wave_2/widgets/filled_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../utils/utils.dart';
+import '../../../utils/utils.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -27,7 +29,8 @@ class LoginScreen extends StatelessWidget {
           } else if (state is AuthFailState) {
             const snackBar = SnackBar(content: Text('ошибка'));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          } else if (state is AuthSuccessState) {
+          } else if (state is AuthSuccessState ||
+              state is RegisterSuccessState) {
             const snackBar = SnackBar(content: Text('успешно'));
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           } else if (state is LoginInvalidFields) {
@@ -91,8 +94,22 @@ class LoginScreen extends StatelessWidget {
                                       password: passwordController.text));
                             },
                             text: 'Войти'),
-                        const SizedBox(height: 10,),
-                        TextButton(onPressed: () {Navigator.pushNamed(context, '/register_first');}, child: const Text('регистрация', style: TextStyle(color: Colors.white, fontSize: 14),))
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/register_first');
+                            },
+                            child: const Text(
+                              'регистрация',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            )),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        GoogleElevatedButton(callback: () {BlocProvider.of<AuthBloc>(context).add(GoogleAuthEvent());}, text: 'продолжить с Google')
                       ],
                     ),
                   ),

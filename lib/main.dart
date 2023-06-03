@@ -1,16 +1,18 @@
-import 'package:brain_wave_2/auth/bloc/auth_bloc.dart';
-import 'package:brain_wave_2/auth/ui/first_registration_screen.dart';
-import 'package:brain_wave_2/auth/ui/login.dart';
-import 'package:brain_wave_2/home/ui/main_screen.dart';
+import 'dart:developer';
+
 import 'package:brain_wave_2/logic/app_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/services/custom_bloc_observer.dart';
 import 'package:brain_wave_2/services/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'feature/auth/bloc/auth_bloc.dart';
+import 'feature/auth/bloc/registration_bloc/registration_bloc.dart';
+import 'feature/auth/ui/first_registration_screen.dart';
+import 'feature/auth/ui/login.dart';
+import 'feature/home/ui/main_screen.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -28,14 +30,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Brain Wave',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: GoogleFonts.ubuntu().fontFamily,
+        canvasColor: const Color(0xff292B57),
       ),
       routes: {
         '/register_first': (context) => const FirstRegistrationScreen(),
         '/login': (context) => const LoginScreen(),
-        '/register_second': (context) => const HomePage()
+        '/main_screen': (context) => const MainScreen(),
       },
       home: const HomePage(),
     );
@@ -71,6 +75,11 @@ class MyBlocProviders extends StatelessWidget {
           create: (_) => AppBloc(
               appRepository: RepositoryProvider.of<AppRepository>(context))
             ..add(AppSubscribeEvent())),
+      BlocProvider(
+          lazy: false,
+          create: (_) => RegistrationBloc(
+              appRepository: RepositoryProvider.of<AppRepository>(context))
+            ..add(RegisterSubscribeEvent())),
     ], child: const MyApp());
   }
 }
@@ -83,11 +92,14 @@ class HomePage extends StatelessWidget {
     return BlocConsumer<AppBloc, AppState>(
         listener: (context, state) {},
         builder: (context, state) {
+          log(state.toString());
           if (state is AppAuthState) return const MainScreen();
-          if (state is AppAuthState) {
+          if (state is AppUnAuthState) {
             return const LoginScreen();
           } else {
-            return const LoginScreen();
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
         });
   }

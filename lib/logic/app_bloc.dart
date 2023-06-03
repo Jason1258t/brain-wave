@@ -31,6 +31,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   _onAuth(AppAuthEvent event, emit) {
     emit(AppAuthState());
+    _appRepository.updateUser();
   }
 
   _onUnAuth(AppUnAuthEvent event, emit) {

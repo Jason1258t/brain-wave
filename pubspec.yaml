@@ -22,6 +22,7 @@ dependencies:
   google_fonts: ^4.0.0
   rxdart: ^0.27.7
   loading_animations: ^2.2.0
+  google_sign_in: ^6.1.2
 
 
 dev_dependencies:
@@ -34,3 +35,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - Assets/ProfileImage.png
+    - Assets/openAi.png
+

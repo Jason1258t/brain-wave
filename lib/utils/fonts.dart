@@ -18,4 +18,14 @@ abstract class AppTypography {
   static const font204F6BFF = TextStyle(color: Color(0xff4F6BFF), fontSize: 20);
 
   static const font16lightGray = TextStyle(color: Color(0xffB0B0B0));
+
+  static const font24lightBlue = TextStyle(color: Color(0xffE1D7FF), fontSize: 24);
+
+  static const font18lightBlue = TextStyle(color: Color(0xffE1D7FF), fontSize: 18);
+
+  static const font16white = TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400);
+
+  static const font20white = TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500);
+
+  static const font14milk = TextStyle(color: Color(0xffC1C1C1), fontSize: 16, fontWeight: FontWeight.w400);
 }
