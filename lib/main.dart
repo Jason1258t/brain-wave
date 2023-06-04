@@ -1,7 +1,10 @@
 import 'dart:developer';
 
+import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
+import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/logic/app_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
+import 'package:brain_wave_2/services/api_service.dart';
 import 'package:brain_wave_2/services/custom_bloc_observer.dart';
 import 'package:brain_wave_2/services/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'feature/auth/bloc/auth_bloc.dart';
 import 'feature/auth/bloc/registration_bloc/registration_bloc.dart';
-import 'feature/auth/ui/first_registration_screen.dart';
+import 'feature/auth/ui/registration.dart';
 import 'feature/auth/ui/login.dart';
 import 'feature/home/ui/main_screen.dart';
 import 'firebase_options.dart';
@@ -49,12 +52,15 @@ class MyApp extends StatelessWidget {
 class MyRepositoryProviders extends StatelessWidget {
   MyRepositoryProviders({Key? key}) : super(key: key);
   final firebaseAuth = FirebaseAuthService();
+  final apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(providers: [
       RepositoryProvider(
           create: (_) => AppRepository(firebaseAuthService: firebaseAuth)),
+      RepositoryProvider(
+          create: (_) => ProfileRepository(apiService: apiService)),
     ], child: const MyBlocProviders());
   }
 }
@@ -73,13 +79,19 @@ class MyBlocProviders extends StatelessWidget {
       BlocProvider(
           lazy: false,
           create: (_) => AppBloc(
-              appRepository: RepositoryProvider.of<AppRepository>(context))
+              appRepository: RepositoryProvider.of<AppRepository>(context),
+              profileRepository: RepositoryProvider.of<ProfileRepository>(context))
             ..add(AppSubscribeEvent())),
       BlocProvider(
           lazy: false,
           create: (_) => RegistrationBloc(
               appRepository: RepositoryProvider.of<AppRepository>(context))
             ..add(RegisterSubscribeEvent())),
+      BlocProvider(
+          lazy: false,
+          create: (_) => ProfileBloc(
+              profileRepository: RepositoryProvider.of<ProfileRepository>(context))
+            ..add(ProfileSubscribeEvent())),
     ], child: const MyApp());
   }
 }

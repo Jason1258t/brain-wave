@@ -1,3 +1,5 @@
+import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
+import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/buttons/icon_text_button.dart';
@@ -8,14 +10,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../models/post_model.dart';
 
-ModelPost _post = ModelPost(
-    name_author: 'лошара',
-    name_post: 'первый пост',
+PostModel _post = PostModel(
+    creatorName: 'лошара',
+    title: 'первый пост',
     description:
-    'Безусловно, базовый вектор развития играет определяющее значение для направлений прогрессивного развития',
-    post_image: 'Assets/openAi.png',
-    author_image: 'Assets/ProfileImage.png');
-var list = [ _post,_post,_post,_post,];
+        'Безусловно, базовый вектор развития играет определяющее значение для направлений прогрессивного развития',
+    image: 'Assets/openAi.png',
+    creatorImage: 'Assets/ProfileImage.png');
+var list = [
+  _post,
+  _post,
+  _post,
+  _post,
+];
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -28,13 +35,9 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final repository = RepositoryProvider.of<AppRepository>(context);
-
-
+    BlocProvider.of<ProfileBloc>(context).add(ProfilePostsInitialLoadEvent());
     final double paddingWidthMainSize =
-        MediaQuery
-            .of(context)
-            .size
-            .width * 0.05;
+        MediaQuery.of(context).size.width * 0.05;
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -67,10 +70,7 @@ class _ProfileState extends State<Profile> {
               padding: EdgeInsets.fromLTRB(
                   paddingWidthMainSize, 10, paddingWidthMainSize, 10),
               child: Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.8,
+                width: MediaQuery.of(context).size.width * 0.8,
                 height: 85,
                 decoration: BoxDecoration(
                   color: const Color(0xff272850),
@@ -122,24 +122,40 @@ class _ProfileState extends State<Profile> {
               icon: const Icon(Icons.add_circle_outline),
               borderRadius: 15,
               height: 60,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.85,
+              width: MediaQuery.of(context).size.width * 0.85,
             ),
             Expanded(
-              child: ListView(
-                physics: const BouncingScrollPhysics(decelerationRate: ScrollDecelerationRate.fast),
-                clipBehavior: Clip.hardEdge,
-                scrollDirection: Axis.vertical,
-                children: [
-                  Column(
-                    children: list.map((e) => Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 21, 0, 21),
-                      child: Post(post: e),
-                    )).toList(),
-                  )
-                ],
+              child: BlocConsumer<ProfileBloc, ProfileState>(
+                listener: (context, state) {
+
+                },
+                builder: (context, state) {
+                  if (state is ProfilePostsSuccessState) {
+                    return ListView(
+                      physics: const BouncingScrollPhysics(
+                          decelerationRate: ScrollDecelerationRate.fast),
+                      clipBehavior: Clip.hardEdge,
+                      scrollDirection: Axis.vertical,
+                      children: [
+                        Column(
+                          children: RepositoryProvider.of<ProfileRepository>(context).usersPosts
+                              .map((e) => Padding(
+                            padding:
+                            const EdgeInsets.fromLTRB(0, 21, 0, 21),
+                            child: Post(post: e),
+                          ))
+                              .toList(),
+                        )
+                      ],
+                    );
+                  } else if (state is ProfilePostsLoadingState) {
+                    return const SizedBox(width: 25, height: 25, child: CircularProgressIndicator());
+                  } else {
+                    return const Text('Проблемс');
+                  }
+
+
+                },
               ),
             )
           ],
@@ -164,7 +180,7 @@ class _Avatar extends StatelessWidget {
         radius: 69,
         child: CircleAvatar(
           backgroundImage:
-          AssetImage(avatar == '' ? 'Assets/ProfileImage.png' : avatar),
+              AssetImage(avatar == '' ? 'Assets/ProfileImage.png' : avatar),
           backgroundColor: Colors.white,
           radius: 62,
         ),

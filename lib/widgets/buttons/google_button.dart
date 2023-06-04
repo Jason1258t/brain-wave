@@ -47,9 +47,9 @@ class GoogleElevatedButton extends StatelessWidget {
             const SizedBox(
               width: 15,
             ),
-            const Icon(
-              Icons.confirmation_num,
-              size: 25,
+            Image.asset(
+              'Assets/google-icon.png',
+              width: 25,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 8.0),

@@ -3,7 +3,7 @@ import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:flutter/material.dart';
 
 class Post extends StatefulWidget {
-  ModelPost post;
+  PostModel post;
 
   Post({
     Key? key,
@@ -34,7 +34,7 @@ class _PostState extends State<Post> {
                 Row(
                   children: [
                     Image(
-                      image: AssetImage(widget.post.author_image),
+                      image: AssetImage(widget.post.creatorImage),
                       width: 51,
                       height: 51,
                     ),
@@ -44,14 +44,14 @@ class _PostState extends State<Post> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.post.name_post,
+                            widget.post.title,
                             style: AppTypography.font20white,
                           ),
                           const SizedBox(
                             height: 9,
                           ),
                           Text(
-                            widget.post.name_author,
+                            widget.post.creatorName,
                             style: AppTypography.font14milk,
                           ),
                         ],
@@ -79,7 +79,7 @@ class _PostState extends State<Post> {
               height: 16,
             ),
             Image.asset(
-              widget.post.post_image,
+              widget.post.image,
               width: double.infinity,
             ),
           ],

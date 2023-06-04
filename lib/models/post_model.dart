@@ -1,15 +1,15 @@
-class ModelPost {
-  String name_post;
-  String name_author;
+class PostModel {
+  String title;
+  String creatorName;
   String description;
-  String post_image;
-  String author_image;
+  String image;
+  String creatorImage;
 
-  ModelPost({
-    required this.name_author,
-    required this.name_post,
+  PostModel({
+    required this.creatorName,
+    required this.title,
     required this.description,
-    required this.post_image,
-    required this.author_image,
+    required this.image,
+    required this.creatorImage,
   });
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:meta/meta.dart';
 
@@ -10,10 +11,12 @@ part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AppRepository _appRepository;
+  final ProfileRepository _profileRepository;
   late final StreamSubscription _appState;
 
-  AppBloc({required AppRepository appRepository})
+  AppBloc({required AppRepository appRepository, required ProfileRepository profileRepository})
       : _appRepository = appRepository,
+        _profileRepository = profileRepository,
         super(AppInitial()) {
     on<AppSubscribeEvent>(_subscribe);
     on<AppAuthEvent>(_onAuth);
@@ -32,6 +35,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   _onAuth(AppAuthEvent event, emit) {
     emit(AppAuthState());
     _appRepository.updateUser();
+    _profileRepository.setUserId(_appRepository.getCurrentUser().uid);
   }
 
   _onUnAuth(AppUnAuthEvent event, emit) {

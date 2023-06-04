@@ -38,4 +38,5 @@ flutter:
   assets:
     - Assets/ProfileImage.png
     - Assets/openAi.png
+    - Assets/google-icon.png
 

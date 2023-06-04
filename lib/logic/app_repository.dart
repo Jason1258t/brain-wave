@@ -8,6 +8,8 @@ enum AppStateEnum { auth, unAuth, start }
 
 enum AuthStateEnum { loading, logged, registered, fail, wait }
 
+enum LoadingStateEnum {wait, loading, success, fail}
+
 class AppRepository {
   final FirebaseAuthService _firebaseAuthService;
   late User _user;
@@ -40,7 +42,6 @@ class AppRepository {
       final user = await _firebaseAuthService.checkLoginWithFirebase();
       final userId = user.uid;
       if (userId == null) {
-        _user = user;
         appState.add(AppStateEnum.unAuth);
       } else {
         loadSavedData().then((value) => loadSavedData());
