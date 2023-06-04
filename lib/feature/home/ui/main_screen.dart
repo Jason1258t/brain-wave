@@ -34,12 +34,7 @@ class _MainScreenState extends State<MainScreen> {
           child: _widgetOptions[_selectedTab],
         ),
         bottomNavigationBar: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(15.0),
-            topRight: Radius.circular(15.0),
-          ),
           child: BottomNavigationBar(
-            backgroundColor: Colors.black,
             currentIndex: _selectedTab,
             items: const [
               BottomNavigationBarItem(

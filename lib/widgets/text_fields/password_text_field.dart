@@ -9,16 +9,18 @@ class CustomPasswordField extends StatefulWidget {
   final TextEditingController controller;
   final TextInputType keyBoardType;
   final bool obscureText;
+  final bool isError;
 
-  CustomPasswordField(
-      {Key? key,
-        this.width = 290,
-        this.height = 50,
-        required this.hintText,
-        required this.controller,
-        this.obscureText = false,
-        this.keyBoardType = TextInputType.text})
-      : super(key: key);
+  CustomPasswordField({
+    Key? key,
+    required this.hintText,
+    required this.controller,
+    required this.isError,
+    this.width = 290,
+    this.height = 50,
+    this.obscureText = false,
+    this.keyBoardType = TextInputType.text,
+  }) : super(key: key);
 
   @override
   State<CustomPasswordField> createState() => _CustomPasswordFieldState();
@@ -51,21 +53,28 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
       child: TextFormField(
         style: AppTypography.font16lightGray,
         decoration: InputDecoration(
-          suffixIcon: IconButton(icon: const Icon(Icons.remove_red_eye_outlined, size: 20, color: AppColors.lightGrayText,), onPressed: showHide),
+          suffixIcon: GestureDetector(
+            onTap: showHide,
+            child: Icon(
+              hideText ? Icons.remove_red_eye_outlined : Icons.remove_red_eye,
+            ),
+          ),
           filled: true,
           fillColor: const Color(0xff323465),
           hintText: widget.hintText,
           hintStyle: AppTypography.font16lightGray,
-          enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(13)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(13)),
             borderSide: BorderSide(
-              color: Color(0xff9687D3),
+                color: widget.isError ? const Color(0xff9687D3) : const Color(
+                    0xffE01748),
             ),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(13)),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(13)),
             borderSide: BorderSide(
-              color: Color(0xff9687D3),
+                color: widget.isError ? const Color(0xff9687D3) : const Color(
+                    0xffE01748),
             ),
           ),
         ),
