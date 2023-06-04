@@ -28,7 +28,6 @@ class CustomPasswordField extends StatefulWidget {
 
 class _CustomPasswordFieldState extends State<CustomPasswordField> {
   bool hideText = true;
-
   void showHide() {
     setState(() {
       hideText = !hideText;
