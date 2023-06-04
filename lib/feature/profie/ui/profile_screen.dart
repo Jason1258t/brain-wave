@@ -115,8 +115,9 @@ class _ProfileState extends State<Profile> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                _Avatar(
-                  avatar: '',
+                ProfileAvatar(
+                  avatar: repository.getCurrentUser()!.photoURL ?? '',
+                  name: repository.getCurrentUser()!.displayName!,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
@@ -234,10 +235,11 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-class _Avatar extends StatelessWidget {
+class ProfileAvatar extends StatelessWidget {
   String avatar;
+  String name;
 
-  _Avatar({Key? key, required this.avatar}) : super(key: key);
+  ProfileAvatar({Key? key, required this.avatar, required this.name}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -247,11 +249,15 @@ class _Avatar extends StatelessWidget {
       child: CircleAvatar(
         backgroundColor: const Color(0xff131124),
         radius: 69,
-        child: CircleAvatar(
+        child: avatar.isNotEmpty ? CircleAvatar(
           backgroundImage:
-              AssetImage(avatar == '' ? 'Assets/ProfileImage.png' : avatar),
+              NetworkImage(avatar),
           backgroundColor: Colors.white,
           radius: 62,
+        ) : CircleAvatar(
+          backgroundColor: const Color(0xff5024CE),
+          radius: 62,
+          child: Text(name[0].toUpperCase(), style: const TextStyle(fontSize: 64, color: Colors.white),),
         ),
       ),
     );
