@@ -1,3 +1,4 @@
+import 'package:brain_wave_2/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,11 +18,11 @@ abstract class AppTypography {
 
   static const font204F6BFF = TextStyle(color: Color(0xff4F6BFF), fontSize: 20);
 
-  static const font16lightGray = TextStyle(color: Color(0xffB0B0B0));
+  static const font16lightGray = TextStyle(color: AppColors.lightGrayText);
 
-  static const font24lightBlue = TextStyle(color: Color(0xffE1D7FF), fontSize: 24);
+  static const font24lightBlue = TextStyle(color: AppColors.lightBlueText, fontSize: 24);
 
-  static const font18lightBlue = TextStyle(color: Color(0xffE1D7FF), fontSize: 18);
+  static const font18lightBlue = TextStyle(color: AppColors.lightBlueText, fontSize: 18);
 
   static const font16white = TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400);
 

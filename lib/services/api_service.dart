@@ -27,4 +27,47 @@ class ApiService {
           image: 'Assets/openAi.png'),
     ];
   }
+
+  Future getAllPosts() async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    return [
+      PostModel(
+          creatorName: 'лошара',
+          description: 'очень классное описание ток здесь дап',
+          title: 'топ 10 нейронок',
+          creatorImage: 'Assets/ProfileImage.png',
+          image: 'Assets/openAi.png'),
+      PostModel(
+          creatorName: 'лошара',
+          description: 'очень классное описание ток здесь дап',
+          title: 'топ 10 нейронок',
+          creatorImage: 'Assets/ProfileImage.png',
+          image: 'Assets/openAi.png'),
+      PostModel(
+          creatorName: 'лошара',
+          description: 'очень классное описание ток здесь дап',
+          title: 'топ 10 нейронок',
+          creatorImage: 'Assets/ProfileImage.png',
+          image: 'Assets/openAi.png'),
+      PostModel(
+          creatorName: 'лошара',
+          description: 'очень классное описание ток здесь дап',
+          title: 'топ 10 нейронок',
+          creatorImage: 'Assets/ProfileImage.png',
+          image: 'Assets/openAi.png'),
+      PostModel(
+          creatorName: 'лошара',
+          description: 'очень классное описание ток здесь дап',
+          title: 'топ 10 нейронок',
+          creatorImage: 'Assets/ProfileImage.png',
+          image: 'Assets/openAi.png'),
+      PostModel(
+          creatorName: 'лошара',
+          description: 'очень классное описание ток здесь дап',
+          title: 'топ 10 нейронок',
+          creatorImage: 'Assets/ProfileImage.png',
+          image: 'Assets/openAi.png'),
+    ];
+  }
 }

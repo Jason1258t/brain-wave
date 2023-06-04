@@ -6,7 +6,7 @@ import '../../../models/models.dart';
 
 class ProfileRepository {
   final ApiService _apiService;
-  late final String _userId;
+  late String _userId;
   ProfileRepository({required ApiService apiService})
       : _apiService = apiService;
 

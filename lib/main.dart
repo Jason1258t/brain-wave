@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:brain_wave_2/feature/news/bloc/news_bloc.dart';
+import 'package:brain_wave_2/feature/news/data/news_repository.dart';
 import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/logic/app_bloc.dart';
@@ -61,6 +63,7 @@ class MyRepositoryProviders extends StatelessWidget {
           create: (_) => AppRepository(firebaseAuthService: firebaseAuth)),
       RepositoryProvider(
           create: (_) => ProfileRepository(apiService: apiService)),
+      RepositoryProvider(create: (_) => NewsRepository(apiService: apiService)),
     ], child: const MyBlocProviders());
   }
 }
@@ -80,7 +83,8 @@ class MyBlocProviders extends StatelessWidget {
           lazy: false,
           create: (_) => AppBloc(
               appRepository: RepositoryProvider.of<AppRepository>(context),
-              profileRepository: RepositoryProvider.of<ProfileRepository>(context))
+              profileRepository:
+                  RepositoryProvider.of<ProfileRepository>(context))
             ..add(AppSubscribeEvent())),
       BlocProvider(
           lazy: false,
@@ -90,8 +94,14 @@ class MyBlocProviders extends StatelessWidget {
       BlocProvider(
           lazy: false,
           create: (_) => ProfileBloc(
-              profileRepository: RepositoryProvider.of<ProfileRepository>(context))
+              profileRepository:
+                  RepositoryProvider.of<ProfileRepository>(context))
             ..add(ProfileSubscribeEvent())),
+      BlocProvider(
+        lazy: false,
+        create: (_) => NewsBloc(
+            newsRepository: RepositoryProvider.of<NewsRepository>(context))..add(NewsSubscribeEvent()),
+      )
     ], child: const MyApp());
   }
 }

@@ -12,7 +12,7 @@ enum LoadingStateEnum {wait, loading, success, fail}
 
 class AppRepository {
   final FirebaseAuthService _firebaseAuthService;
-  late User _user;
+  User? _user;
   late StreamSubscription _userUpdateState;
 
   AppRepository({required FirebaseAuthService firebaseAuthService})
@@ -28,7 +28,7 @@ class AppRepository {
     authState.add(AuthStateEnum.wait);
   }
 
-  User getCurrentUser() => _user;
+  User? getCurrentUser() => _user;
 
   void updateUser() async {
     _userUpdateState =

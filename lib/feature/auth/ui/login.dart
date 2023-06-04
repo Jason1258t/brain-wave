@@ -3,7 +3,8 @@ import 'package:brain_wave_2/feature/auth/bloc/registration_bloc/registration_bl
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/buttons/elevated_button.dart';
 import 'package:brain_wave_2/widgets/buttons/google_button.dart';
-import 'package:brain_wave_2/widgets/filled_text_field.dart';
+import 'package:brain_wave_2/widgets/text_fields/filled_text_field.dart';
+import 'package:brain_wave_2/widgets/text_fields/password_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -80,7 +81,7 @@ class LoginScreen extends StatelessWidget {
                             const SizedBox(
                               height: 30,
                             ),
-                            CustomFilledTextField(
+                            CustomPasswordField(
                                 hintText: 'Password',
                                 controller: passwordController),
                             const SizedBox(height: 120)

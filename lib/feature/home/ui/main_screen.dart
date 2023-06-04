@@ -1,3 +1,4 @@
+import 'package:brain_wave_2/feature/news/ui/news.dart';
 import 'package:brain_wave_2/feature/profie/ui/profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final List<Widget> _widgetOptions = <Widget>[
-    Text('посты'),
+    const NewsScreen(),
     Text('нейронки'),
     Text('массенджер'),
     const Profile(),
