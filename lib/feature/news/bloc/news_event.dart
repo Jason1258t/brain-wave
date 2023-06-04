@@ -5,7 +5,10 @@ abstract class NewsEvent {}
 
 class NewsSubscribeEvent extends NewsEvent {}
 
-class NewsInitialLoadEvent extends NewsEvent {}
+class NewsInitialLoadEvent extends NewsEvent {
+  final bool f;
+  NewsInitialLoadEvent({this.f = false});
+}
 
 class NewsLoadingEvent extends NewsEvent {}
 

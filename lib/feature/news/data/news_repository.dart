@@ -17,17 +17,18 @@ class NewsRepository {
 
   List<PostModel> getNews() => _news;
 
-  void loadNews() async {
-    log('абоба');
-    newsState.add(LoadingStateEnum.loading);
-    log('абоба');
-    try {
-      final news = await _apiService.getAllPosts();
-      _news = news;
+  void loadNews(bool f) async {
+    if (f || _news.isEmpty) {
+      newsState.add(LoadingStateEnum.loading);
+      try {
+        final news = await _apiService.getAllPosts();
+        _news = news;
 
-      newsState.add(LoadingStateEnum.success);
-    } catch (e) {
-      newsState.add(LoadingStateEnum.fail);
+        newsState.add(LoadingStateEnum.success);
+      } catch (e) {
+        newsState.add(LoadingStateEnum.fail);
+      }
     }
+
   }
 }

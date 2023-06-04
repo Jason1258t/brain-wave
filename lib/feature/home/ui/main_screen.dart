@@ -34,11 +34,21 @@ class _MainScreenState extends State<MainScreen> {
           child: _widgetOptions[_selectedTab],
         ),
         bottomNavigationBar: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(15.0),
+            topRight: Radius.circular(15.0),
+          ),
+
           child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Colors.white,
+            //backgroundColor: Colors.black,
             currentIndex: _selectedTab,
             items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.newspaper),
+                icon: Icon(Icons.newspaper_outlined),
+                activeIcon: Icon(Icons.newspaper),
                 label: '',
               ),
               BottomNavigationBarItem(
@@ -46,11 +56,13 @@ class _MainScreenState extends State<MainScreen> {
                 label: '',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.mail_lock_outlined),
+                icon: Icon(Icons.mail_outline),
+                activeIcon: Icon(Icons.mail),
                 label: '',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.person),
+                icon: Icon(Icons.person_2_outlined),
+                activeIcon: Icon(Icons.person),
                 label: '',
               ),
             ],

@@ -1,4 +1,5 @@
 import 'package:brain_wave_2/models/post_model.dart';
+import 'package:brain_wave_2/utils/colors.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class _PostState extends State<Post> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       decoration: const BoxDecoration(
-        color: Color(0xff272850),
+        color: AppColors.widgetsBackground,
         borderRadius: BorderRadius.all(Radius.circular(14)),
       ),
       child: Padding(
