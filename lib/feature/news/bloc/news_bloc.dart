@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:brain_wave_2/feature/news/data/news_repository.dart';
+import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'news_event.dart';
@@ -20,6 +23,11 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   }
 
   _subscribe(NewsSubscribeEvent event, emit) {
+    StreamSubscription newsState = _newsRepository.newsState.stream.listen((event) {
+      if (event == LoadingStateEnum.loading) add(NewsLoadingEvent());
+      if (event == LoadingStateEnum.success) add(NewsSuccessEvent());
+      if (event == LoadingStateEnum.fail) add(NewsFailEvent());
+    });
   }
 
   _onInitialLoad(NewsInitialLoadEvent event, emit) {
