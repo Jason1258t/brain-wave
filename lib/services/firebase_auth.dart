@@ -9,12 +9,18 @@ import 'package:rxdart/rxdart.dart';
 class FirebaseAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   BehaviorSubject<User?> userUpdateState = BehaviorSubject<User?>.seeded(null);
+
+
   void subscribeUserChanges(VoidCallback callback) async {
     _firebaseAuth.authStateChanges().listen((User? user) {
       if (user != null) {
         userUpdateState.add(user);
       }
     });
+  }
+
+  Future verifyEmail() async {
+    await _firebaseAuth.currentUser?.sendEmailVerification();
   }
 
   Future checkLoginWithFirebase() async {
@@ -84,6 +90,9 @@ class FirebaseAuthService {
       log('-                                           -');
       log('-                                           -');
       log('---------------------------------------------');
+
+
+
       return user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -103,7 +112,7 @@ class FirebaseAuthService {
       );
       await credential.user!.updateDisplayName(name);
 
-      final user = credential.user;
+      final user = _firebaseAuth.currentUser;
       log('---------------------------------------------');
       log('-                                           -');
       log('-                                           -');
@@ -116,7 +125,8 @@ class FirebaseAuthService {
       log('-                                           -');
       log('-                                           -');
       log('---------------------------------------------');
-      return credential.user;
+
+      return user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         log('The password provided is too weak.');
