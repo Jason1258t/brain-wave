@@ -19,6 +19,12 @@ PostModel _post = PostModel(
         'Безусловно, базовый вектор развития играет определяющее значение для направлений прогрессивного развития',
     image: 'Assets/openAi.png',
     creatorImage: 'Assets/ProfileImage.png');
+var list = [
+  _post,
+  _post,
+  _post,
+  _post,
+];
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -30,18 +36,72 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    void logoutShowDialog() {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: AppColors.widgetsBackground,
+              title: const Text(
+                'Уверены что хотите выйти?',
+                style: AppTypography.font18lightBlue,
+              ),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          BlocProvider.of<AppBloc>(context)
+                              .add(AppLogOutEvent());
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Да')),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Эээ куда'))
+                  ],
+                )
+              ],
+            );
+          });
+    }
+
     final repository = RepositoryProvider.of<AppRepository>(context);
     BlocProvider.of<ProfileBloc>(context).add(ProfilePostsInitialLoadEvent());
     final double paddingWidthMainSize =
         MediaQuery.of(context).size.width * 0.05;
     return Scaffold(
-      appBar: AppBar(backgroundColor: AppColors.purpleButton,),
-      drawer: Drawer(child: ListView(
-        children: [
-          ListTile(title: const Text('Закрыть'), onTap: () {Navigator.pop(context);},),
-          ListTile(title: const Text('Выйти'), onTap: () {BlocProvider.of<AppBloc>(context).add(AppLogOutEvent());},),
-        ],
-      ),),
+      appBar: AppBar(
+        backgroundColor: AppColors.purpleButton,
+        title: const Text(
+          'Профиль',
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: ListTile.divideTiles(context: context, tiles: [
+            ListTile(
+              title: const Text(
+                'Закрыть',
+                style: AppTypography.font18lightBlue,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+                title: const Text(
+                  'Выйти',
+                  style: AppTypography.font18red,
+                ),
+                onTap: logoutShowDialog),
+          ]).toList(),
+        ),
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,

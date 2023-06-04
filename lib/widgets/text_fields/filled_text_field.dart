@@ -8,16 +8,18 @@ class CustomFilledTextField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyBoardType;
   final bool obscureText;
+  final bool isError;
 
-  CustomFilledTextField(
-      {Key? key,
-      this.width = 290,
-      this.height = 50,
-      required this.hintText,
-      required this.controller,
-      this.obscureText = false,
-      this.keyBoardType = TextInputType.text})
-      : super(key: key);
+  const CustomFilledTextField({
+    Key? key,
+    required this.hintText,
+    required this.controller,
+    required this.isError,
+    this.width = 290,
+    this.height = 50,
+    this.obscureText = false,
+    this.keyBoardType = TextInputType.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +43,18 @@ class CustomFilledTextField extends StatelessWidget {
           fillColor: const Color(0xff323465),
           hintText: hintText,
           hintStyle: AppTypography.font16lightGray,
-          enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(13)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(13)),
             borderSide: BorderSide(
-              color: Color(0xff9687D3),
+              color:
+                  isError ? const Color(0xff9687D3) : const Color(0xffE01748),
             ),
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(13)),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(13)),
             borderSide: BorderSide(
-              color: Color(0xff9687D3),
+              color:
+                  isError ? const Color(0xff9687D3) : const Color(0xffE01748),
             ),
           ),
         ),

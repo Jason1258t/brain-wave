@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'feature/auth/bloc/auth_bloc.dart';
+import 'feature/auth/bloc/auth_bloc/auth_bloc.dart';
 import 'feature/auth/bloc/registration_bloc/registration_bloc.dart';
 import 'feature/auth/ui/registration.dart';
 import 'feature/auth/ui/login.dart';
@@ -41,8 +41,9 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.ubuntu().fontFamily,
         canvasColor: const Color(0xff292B57),
       ),
+      color: const Color(0xff292B57),
       routes: {
-        '/register_first': (context) => const FirstRegistrationScreen(),
+        '/register_first': (context) => FirstRegistrationScreen(),
         '/login': (context) => const LoginScreen(),
         '/main_screen': (context) => const MainScreen(),
       },

@@ -1,8 +1,9 @@
-import 'package:brain_wave_2/feature/auth/bloc/auth_bloc.dart';
+import 'package:brain_wave_2/feature/auth/bloc/auth_bloc/auth_bloc.dart';
 import 'package:brain_wave_2/feature/auth/bloc/registration_bloc/registration_bloc.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/buttons/elevated_button.dart';
 import 'package:brain_wave_2/widgets/buttons/google_button.dart';
+import 'package:brain_wave_2/widgets/snack_bar/custom_cnack_bar.dart';
 import 'package:brain_wave_2/widgets/text_fields/filled_text_field.dart';
 import 'package:brain_wave_2/widgets/text_fields/password_text_field.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isErrorEmail = true;
+    bool isErrorPassword = true;
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();
     return SafeArea(
@@ -28,15 +31,14 @@ class LoginScreen extends StatelessWidget {
                   child: AppAnimations.bouncingLine,
                 ));
           } else if (state is AuthFailState) {
-            const snackBar = SnackBar(content: Text('ошибка'));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            CustomSnackBar.showSnackBar(context, 'ошибка');
           } else if (state is AuthSuccessState ||
               state is RegisterSuccessState) {
-            const snackBar = SnackBar(content: Text('успешно'));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            CustomSnackBar.showSnackBar(context, 'успешно');
           } else if (state is LoginInvalidFields) {
-            const snackBar = SnackBar(content: Text('поля заполнены неверно'));
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            isErrorEmail = !state.email;
+            isErrorPassword = !state.password;
+            CustomSnackBar.showSnackBar(context, 'поля заполнены неверно');
           } else if (state is LoginValidFields) {
             BlocProvider.of<AuthBloc>(context).add(LoginInitialEvent(
                 email: emailController.text,
@@ -77,13 +79,16 @@ class LoginScreen extends StatelessWidget {
                               hintText: 'Email',
                               controller: emailController,
                               keyBoardType: TextInputType.emailAddress,
+                              isError: isErrorEmail,
                             ),
                             const SizedBox(
                               height: 30,
                             ),
                             CustomPasswordField(
                                 hintText: 'Password',
-                                controller: passwordController),
+                                controller: passwordController,
+                                isError: isErrorPassword,
+                            ),
                             const SizedBox(height: 120)
                           ],
                         ),
