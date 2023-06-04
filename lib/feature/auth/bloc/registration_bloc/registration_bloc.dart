@@ -55,7 +55,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       if (event.name.length > 2) {
         name = false;
       }
-      if (event.firstPassword == event.secondPassword) {
+      if (event.firstPassword == event.secondPassword && event.firstPassword.length > 5) {
         password = false;
       }
       if (email || name || password) {

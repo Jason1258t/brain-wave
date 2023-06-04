@@ -19,12 +19,6 @@ PostModel _post = PostModel(
         'Безусловно, базовый вектор развития играет определяющее значение для направлений прогрессивного развития',
     image: 'Assets/openAi.png',
     creatorImage: 'Assets/ProfileImage.png');
-var list = [
-  _post,
-  _post,
-  _post,
-  _post,
-];
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -54,122 +48,125 @@ class _ProfileState extends State<Profile> {
         decoration: const BoxDecoration(
           color: Color(0xff131124),
         ),
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _Avatar(
-                avatar: '',
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  repository.getCurrentUser()!.displayName!,
-                  style: AppTypography.font24lightBlue,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 18.0),
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _Avatar(
+                  avatar: '',
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: Text(
-                  repository.getCurrentUser()!.email!,
-                  style: AppTypography.font18lightBlue,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(
-                    paddingWidthMainSize, 10, paddingWidthMainSize, 10),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: 85,
-                  decoration: BoxDecoration(
-                    color: const Color(0xff272850),
-                    borderRadius: BorderRadius.circular(11),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    repository.getCurrentUser()!.displayName!,
+                    style: AppTypography.font24lightBlue,
                   ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              'Избранные нейронки:',
-                              style: AppTypography.font18lightBlue,
-                            ),
-                            Text(
-                              '10',
-                              style: AppTypography.font18lightBlue,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Text(
+                    repository.getCurrentUser()!.email!,
+                    style: AppTypography.font18lightBlue,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      paddingWidthMainSize, 10, paddingWidthMainSize, 10),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: 85,
+                    decoration: BoxDecoration(
+                      color: const Color(0xff272850),
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                'Избранные нейронки:',
+                                style: AppTypography.font18lightBlue,
+                              ),
+                              Text(
+                                '10',
+                                style: AppTypography.font18lightBlue,
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                'Посты:',
+                                style: AppTypography.font18lightBlue,
+                              ),
+                              Text(
+                                '2',
+                                style: AppTypography.font18lightBlue,
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                IconTextButton(
+                  title: 'Опубликовать',
+                  onPressed: () {},
+                  icon: const Icon(Icons.add_circle_outline),
+                  borderRadius: 15,
+                  height: 60,
+                  width: MediaQuery.of(context).size.width * 0.85,
+                ),
+                BlocConsumer<ProfileBloc, ProfileState>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    if (state is ProfilePostsSuccessState) {
+                      return Expanded(
+                        child: ListView(
+                          physics: const BouncingScrollPhysics(
+                              decelerationRate: ScrollDecelerationRate.fast),
+                          clipBehavior: Clip.hardEdge,
+                          scrollDirection: Axis.vertical,
+                          children: [
+                            Column(
+                              children:
+                                  RepositoryProvider.of<ProfileRepository>(context)
+                                      .usersPosts
+                                      .map((e) => Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 21, 0, 21),
+                                            child: Post(post: e),
+                                          ))
+                                      .toList(),
                             )
                           ],
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              'Посты:',
-                              style: AppTypography.font18lightBlue,
-                            ),
-                            Text(
-                              '2',
-                              style: AppTypography.font18lightBlue,
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              IconTextButton(
-                title: 'Опубликовать',
-                onPressed: () {},
-                icon: const Icon(Icons.add_circle_outline),
-                borderRadius: 15,
-                height: 60,
-                width: MediaQuery.of(context).size.width * 0.85,
-              ),
-              BlocConsumer<ProfileBloc, ProfileState>(
-                listener: (context, state) {},
-                builder: (context, state) {
-                  if (state is ProfilePostsSuccessState) {
-                    return Expanded(
-                      child: ListView(
-                        physics: const BouncingScrollPhysics(
-                            decelerationRate: ScrollDecelerationRate.fast),
-                        clipBehavior: Clip.hardEdge,
-                        scrollDirection: Axis.vertical,
-                        children: [
-                          Column(
-                            children:
-                                RepositoryProvider.of<ProfileRepository>(context)
-                                    .usersPosts
-                                    .map((e) => Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 21, 0, 21),
-                                          child: Post(post: e),
-                                        ))
-                                    .toList(),
-                          )
-                        ],
-                      ),
-                    );
-                  } else if (state is ProfilePostsLoadingState) {
-                    return const Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return const Text('Проблемс');
-                  }
-                },
-              )
-            ],
+                      );
+                    } else if (state is ProfilePostsLoadingState) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 20),
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      return const Text('Проблемс');
+                    }
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),

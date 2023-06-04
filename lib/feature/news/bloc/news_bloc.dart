@@ -34,7 +34,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   }
 
   _onInitialLoad(NewsInitialLoadEvent event, emit) {
-    _newsRepository.loadNews();
+    _newsRepository.loadNews(event.f);
     log('fdfwefwefwef');
   }
 
