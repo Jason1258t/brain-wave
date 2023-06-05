@@ -20,6 +20,7 @@ class NewsScreen extends StatefulWidget {
 class _NewsScreenState extends State<NewsScreen> {
   final TextEditingController queryController = TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<NewsBloc>(context).add(NewsInitialLoadEvent());
