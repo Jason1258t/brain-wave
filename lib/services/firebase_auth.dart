@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
 
@@ -10,22 +11,60 @@ class FirebaseAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   BehaviorSubject<User?> userUpdateState = BehaviorSubject<User?>.seeded(null);
 
+  FirebaseAuthService() : super() {
+    subscribeUserChanges();
+  }
 
-  void subscribeUserChanges(VoidCallback callback) async {
-    _firebaseAuth.authStateChanges().listen((User? user) {
+  User? currentUser() => _firebaseAuth.currentUser;
+
+  void subscribeUserChanges() async {
+    FirebaseAuth.instance.userChanges().listen((User? user) {
       if (user != null) {
-        userUpdateState.add(user);
+        print('');
+        print('');
+        print('');
+        print('');
+        print('');
+        print(user.toString());
+        print('');
+        print('');
+        print('');
+        print('');
+        print('');
+      }
+    });
+  }
+
+  void updater() async {
+    int endIn = 120;
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      if (endIn > 0) {
+        _firebaseAuth.currentUser?.reload();
+        if (_firebaseAuth.currentUser!.emailVerified) timer.cancel();
+        endIn--;
+      } else {
+        timer.cancel();
       }
     });
   }
 
   Future verifyEmail() async {
-    await _firebaseAuth.currentUser?.sendEmailVerification();
+    await _firebaseAuth.currentUser?.sendEmailVerification().whenComplete(() => updater());
+  }
+
+  Future changeName(String name) async {
+    try {
+      await _firebaseAuth.currentUser?.updateDisplayName(name);
+    } catch (e) {
+      rethrow;
+    }
+
   }
 
   Future checkLoginWithFirebase() async {
     try {
       final user = _firebaseAuth.currentUser;
+      await user!.reload();
       return user;
     } catch (e) {
       log('ошибка повторной авторизации с firebase $e');
@@ -90,8 +129,6 @@ class FirebaseAuthService {
       log('-                                           -');
       log('-                                           -');
       log('---------------------------------------------');
-
-
 
       return user;
     } on FirebaseAuthException catch (e) {

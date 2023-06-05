@@ -14,7 +14,6 @@ enum LoadingStateEnum { wait, loading, success, fail }
 class AppRepository {
   final FirebaseAuthService _firebaseAuthService;
   User? _user;
-  late StreamSubscription _userUpdateState;
 
   AppRepository({required FirebaseAuthService firebaseAuthService})
       : _firebaseAuthService = firebaseAuthService;
@@ -22,6 +21,8 @@ class AppRepository {
       BehaviorSubject<AppStateEnum>.seeded(AppStateEnum.start);
   BehaviorSubject<AuthStateEnum> authState =
       BehaviorSubject<AuthStateEnum>.seeded(AuthStateEnum.wait);
+  BehaviorSubject<LoadingStateEnum> changeNameState =
+      BehaviorSubject<LoadingStateEnum>.seeded(LoadingStateEnum.wait);
 
   void logout() async {
     await _firebaseAuthService.logout();
@@ -30,14 +31,20 @@ class AppRepository {
     authState.add(AuthStateEnum.wait);
   }
 
-  User? getCurrentUser() => _user;
+  User? getCurrentUser() => _firebaseAuthService.currentUser();
 
-  void updateUser() async {
-    _userUpdateState =
-        _firebaseAuthService.userUpdateState.stream.listen((event) {
-      if (event != null) _user = event;
+  void verifyEmail() async {
+    await _firebaseAuthService.verifyEmail();
+  }
 
-    });
+  void changeName(String name) async {
+    changeNameState.add(LoadingStateEnum.loading);
+    try {
+      await _firebaseAuthService.changeName(name);
+      changeNameState.add(LoadingStateEnum.success);
+    } catch (e) {
+      changeNameState.add(LoadingStateEnum.fail);
+    }
   }
 
   void checkLogin() async {

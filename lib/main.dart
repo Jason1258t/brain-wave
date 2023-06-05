@@ -6,6 +6,7 @@ import 'package:brain_wave_2/feature/neurons/ui/neurons_screen.dart';
 import 'package:brain_wave_2/feature/news/bloc/news_bloc.dart';
 import 'package:brain_wave_2/feature/news/data/news_repository.dart';
 import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
+import 'package:brain_wave_2/feature/profie/bloc/profile_update/profile_update_bloc.dart';
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/feature/profie/ui/edit_profile_screen.dart';
 import 'package:brain_wave_2/logic/app_bloc.dart';
@@ -112,6 +113,9 @@ class MyBlocProviders extends StatelessWidget {
       BlocProvider(
         lazy: false,
         create: (_) => NavigationBloc()),
+      BlocProvider(
+        lazy: false,
+        create: (_) => ProfileUpdateBloc(appRepository: RepositoryProvider.of<AppRepository>(context))),
     ], child: const MyApp());
   }
 }
