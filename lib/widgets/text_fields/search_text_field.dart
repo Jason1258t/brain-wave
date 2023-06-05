@@ -26,7 +26,7 @@ class CustomSearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(7)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       width: width,
       height: height,
@@ -40,7 +40,7 @@ class CustomSearchField extends StatelessWidget {
             size: 20,
           ),
           enabledBorder: const OutlineInputBorder(borderSide: BorderSide(width: 0)),
-          focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 0)),
+          focusedBorder: const OutlineInputBorder(borderSide: BorderSide(width: 1 ,color: AppColors.purpleButton)),
           filled: true,
           fillColor: const Color(0xff323465),
           hintText: hintText,

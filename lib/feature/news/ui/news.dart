@@ -65,7 +65,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 hintText: 'что ищем',
                 controller: queryController,
                 callback: (q) {},
-                width: MediaQuery.of(context).size.width * 0.8,
+                width: MediaQuery.of(context).size.width * 0.9,
               ),
               const SizedBox(
                 height: 15,

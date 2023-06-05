@@ -147,7 +147,7 @@ class _ProfileState extends State<Profile> {
                   padding: EdgeInsets.fromLTRB(
                       paddingWidthMainSize, 10, paddingWidthMainSize, 10),
                   child: Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.85,
                     height: 85,
                     decoration: BoxDecoration(
                       color: const Color(0xff272850),
@@ -199,7 +199,7 @@ class _ProfileState extends State<Profile> {
                   icon: const Icon(Icons.add_circle_outline),
                   borderRadius: 15,
                   height: 60,
-                  width: MediaQuery.of(context).size.width * 0.85,
+                  width: MediaQuery.of(context).size.width * 0.9,
                 ),
                 BlocConsumer<ProfileBloc, ProfileState>(
                   listener: (context, state) {},

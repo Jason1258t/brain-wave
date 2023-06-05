@@ -20,7 +20,7 @@ class _PostState extends State<Post> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: MediaQuery.of(context).size.width * 0.85,
       decoration: const BoxDecoration(
         color: AppColors.widgetsBackground,
         borderRadius: BorderRadius.all(Radius.circular(14)),
@@ -78,9 +78,16 @@ class _PostState extends State<Post> {
             const SizedBox(
               height: 16,
             ),
-            Image.asset(
-              widget.post.image,
+            Container(
               width: double.infinity,
+              height: 140,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(7)),
+                  image: DecorationImage(
+                      image: AssetImage(
+                        widget.post.image,
+                      ),
+                      fit: BoxFit.cover)),
             ),
           ],
         ),
