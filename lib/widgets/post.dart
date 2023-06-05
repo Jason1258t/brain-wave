@@ -1,6 +1,7 @@
 import 'package:brain_wave_2/models/post_model.dart';
 import 'package:brain_wave_2/utils/colors.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
+import 'package:brain_wave_2/widgets/avatars/small_avatar.dart';
 import 'package:flutter/material.dart';
 
 class Post extends StatefulWidget {
@@ -34,11 +35,9 @@ class _PostState extends State<Post> {
               children: [
                 Row(
                   children: [
-                    Image(
-                      image: AssetImage(widget.post.creatorImage),
-                      width: 51,
-                      height: 51,
-                    ),
+                    SmallAvatar(
+                        avatar: widget.post.creatorImage,
+                        name: widget.post.creatorName),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(

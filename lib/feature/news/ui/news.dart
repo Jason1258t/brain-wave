@@ -1,6 +1,9 @@
+import 'package:brain_wave_2/feature/home/bloc/navigation_bloc.dart';
 import 'package:brain_wave_2/feature/news/bloc/news_bloc.dart';
 import 'package:brain_wave_2/feature/news/data/news_repository.dart';
+import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/utils/utils.dart';
+import 'package:brain_wave_2/widgets/avatars/small_avatar.dart';
 import 'package:brain_wave_2/widgets/text_fields/search_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,14 +37,24 @@ class _NewsScreenState extends State<NewsScreen> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     'Новости',
                     style: AppTypography.font24lightBlue,
                   ),
-                  CircleAvatar(
-                    backgroundImage: AssetImage('Assets/ProfileImage.png'),
-                    radius: 25,
+                  GestureDetector(
+                    onTap: () async {
+                      BlocProvider.of<NavigationBloc>(context)
+                          .add(ViewProfileEvent());
+                    },
+                    child: SmallAvatar(
+                        avatar: RepositoryProvider.of<AppRepository>(context)
+                                .getCurrentUser()!
+                                .photoURL ??
+                            '',
+                        name: RepositoryProvider.of<AppRepository>(context)
+                            .getCurrentUser()!
+                            .displayName!),
                   )
                 ],
               ),
@@ -53,7 +66,6 @@ class _NewsScreenState extends State<NewsScreen> {
                 controller: queryController,
                 callback: (q) {},
                 width: MediaQuery.of(context).size.width * 0.8,
-                height: 55,
               ),
               const SizedBox(
                 height: 15,

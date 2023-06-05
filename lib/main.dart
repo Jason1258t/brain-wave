@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:brain_wave_2/feature/home/bloc/navigation_bloc.dart';
 import 'package:brain_wave_2/feature/news/bloc/news_bloc.dart';
 import 'package:brain_wave_2/feature/news/data/news_repository.dart';
 import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
@@ -103,8 +104,10 @@ class MyBlocProviders extends StatelessWidget {
       BlocProvider(
         lazy: false,
         create: (_) => NewsBloc(
-            newsRepository: RepositoryProvider.of<NewsRepository>(context))..add(NewsSubscribeEvent()),
-      )
+            newsRepository: RepositoryProvider.of<NewsRepository>(context))..add(NewsSubscribeEvent())),
+      BlocProvider(
+        lazy: false,
+        create: (_) => NavigationBloc()),
     ], child: const MyApp());
   }
 }
