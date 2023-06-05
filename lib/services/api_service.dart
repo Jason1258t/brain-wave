@@ -11,19 +11,19 @@ class ApiService {
           creatorName: 'лошара',
           description: 'очень классное описание ток здесь дап',
           title: 'топ 10 нейронок',
-          creatorImage: 'Assets/ProfileImage.png',
+          creatorImage: '',
           image: 'Assets/openAi.png'),
       PostModel(
           creatorName: 'лошара',
           description: 'очень классное описание ток здесь дап',
           title: 'топ 10 нейронок',
-          creatorImage: 'Assets/ProfileImage.png',
+          creatorImage: '',
           image: 'Assets/openAi.png'),
       PostModel(
           creatorName: 'лошара',
           description: 'очень классное описание ток здесь дап',
           title: 'топ 10 нейронок',
-          creatorImage: 'Assets/ProfileImage.png',
+          creatorImage: '',
           image: 'Assets/openAi.png'),
     ];
   }
@@ -36,37 +36,37 @@ class ApiService {
           creatorName: 'лошара',
           description: 'очень классное описание ток здесь дап',
           title: 'топ 10 нейронок',
-          creatorImage: 'Assets/ProfileImage.png',
+          creatorImage: '',
           image: 'Assets/openAi.png'),
       PostModel(
           creatorName: 'лошара',
           description: 'очень классное описание ток здесь дап',
           title: 'топ 10 нейронок',
-          creatorImage: 'Assets/ProfileImage.png',
+          creatorImage: '',
           image: 'Assets/openAi.png'),
       PostModel(
           creatorName: 'лошара',
           description: 'очень классное описание ток здесь дап',
           title: 'топ 10 нейронок',
-          creatorImage: 'Assets/ProfileImage.png',
+          creatorImage: '',
           image: 'Assets/openAi.png'),
       PostModel(
           creatorName: 'лошара',
           description: 'очень классное описание ток здесь дап',
           title: 'топ 10 нейронок',
-          creatorImage: 'Assets/ProfileImage.png',
+          creatorImage: '',
           image: 'Assets/openAi.png'),
       PostModel(
           creatorName: 'лошара',
           description: 'очень классное описание ток здесь дап',
           title: 'топ 10 нейронок',
-          creatorImage: 'Assets/ProfileImage.png',
+          creatorImage: '',
           image: 'Assets/openAi.png'),
       PostModel(
           creatorName: 'лошара',
           description: 'очень классное описание ток здесь дап',
           title: 'топ 10 нейронок',
-          creatorImage: 'Assets/ProfileImage.png',
+          creatorImage: '',
           image: 'Assets/openAi.png'),
     ];
   }
