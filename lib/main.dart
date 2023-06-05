@@ -4,6 +4,7 @@ import 'package:brain_wave_2/feature/news/bloc/news_bloc.dart';
 import 'package:brain_wave_2/feature/news/data/news_repository.dart';
 import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
+import 'package:brain_wave_2/feature/profie/ui/edit_profile_screen.dart';
 import 'package:brain_wave_2/logic/app_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/services/api_service.dart';
@@ -43,9 +44,10 @@ class MyApp extends StatelessWidget {
       ),
       color: const Color(0xff292B57),
       routes: {
-        '/register_first': (context) => FirstRegistrationScreen(),
-        '/login': (context) => const LoginScreen(),
+        '/register_screen': (context) => FirstRegistrationScreen(),
+        '/login_screen': (context) => const LoginScreen(),
         '/main_screen': (context) => const MainScreen(),
+        '/edit_profile_screen' : (context) => const EditProfile(),
       },
       home: const HomePage(),
     );

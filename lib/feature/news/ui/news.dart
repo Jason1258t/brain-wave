@@ -35,16 +35,29 @@ class _NewsScreenState extends State<NewsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
-                  Text('Новости', style: AppTypography.font24lightBlue,),
+                  Text(
+                    'Новости',
+                    style: AppTypography.font24lightBlue,
+                  ),
                   CircleAvatar(
                     backgroundImage: AssetImage('Assets/ProfileImage.png'),
                     radius: 25,
                   )
                 ],
               ),
-              const SizedBox(height: 15,),
-              CustomSearchField(hintText: 'что ищем', controller: queryController, callback: (q) {}, width: MediaQuery.of(context).size.width * 0.8,),
-              const SizedBox(height: 15,),
+              const SizedBox(
+                height: 15,
+              ),
+              CustomSearchField(
+                hintText: 'что ищем',
+                controller: queryController,
+                callback: (q) {},
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: 55,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
               BlocConsumer<NewsBloc, NewsState>(
                 listener: (context, state) {},
                 builder: (context, state) {
@@ -58,14 +71,14 @@ class _NewsScreenState extends State<NewsScreen> {
                         children: [
                           Column(
                             children:
-                            RepositoryProvider.of<NewsRepository>(context)
-                                .getNews()
-                                .map((e) => Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                  0, 21, 0, 21),
-                              child: Post(post: e),
-                            ))
-                                .toList(),
+                                RepositoryProvider.of<NewsRepository>(context)
+                                    .getNews()
+                                    .map((e) => Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 21, 0, 21),
+                                          child: Post(post: e),
+                                        ))
+                                    .toList(),
                           )
                         ],
                       ),

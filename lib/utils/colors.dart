@@ -9,4 +9,5 @@ abstract class AppColors {
   static const snackBarBackgroundColor = Color(0xff272850);
   static const snackBarTextColor = Color(0xffE1D7FF);
   static const red = Colors.red;
+  static const checkIcon = Color(0xff00D1FF);
 }

@@ -6,13 +6,16 @@ class CustomElevatedButton extends StatelessWidget {
   final String text;
   final double width;
   final double height;
+  final TextStyle styleText;
 
   const CustomElevatedButton(
       {Key? key,
       required this.callback,
       required this.text,
+      this.styleText = AppTypography.font20fff,
       this.width = 290,
-      this.height = 50})
+      this.height = 50,
+      })
       : super(key: key);
 
   @override
@@ -30,7 +33,7 @@ class CustomElevatedButton extends StatelessWidget {
         onPressed: callback,
         child: Text(
           text,
-          style: AppTypography.font20fff,
+          style: styleText,
         ),
       ),
     );

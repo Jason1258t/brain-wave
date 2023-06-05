@@ -94,6 +94,15 @@ class _ProfileState extends State<Profile> {
               },
             ),
             ListTile(
+              title: const Text(
+                'Редактировать профиль',
+                style: AppTypography.font18lightBlue,
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/edit_profile_screen');
+              },
+            ),
+            ListTile(
                 title: const Text(
                   'Выйти',
                   style: AppTypography.font18red,
