@@ -5,10 +5,6 @@ class Chat extends StatefulWidget {
 
   @override
   State<Chat> createState() => _ChatState();
-
-  void Add() {
-
-  }
 }
 
 class _ChatState extends State<Chat> {
