@@ -41,8 +41,8 @@ class LoginScreen extends StatelessWidget {
             CustomSnackBar.showSnackBar(context, 'поля заполнены неверно');
           } else if (state is LoginValidFields) {
             BlocProvider.of<AuthBloc>(context).add(LoginInitialEvent(
-                email: emailController.text,
-                password: passwordController.text));
+                email: emailController.text.trim(),
+                password: passwordController.text.trim()));
           }
         },
         builder: (context, state) {
@@ -96,8 +96,8 @@ class LoginScreen extends StatelessWidget {
                             callback: () {
                               BlocProvider.of<AuthBloc>(context).add(
                                   LoginCheckValid(
-                                      email: emailController.text,
-                                      password: passwordController.text));
+                                      email: emailController.text.trim(),
+                                      password: passwordController.text.trim()));
                             },
                             text: 'Войти'),
                         const SizedBox(
@@ -105,7 +105,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                         TextButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, '/register_first');
+                              Navigator.pushNamed(context, '/register_screen');
                             },
                             child: const Text(
                               'регистрация',
