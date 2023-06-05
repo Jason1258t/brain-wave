@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:brain_wave_2/feature/home/bloc/navigation_bloc.dart';
+import 'package:brain_wave_2/feature/neurons/ui/chat_neuron.dart';
+import 'package:brain_wave_2/feature/neurons/ui/neurons_screen.dart';
 import 'package:brain_wave_2/feature/news/bloc/news_bloc.dart';
 import 'package:brain_wave_2/feature/news/data/news_repository.dart';
 import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
@@ -49,6 +51,8 @@ class MyApp extends StatelessWidget {
         '/login_screen': (context) => const LoginScreen(),
         '/main_screen': (context) => const MainScreen(),
         '/edit_profile_screen' : (context) => const EditProfile(),
+        '/neurons' : (context) => const NeuronsScreen(),
+        '/neuron_chat' : (context) => const ChatNeuron(),
       },
       home: const HomePage(),
     );

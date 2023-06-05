@@ -5,7 +5,7 @@ import 'package:brain_wave_2/utils/colors.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/avatars/profile_avatar.dart';
 import 'package:brain_wave_2/widgets/buttons/icon_text_button.dart';
-import 'package:brain_wave_2/widgets/post.dart';
+import 'package:brain_wave_2/widgets/post/post.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

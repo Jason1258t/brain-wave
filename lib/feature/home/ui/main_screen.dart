@@ -3,6 +3,7 @@ import 'package:brain_wave_2/feature/profie/ui/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../neurons/ui/neurons_screen.dart';
 import '../bloc/navigation_bloc.dart';
 
 class MainScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final List<Widget> _widgetOptions = <Widget>[
     const NewsScreen(),
-    Text('нейронки'),
+    const NeuronsScreen(),
     Text('массенджер'),
     const Profile(),
   ];

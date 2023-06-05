@@ -2,22 +2,28 @@ import 'package:brain_wave_2/feature/home/bloc/navigation_bloc.dart';
 import 'package:brain_wave_2/feature/news/bloc/news_bloc.dart';
 import 'package:brain_wave_2/feature/news/data/news_repository.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
+import 'package:brain_wave_2/models/neuron_model.dart';
 import 'package:brain_wave_2/utils/utils.dart';
 import 'package:brain_wave_2/widgets/avatars/small_avatar.dart';
+import 'package:brain_wave_2/widgets/nueron/neuron.dart';
 import 'package:brain_wave_2/widgets/text_fields/search_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../widgets/post/post.dart';
+NeuronModel neuronL = NeuronModel(title: 'Chat gbt', image: 'Assets/chatGBT.png', isLike: true);
+NeuronModel neuron = NeuronModel(title: 'Chat gbt', image: 'Assets/chatGBT.png', isLike: false);
 
-class NewsScreen extends StatefulWidget {
-  const NewsScreen({Key? key}) : super(key: key);
+List<NeuronModel> neurons = <NeuronModel>[neuronL,neuron,neuronL,neuron,neuronL,neuron,neuronL,neuron,neuronL,neuron,neuronL,neuron];
+
+
+class NeuronsScreen extends StatefulWidget {
+  const NeuronsScreen({Key? key}) : super(key: key);
 
   @override
-  State<NewsScreen> createState() => _NewsScreenState();
+  State<NeuronsScreen> createState() => _NeuronsScreenState();
 }
 
-class _NewsScreenState extends State<NewsScreen> {
+class _NeuronsScreenState extends State<NeuronsScreen> {
   final TextEditingController queryController = TextEditingController();
 
   @override
@@ -39,7 +45,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Новости',
+                    'Нейросети',
                     style: AppTypography.font24lightBlue,
                   ),
                   GestureDetector(
@@ -62,7 +68,7 @@ class _NewsScreenState extends State<NewsScreen> {
                 height: 15,
               ),
               CustomSearchField(
-                hintText: 'что ищем',
+                hintText: 'Поиск нейросетей',
                 controller: queryController,
                 callback: (q) {},
                 width: MediaQuery.of(context).size.width * 0.8,
@@ -82,14 +88,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         scrollDirection: Axis.vertical,
                         children: [
                           Column(
-                            children:
-                                RepositoryProvider.of<NewsRepository>(context)
-                                    .getNews()
-                                    .map((e) => Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 21, 0, 21),
-                                          child: Post(post: e),
-                                        ))
+                            children: neurons.map((e) => Neuron(neuron: e,))
                                     .toList(),
                           )
                         ],

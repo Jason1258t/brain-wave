@@ -31,4 +31,6 @@ abstract class AppTypography {
   static const font20white = TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500);
 
   static const font14milk = TextStyle(color: Color(0xffC1C1C1), fontSize: 16, fontWeight: FontWeight.w400);
+
+  static const font13grey = TextStyle(color: Colors.grey, fontSize: 13);
 }
