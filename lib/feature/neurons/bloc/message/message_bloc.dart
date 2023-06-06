@@ -16,6 +16,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   MessageBloc({required ChatRepository chatRepository})
       : _chatRepository = chatRepository,
         super(MessageInitial()) {
+
     on<MessageSubscribeEvent>(_subscribe);
     on<MessageLoadingEvent>(_onLoading);
     on<MessageSuccessEvent>(_onSuccess);

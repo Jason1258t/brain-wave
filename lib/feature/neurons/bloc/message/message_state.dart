@@ -7,3 +7,4 @@ class MessageInitial extends MessageState {}
 class MessageLoadingState extends MessageState {}
 
 class MessageSuccessState extends MessageState {}
+
