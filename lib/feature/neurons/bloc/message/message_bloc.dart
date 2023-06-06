@@ -17,7 +17,31 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       : _chatRepository = chatRepository,
         super(MessageInitial()) {
 
+    on<MessageSubscribeEvent>(_subscribe);
+    on<MessageLoadingEvent>(_onLoading);
+    on<MessageSuccessEvent>(_onSuccess);
+    on<MessageSendEvent>(_sendMessage);
   }
 
+  _subscribe(MessageSubscribeEvent event, emit) {
+    _chatRepository.messageState.stream.listen((event) {
+      if (event == LoadingStateEnum.loading) add(MessageLoadingEvent());
+      if (event == LoadingStateEnum.success) add(MessageSuccessEvent());
+    });
+  }
 
+  _onLoading(MessageLoadingEvent event, emit) {
+    emit(MessageLoadingState());
+  }
+
+  _onSuccess(MessageSuccessEvent event, emit) {
+    emit(MessageSuccessState());
+  }
+
+  _sendMessage(MessageSendEvent event, emit) {
+    _chatRepository.messages
+        .add(Message(isReverse: false, text: event.content, isLoad: false));
+
+    _chatRepository.getMessageFromChatGBT(event.content);
+  }
 }

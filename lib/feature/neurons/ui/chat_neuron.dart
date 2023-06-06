@@ -6,6 +6,8 @@ import 'package:brain_wave_2/widgets/chat/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../bloc/message/message_bloc.dart';
+
 class ChatNeuron extends StatefulWidget {
   const ChatNeuron({Key? key}) : super(key: key);
 
@@ -30,144 +32,140 @@ class _ChatNeuronState extends State<ChatNeuron> {
     ChatRepository _chatRepository =
         RepositoryProvider.of<ChatRepository>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        backgroundColor: AppColors.appBarChat,
-        flexibleSpace: SafeArea(
-          child: Container(
-            height: 60,
-            padding: const EdgeInsets.only(right: 16),
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(
-                  width: 2,
-                ),
-                const CircleAvatar(
-                  backgroundImage: AssetImage('Assets/chatGBT.png'),
-                  maxRadius: 20,
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[
-                      Text(
-                        "Chat GBT",
-                        style: AppTypography.font18lightBlue,
+    return BlocConsumer<MessageBloc, MessageState>(
+      listener: (context, state) {
+        scrollDown();
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            backgroundColor: AppColors.appBarChat,
+            flexibleSpace: SafeArea(
+              child: Container(
+                height: 60,
+                padding: const EdgeInsets.only(right: 16),
+                child: Row(
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
                       ),
-                      SizedBox(
-                        height: 6,
+                    ),
+                    const SizedBox(
+                      width: 2,
+                    ),
+                    const CircleAvatar(
+                      backgroundImage: AssetImage('Assets/chatGBT.png'),
+                      maxRadius: 20,
+                    ),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const <Widget>[
+                          Text(
+                            "Chat GBT",
+                            style: AppTypography.font18lightBlue,
+                          ),
+                          SizedBox(
+                            height: 6,
+                          ),
+                          Text("Online", style: AppTypography.font13grey),
+                        ],
                       ),
-                      Text("Online", style: AppTypography.font13grey),
-                    ],
-                  ),
+                    ),
+                    const Icon(
+                      Icons.settings,
+                      color: AppColors.lightGrayText,
+                    ),
+                  ],
                 ),
-                const Icon(
-                  Icons.settings,
-                  color: AppColors.lightGrayText,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: AppColors.background,
-              ),
-              child: ListView(
-                reverse: true,
-                controller: _controller,
-                children: _chatRepository.messages.reversed
-                    .map((e) => Chat(
-                          message: e,
-                        ))
-                    .toList(),
               ),
             ),
           ),
-          Stack(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.bottomLeft,
+          body: Column(
+            children: [
+              Expanded(
                 child: Container(
-                  padding: const EdgeInsets.only(left: 10, bottom: 10, top: 10),
-                  height: 60,
                   width: double.infinity,
-                  color: Colors.white,
-                  child: Row(
-                    children: <Widget>[
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Expanded(
-                        child: TextField(
-                          controller: messageController,
-                          decoration: const InputDecoration(
-                              hintText: "Write message...",
-                              hintStyle: TextStyle(color: Colors.black54),
-                              border: InputBorder.none),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      FloatingActionButton(
-                        onPressed: () async {
-                          scrollDown();
-                          if (messageController.text.isNotEmpty) {
-                            _chatRepository.messages.add(Message(
-                                isReverse: false,
-                                text: messageController.text,
-                                isLoad: false));
-                            messageController.text = '';
-                            setState(() {});
-
-                            _chatRepository.messages.add(Message(
-                                isLoad: true,
-                                isReverse: true,
-                                text:
-                                    await _chatRepository.getMessageFromChatGBT(
-                                        messageController.text)));
-                          }
-
-                          setState(() {});
-                          scrollDown();
-                        },
-                        backgroundColor: Colors.blue,
-                        elevation: 0,
-                        child: const Icon(
-                          Icons.send,
-                          color: Colors.white,
-                          size: 18,
-                        ),
-                      ),
-                    ],
+                  decoration: const BoxDecoration(
+                    color: AppColors.background,
+                  ),
+                  child: ListView(
+                    reverse: true,
+                    controller: _controller,
+                    children: _chatRepository.messages.reversed
+                        .map((e) => MessageWidget(
+                              message: e,
+                            ))
+                        .toList(),
                   ),
                 ),
+              ),
+              Stack(
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Container(
+                      padding:
+                          const EdgeInsets.only(left: 10, bottom: 10, top: 10),
+                      height: 60,
+                      width: double.infinity,
+                      color: Colors.white,
+                      child: Row(
+                        children: <Widget>[
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child: TextField(
+                              controller: messageController,
+                              decoration: const InputDecoration(
+                                  hintText: "Write message...",
+                                  hintStyle: TextStyle(color: Colors.black54),
+                                  border: InputBorder.none),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          FloatingActionButton(
+                            onPressed: () async {
+                              scrollDown();
+                              if (messageController.text.isNotEmpty) {
+                                BlocProvider.of<MessageBloc>(context).add(
+                                    MessageSendEvent(
+                                        content: messageController.text));
+                                messageController.text = '';
+                              }
+                            },
+                            backgroundColor: Colors.blue,
+                            elevation: 0,
+                            child: const Icon(
+                              Icons.send,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

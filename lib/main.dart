@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:brain_wave_2/feature/home/bloc/navigation_bloc.dart';
+import 'package:brain_wave_2/feature/neurons/bloc/message/message_bloc.dart';
 import 'package:brain_wave_2/feature/neurons/data/chat_repository.dart';
 import 'package:brain_wave_2/feature/neurons/ui/chat_neuron.dart';
 import 'package:brain_wave_2/feature/neurons/ui/neurons_screen.dart';
@@ -118,6 +119,9 @@ class MyBlocProviders extends StatelessWidget {
       BlocProvider(
         lazy: false,
         create: (_) => ProfileUpdateBloc(appRepository: RepositoryProvider.of<AppRepository>(context))),
+      BlocProvider(
+        lazy: false,
+        create: (_) => MessageBloc(chatRepository: RepositoryProvider.of<ChatRepository>(context))..add(MessageSubscribeEvent())),
     ], child: const MyApp());
   }
 }
