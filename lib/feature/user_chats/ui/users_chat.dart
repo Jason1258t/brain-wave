@@ -1,5 +1,4 @@
 import 'package:brain_wave_2/feature/neurons/bloc/message/message_bloc.dart';
-import 'package:brain_wave_2/feature/neurons/data/chat_repository.dart';
 import 'package:brain_wave_2/models/message.dart';
 import 'package:brain_wave_2/utils/colors.dart';
 import 'package:brain_wave_2/utils/fonts.dart';

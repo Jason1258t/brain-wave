@@ -21,6 +21,7 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
+
 class _ChatPageState extends State<ChatPage> {
   bool _isAttachmentUploading = false;
 
