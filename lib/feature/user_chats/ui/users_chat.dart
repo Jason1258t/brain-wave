@@ -1,3 +1,4 @@
+import 'package:brain_wave_2/feature/neurons/bloc/message/message_bloc.dart';
 import 'package:brain_wave_2/feature/neurons/data/chat_repository.dart';
 import 'package:brain_wave_2/models/message.dart';
 import 'package:brain_wave_2/utils/colors.dart';
@@ -5,17 +6,33 @@ import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/chat/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
-import '../bloc/message/message_bloc.dart';
+class ChatUser extends StatefulWidget {
+  final bool isAttachmentUploading;
+  final List<types.Message> messageList;
+  final onAttachmentPressed;
+  final onMessageTap;
+  final onPreviewDataFetched;
+  final onSendPressed;
+  final types.User user;
 
-class ChatNeuron extends StatefulWidget {
-  const ChatNeuron({Key? key}) : super(key: key);
+  const ChatUser(
+      {Key? key,
+      required this.isAttachmentUploading,
+      required this.messageList,
+      required this.onAttachmentPressed,
+      required this.onMessageTap,
+      required this.onPreviewDataFetched,
+      required this.onSendPressed,
+      required this.user})
+      : super(key: key);
 
   @override
-  State<ChatNeuron> createState() => _ChatNeuronState();
+  State<ChatUser> createState() => _ChatUserState();
 }
 
-class _ChatNeuronState extends State<ChatNeuron> {
+class _ChatUserState extends State<ChatUser> {
   TextEditingController messageController = TextEditingController();
   final ScrollController _controller = ScrollController();
 
@@ -29,9 +46,6 @@ class _ChatNeuronState extends State<ChatNeuron> {
 
   @override
   Widget build(BuildContext context) {
-    ChatRepository _chatRepository =
-        RepositoryProvider.of<ChatRepository>(context);
-
     return BlocConsumer<MessageBloc, MessageState>(
       listener: (context, state) {
         scrollDown();
@@ -101,14 +115,19 @@ class _ChatNeuronState extends State<ChatNeuron> {
                     color: AppColors.background,
                   ),
                   child: ListView(
-                    reverse: true,
-                    controller: _controller,
-                    children: _chatRepository.messages.reversed
-                        .map((e) => MessageWidget(
-                              message: e,
-                            ))
-                        .toList(),
-                  ),
+                      reverse: true,
+                      controller: _controller,
+                      children: widget.messageList
+                          .map((e) => MessageWidget(
+                              message: Message(
+                                  createdAt:
+                                      "${DateTime.fromMillisecondsSinceEpoch(e.createdAt!).hour}:${DateTime.fromMillisecondsSinceEpoch(e.createdAt!).minute > 9 ? DateTime.fromMillisecondsSinceEpoch(e.createdAt!).minute : '0${DateTime.fromMillisecondsSinceEpoch(e.createdAt!).minute}'}",
+                                  authorName: e.author.firstName ?? '',
+                                  authorImage: e.author.imageUrl ?? '',
+                                  isReverse: e.author.id != widget.user.id,
+                                  isLoad: false,
+                                  text: e.toJson()['text'])))
+                          .toList()),
                 ),
               ),
               Stack(
@@ -142,9 +161,8 @@ class _ChatNeuronState extends State<ChatNeuron> {
                             onPressed: () async {
                               scrollDown();
                               if (messageController.text.isNotEmpty) {
-                                BlocProvider.of<MessageBloc>(context).add(
-                                    MessageSendEvent(
-                                        content: messageController.text.trim()));
+                                widget.onSendPressed(types.PartialText(
+                                    text: messageController.text));
                                 messageController.text = '';
                               }
                             },

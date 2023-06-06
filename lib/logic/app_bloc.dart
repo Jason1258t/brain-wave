@@ -34,7 +34,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   _onAuth(AppAuthEvent event, emit) {
     try {
-      _appRepository.authListener();
+      //_appRepository.authListener();
       _profileRepository.setUserId(_appRepository.getCurrentUser()!.uid);
       emit(AppAuthState());
     } catch (e) {

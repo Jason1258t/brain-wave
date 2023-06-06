@@ -3,7 +3,9 @@ import 'dart:developer';
 
 import 'package:brain_wave_2/services/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 enum AppStateEnum { auth, unAuth, start }
 
@@ -116,6 +118,17 @@ class AppRepository {
       final User user = await _firebaseAuthService.registerWithEmailAndPassword(
           email, password, name);
       _user = user;
+
+
+      await FirebaseChatCore.instance.createUserInFirestore(
+        types.User(
+          firstName: name,
+          id: user.uid,
+          imageUrl: 'https://i.pravatar.cc/300?u=$email',
+          //lastName: _lastName,
+        ),
+      );
+
       authState.add(AuthStateEnum.registered);
       appState.add(AppStateEnum.auth);
     } catch (e) {

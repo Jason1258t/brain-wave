@@ -16,7 +16,6 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   MessageBloc({required ChatRepository chatRepository})
       : _chatRepository = chatRepository,
         super(MessageInitial()) {
-
     on<MessageSubscribeEvent>(_subscribe);
     on<MessageLoadingEvent>(_onLoading);
     on<MessageSuccessEvent>(_onSuccess);
@@ -39,8 +38,13 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   }
 
   _sendMessage(MessageSendEvent event, emit) {
-    _chatRepository.messages
-        .add(Message(isReverse: false, text: event.content, isLoad: false));
+    _chatRepository.messages.add(Message(
+        isReverse: false,
+        text: event.content,
+        isLoad: false,
+        authorImage: '',
+        authorName: 'Chat GPT',
+        createdAt: "${DateTime.now().hour}:${DateTime.now().minute  > 9 ? DateTime.now().minute : '0${DateTime.now().minute}'}"));
 
     _chatRepository.getMessageFromChatGBT(event.content);
   }
