@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/models/message.dart';
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 
 class ChatRepository {
@@ -42,7 +43,6 @@ class ChatRepository {
     final responseBody = response.data;
     final mes = responseBody['choices'][0]['message']['content'];
     showLoadedMessage(mes);
-
     messageState.add(LoadingStateEnum.success);
 
     return mes;
