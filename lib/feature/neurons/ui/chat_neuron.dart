@@ -144,7 +144,7 @@ class _ChatNeuronState extends State<ChatNeuron> {
                               if (messageController.text.isNotEmpty) {
                                 BlocProvider.of<MessageBloc>(context).add(
                                     MessageSendEvent(
-                                        content: messageController.text));
+                                        content: messageController.text.trim()));
                                 messageController.text = '';
                               }
                             },
