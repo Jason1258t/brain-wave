@@ -2,8 +2,11 @@ import 'dart:developer';
 
 import 'package:brain_wave_2/feature/home/bloc/navigation_bloc.dart';
 import 'package:brain_wave_2/feature/neurons/bloc/message/message_bloc.dart';
-import 'package:brain_wave_2/feature/neurons/data/chat_repository.dart';
+import 'package:brain_wave_2/feature/neurons/bloc/neurons/neurons_bloc.dart';
+import 'package:brain_wave_2/feature/neurons/data/chat/chat_repository.dart';
+import 'package:brain_wave_2/feature/neurons/data/main/main_neuron_repository.dart';
 import 'package:brain_wave_2/feature/neurons/ui/chat_neuron.dart';
+import 'package:brain_wave_2/feature/neurons/ui/information_neuron.dart';
 import 'package:brain_wave_2/feature/neurons/ui/neurons_screen.dart';
 import 'package:brain_wave_2/feature/news/bloc/news_bloc.dart';
 import 'package:brain_wave_2/feature/news/data/news_repository.dart';
@@ -56,6 +59,7 @@ class MyApp extends StatelessWidget {
         '/edit_profile_screen' : (context) => const EditProfile(),
         '/neurons' : (context) => const NeuronsScreen(),
         '/neuron_chat' : (context) => const ChatNeuron(),
+        '/neuron_info' : (context) => const InformationNeuron(),
       },
       home: const HomePage(),
     );
@@ -76,6 +80,8 @@ class MyRepositoryProviders extends StatelessWidget {
           create: (_) => ProfileRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => NewsRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => ChatRepository()),
+      RepositoryProvider(create: (_) => NeuronsRepository(apiService: apiService)),
+      
     ], child: const MyBlocProviders());
   }
 }
@@ -122,6 +128,9 @@ class MyBlocProviders extends StatelessWidget {
       BlocProvider(
         lazy: false,
         create: (_) => MessageBloc(chatRepository: RepositoryProvider.of<ChatRepository>(context))..add(MessageSubscribeEvent())),
+      BlocProvider(
+        lazy: false,
+        create: (_) => NeuronsBloc(neuronsRepository: RepositoryProvider.of<NeuronsRepository>(context))..add(NeuronsSubscribeEvent())),
     ], child: const MyApp());
   }
 }

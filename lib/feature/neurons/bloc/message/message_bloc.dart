@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:brain_wave_2/feature/neurons/data/chat_repository.dart';
+import 'package:brain_wave_2/feature/neurons/data/chat/chat_repository.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/models/message.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,8 +1,7 @@
-import 'package:brain_wave_2/feature/neurons/data/chat_repository.dart';
-import 'package:brain_wave_2/models/message.dart';
+import 'package:brain_wave_2/feature/neurons/data/chat/chat_repository.dart';
 import 'package:brain_wave_2/utils/colors.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
-import 'package:brain_wave_2/widgets/chat/chat.dart';
+import 'package:brain_wave_2/widgets/chat/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -54,7 +53,7 @@ class _ChatNeuronState extends State<ChatNeuron> {
                       },
                       icon: const Icon(
                         Icons.arrow_back,
-                        color: Colors.black,
+                        color: AppColors.lightGrayText,
                       ),
                     ),
                     const SizedBox(
@@ -103,11 +102,7 @@ class _ChatNeuronState extends State<ChatNeuron> {
                   child: ListView(
                     reverse: true,
                     controller: _controller,
-                    children: _chatRepository.messages.reversed
-                        .map((e) => MessageWidget(
-                              message: e,
-                            ))
-                        .toList(),
+                    children: _chatRepository.messages.reversed.map((e) => MessageWidget(message: e,)).toList(),
                   ),
                 ),
               ),

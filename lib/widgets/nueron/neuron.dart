@@ -19,7 +19,7 @@ class _NeuronState extends State<Neuron> {
     return Padding(
       padding: const EdgeInsets.only(top: 25),
       child: InkWell(
-        onTap: () {Navigator.pushNamed(context, '/neuron_chat');},
+        onTap: () {Navigator.pushNamed(context, '/neuron_info');},
         child: Container(
           width: MediaQuery.of(context).size.width * 0.8,
           height: widget.height,
