@@ -12,4 +12,5 @@ abstract class AppColors {
   static const checkIcon = Color(0xff00D1FF);
   static const appBarChat = Color(0xff292B57);
   static const backgroundChat = Color(0xff131124);
+  static const chatYour = Color(0xff454682);
 }

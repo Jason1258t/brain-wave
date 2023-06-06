@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:brain_wave_2/feature/home/bloc/navigation_bloc.dart';
+import 'package:brain_wave_2/feature/neurons/data/chat_repository.dart';
 import 'package:brain_wave_2/feature/neurons/ui/chat_neuron.dart';
 import 'package:brain_wave_2/feature/neurons/ui/neurons_screen.dart';
 import 'package:brain_wave_2/feature/news/bloc/news_bloc.dart';
@@ -73,6 +74,7 @@ class MyRepositoryProviders extends StatelessWidget {
       RepositoryProvider(
           create: (_) => ProfileRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => NewsRepository(apiService: apiService)),
+      RepositoryProvider(create: (_) => ChatRepository()),
     ], child: const MyBlocProviders());
   }
 }
