@@ -14,6 +14,7 @@ import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
 import 'package:brain_wave_2/feature/profie/bloc/profile_update/profile_update_bloc.dart';
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/feature/profie/ui/edit_profile_screen.dart';
+import 'package:brain_wave_2/feature/user_chats/data/user_chats_repository.dart';
 import 'package:brain_wave_2/logic/app_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/services/api_service.dart';
@@ -81,7 +82,7 @@ class MyRepositoryProviders extends StatelessWidget {
       RepositoryProvider(create: (_) => NewsRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => ChatRepository()),
       RepositoryProvider(create: (_) => NeuronsRepository(apiService: apiService)),
-      
+      RepositoryProvider(create: (_) => UserChatsRepository()),
     ], child: const MyBlocProviders());
   }
 }

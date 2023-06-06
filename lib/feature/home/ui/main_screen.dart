@@ -1,5 +1,6 @@
 import 'package:brain_wave_2/feature/news/ui/news.dart';
 import 'package:brain_wave_2/feature/profie/ui/profile_screen.dart';
+import 'package:brain_wave_2/feature/user_chats/ui/rooms_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _widgetOptions = <Widget>[
     const NewsScreen(),
     const NeuronsScreen(),
-    Text('массенджер'),
+    const RoomsPage(),
     const Profile(),
   ];
 

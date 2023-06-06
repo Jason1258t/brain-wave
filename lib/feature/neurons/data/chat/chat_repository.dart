@@ -12,12 +12,23 @@ class ChatRepository {
       BehaviorSubject<LoadingStateEnum>.seeded(LoadingStateEnum.wait);
 
   void addLoadingMessage() {
-    messages.add(Message(isLoad: true, isReverse: true, text: ''));
+    messages.add(Message(
+        isLoad: true,
+        isReverse: true,
+        text: '',
+        authorName: 'Chat GPT',
+        authorImage: '',
+        createdAt: "${DateTime.now().hour}:${DateTime.now().minute}"));
   }
 
   void showLoadedMessage(String content) {
-    messages[messages.length - 1] =
-        Message(isReverse: true, text: content, isLoad: false);
+    messages[messages.length - 1] = Message(
+        isReverse: true,
+        text: content,
+        isLoad: false,
+        authorName: 'Chat GPT',
+        authorImage: '',
+        createdAt: "${DateTime.now().hour}:${DateTime.now().minute}");
   }
 
   Future<String> getMessageFromChatGBT(String question) async {
