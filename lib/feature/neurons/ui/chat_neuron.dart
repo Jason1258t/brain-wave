@@ -6,33 +6,6 @@ import 'package:brain_wave_2/widgets/chat/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-Message chats = Message(
-    isReverse: true,
-    text:
-        'teasfasdfaskdjfhaskjdfhakjsdmnbmnbmnbmnbm,nbmnbmnbm,bm,nbhflkasjdfxt');
-Message chatS = Message(isReverse: false, text: 'text');
-
-List messenges = [
-  chats,
-  chatS,
-  chats,
-  chatS,
-  chats,
-  chatS,
-  chats,
-  chatS,
-  chats,
-  chatS,
-  chats,
-  chatS,
-  chats,
-  chatS,
-  chats,
-  chatS,
-  chats,
-  chatS,
-];
-
 class ChatNeuron extends StatefulWidget {
   const ChatNeuron({Key? key}) : super(key: key);
 
@@ -54,6 +27,9 @@ class _ChatNeuronState extends State<ChatNeuron> {
 
   @override
   Widget build(BuildContext context) {
+    ChatRepository _chatRepository =
+        RepositoryProvider.of<ChatRepository>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -120,10 +96,10 @@ class _ChatNeuronState extends State<ChatNeuron> {
               child: ListView(
                 reverse: true,
                 controller: _controller,
-                children: messenges.reversed
+                children: _chatRepository.messages.reversed
                     .map((e) => Chat(
-                  message: e,
-                ))
+                          message: e,
+                        ))
                     .toList(),
               ),
             ),
@@ -158,14 +134,23 @@ class _ChatNeuronState extends State<ChatNeuron> {
                         onPressed: () async {
                           scrollDown();
                           if (messageController.text.isNotEmpty) {
-                            messenges.add(Message(
+                            _chatRepository.messages.add(Message(
                                 isReverse: false,
-                                text: messageController.text));
-                            messenges.add(Message(isReverse: true, text: await RepositoryProvider.of<ChatRepository>(context).getChat(messageController.text)));
+                                text: messageController.text,
+                                isLoad: false));
+                            messageController.text = '';
+                            setState(() {});
+
+                            _chatRepository.messages.add(Message(
+                                isLoad: true,
+                                isReverse: true,
+                                text:
+                                    await _chatRepository.getMessageFromChatGBT(
+                                        messageController.text)));
                           }
-                          messageController.text = '';
 
                           setState(() {});
+                          scrollDown();
                         },
                         backgroundColor: Colors.blue,
                         elevation: 0,
@@ -186,4 +171,3 @@ class _ChatNeuronState extends State<ChatNeuron> {
     );
   }
 }
-
