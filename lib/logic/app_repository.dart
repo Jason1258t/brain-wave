@@ -33,6 +33,12 @@ class AppRepository {
 
   User? getCurrentUser() => _firebaseAuthService.currentUser();
 
+  void authListener() async {
+    _firebaseAuthService.userUpdateState.stream.listen((event) {
+      if (event == null) logout();
+    });
+  }
+
   void verifyEmail() async {
     await _firebaseAuthService.verifyEmail();
   }

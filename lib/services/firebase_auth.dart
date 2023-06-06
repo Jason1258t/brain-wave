@@ -18,20 +18,16 @@ class FirebaseAuthService {
   User? currentUser() => _firebaseAuth.currentUser;
 
   void subscribeUserChanges() async {
+    subscribeAuthChanges();
     FirebaseAuth.instance.userChanges().listen((User? user) {
       if (user != null) {
-        print('');
-        print('');
-        print('');
-        print('');
-        print('');
         print(user.toString());
-        print('');
-        print('');
-        print('');
-        print('');
-        print('');
       }
+    });
+  }
+  void subscribeAuthChanges() async {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      userUpdateState.add(user);
     });
   }
 

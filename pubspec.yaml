@@ -24,6 +24,8 @@ dependencies:
   loading_animations: ^2.2.0
   google_sign_in: ^6.1.2
   font_awesome_flutter: ^10.4.0
+  freezed: ^2.3.5
+  flutter_firebase_chat_core: any
 
 
 dev_dependencies:
