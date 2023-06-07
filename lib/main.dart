@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:brain_wave_2/feature/add_post/ui/add_post_screen.dart';
 import 'package:brain_wave_2/feature/home/bloc/navigation_bloc.dart';
 import 'package:brain_wave_2/feature/neurons/bloc/message/message_bloc.dart';
 import 'package:brain_wave_2/feature/neurons/bloc/neurons/neurons_bloc.dart';
@@ -20,10 +21,12 @@ import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/services/api_service.dart';
 import 'package:brain_wave_2/services/custom_bloc_observer.dart';
 import 'package:brain_wave_2/services/firebase_auth.dart';
+import 'package:brain_wave_2/widgets/add_image_from_phone/image_from_phone.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'feature/auth/bloc/auth_bloc/auth_bloc.dart';
 import 'feature/auth/bloc/registration_bloc/registration_bloc.dart';
 import 'feature/auth/ui/registration.dart';
@@ -61,6 +64,8 @@ class MyApp extends StatelessWidget {
         '/neurons' : (context) => const NeuronsScreen(),
         '/neuron_chat' : (context) => const ChatNeuron(),
         '/neuron_info' : (context) => const InformationNeuron(),
+        '/add_post' : (context) => const AddPost(),
+        '/add_image' : (context) => ImageFromGalleryEx(),
       },
       home: const HomePage(),
     );

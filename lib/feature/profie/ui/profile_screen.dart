@@ -6,26 +6,10 @@ import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/avatars/profile_avatar.dart';
 import 'package:brain_wave_2/widgets/buttons/icon_text_button.dart';
 import 'package:brain_wave_2/widgets/post/post.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../logic/app_bloc.dart';
-import '../../../models/post_model.dart';
-
-PostModel _post = PostModel(
-    creatorName: 'лошара',
-    title: 'первый пост',
-    description:
-        'Безусловно, базовый вектор развития играет определяющее значение для направлений прогрессивного развития',
-    image: 'Assets/openAi.png',
-    creatorImage: 'Assets/ProfileImage.png');
-var list = [
-  _post,
-  _post,
-  _post,
-  _post,
-];
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -195,7 +179,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 IconTextButton(
                   title: 'Опубликовать',
-                  onPressed: () {},
+                  onPressed: () {Navigator.pushNamed(context, '/add_post');},
                   icon: const Icon(Icons.add_circle_outline),
                   borderRadius: 15,
                   height: 60,
