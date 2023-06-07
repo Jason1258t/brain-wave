@@ -1,8 +1,13 @@
 import 'dart:io';
 
 import 'package:brain_wave_2/feature/user_chats/ui/users_chat.dart';
+import 'package:brain_wave_2/logic/app_repository.dart';
+import 'package:brain_wave_2/utils/animations.dart';
+import 'package:brain_wave_2/utils/colors.dart';
+import 'package:brain_wave_2/utils/fonts.dart';
+import 'package:brain_wave_2/widgets/avatars/small_avatar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:http/http.dart' as http;
@@ -106,29 +111,79 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      systemOverlayStyle: SystemUiOverlayStyle.light,
-      title: const Text('Chat'),
-    ),
-    body: StreamBuilder<types.Room>(
-      initialData: widget.room,
-      stream: FirebaseChatCore.instance.room(widget.room.id),
-      builder: (context, snapshot) => StreamBuilder<List<types.Message>>(
-        initialData: const [],
-        stream: FirebaseChatCore.instance.messages(snapshot.data!),
-        builder: (context, snapshot) => ChatUser(
-          isAttachmentUploading: _isAttachmentUploading,
-          messageList: snapshot.data ?? [],
-          onAttachmentPressed: _handleAtachmentPressed,
-          onMessageTap: _handleMessageTap,
-          onPreviewDataFetched: _handlePreviewDataFetched,
-          onSendPressed: _handleSendPressed,
-          user: types.User(
-            id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
+  Widget build(BuildContext context) {
+    final chatCore = RepositoryProvider.of<AppRepository>(context).chatCore;
+    return  Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        backgroundColor: AppColors.appBarChat,
+        flexibleSpace: SafeArea(
+          child: Container(
+            height: 60,
+            padding: const EdgeInsets.only(right: 16),
+            child: Row(
+              children: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(
+                  width: 2,
+                ),
+                SmallAvatar(avatar: widget.room.imageUrl ?? '', name: widget.room.name!),
+                const SizedBox(
+                  width: 12,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        widget.room.name ?? '',
+                        style: AppTypography.font18lightBlue,
+                      ),
+                      const SizedBox(
+                        height: 6,
+                      ),
+                      const Text("Online", style: AppTypography.font13grey),
+                    ],
+                  ),
+                ),
+                const Icon(
+                  Icons.settings,
+                  color: AppColors.lightGrayText,
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
+      body: StreamBuilder<types.Room>(
+        initialData: widget.room,
+        stream: chatCore.room(widget.room.id),
+        builder: (context, snapshot) => StreamBuilder<List<types.Message>>(
+            initialData: const [],
+            stream: chatCore.messages(snapshot.data!),
+            builder: (context, snapshot) => snapshot.data != null ? ChatUser(
+              isAttachmentUploading: _isAttachmentUploading,
+              messageList: snapshot.data ?? [],
+              onAttachmentPressed: _handleAtachmentPressed,
+              onMessageTap: _handleMessageTap,
+              onPreviewDataFetched: _handlePreviewDataFetched,
+              onSendPressed: _handleSendPressed,
+              user: types.User(
+                id: chatCore.firebaseUser!.uid ?? '',
+              ),
+            ) : AppAnimations.bouncingLine
+        ),
+      ),
+    );
+  }
 }

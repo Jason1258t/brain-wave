@@ -4,7 +4,7 @@ import 'package:brain_wave_2/feature/neurons/data/main/main_neuron_repository.da
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/utils/utils.dart';
 import 'package:brain_wave_2/widgets/avatars/small_avatar.dart';
-import 'package:brain_wave_2/widgets/nueron/neuron.dart';
+import 'package:brain_wave_2/widgets/container_info/nueron/neuron.dart';
 import 'package:brain_wave_2/widgets/text_fields/search_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
