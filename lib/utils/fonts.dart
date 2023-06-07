@@ -37,6 +37,9 @@ abstract class AppTypography {
 
   static const font13grey = TextStyle(color: Colors.grey, fontSize: 13);
 
+  static const font14lightGrey =
+      TextStyle(color: Color(0xffC1C1C1), fontSize: 14);
+
   static const font13purple = TextStyle(color: Color(0xff7B6E9F), fontSize: 13);
 
   static const font12lightGray =
@@ -44,5 +47,6 @@ abstract class AppTypography {
 
   static const font32white = TextStyle(color: Colors.white, fontSize: 32);
 
-  static const font16description = TextStyle(color: AppColors.snackBarTextColor, fontSize: 16);
+  static const font16description =
+      TextStyle(color: AppColors.snackBarTextColor, fontSize: 16);
 }

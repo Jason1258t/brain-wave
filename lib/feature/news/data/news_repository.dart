@@ -21,6 +21,7 @@ class NewsRepository {
     if (f || _news.isEmpty) {
       newsState.add(LoadingStateEnum.loading);
       try {
+        log('ы');
         final news = await _apiService.getAllPosts();
         _news = news;
 

@@ -16,8 +16,8 @@ enum LoadingStateEnum { wait, loading, success, fail }
 class AppRepository {
   final FirebaseAuthService _firebaseAuthService;
   User? _user;
-
-  AppRepository({required FirebaseAuthService firebaseAuthService})
+  final chatCore;
+  AppRepository({required FirebaseAuthService firebaseAuthService, required this.chatCore})
       : _firebaseAuthService = firebaseAuthService;
   BehaviorSubject<AppStateEnum> appState =
       BehaviorSubject<AppStateEnum>.seeded(AppStateEnum.start);
@@ -103,6 +103,18 @@ class AppRepository {
     try {
       final User user = await _firebaseAuthService.signInWithGoogle();
       _user = user;
+
+      try {
+        await FirebaseChatCore.instance.createUserInFirestore(
+          types.User(
+            firstName: user.displayName,
+            id: user.uid,
+            imageUrl: user.photoURL,
+            //lastName: _lastName,
+          ),
+        );
+      } catch (e) {}
+
       authState.add(AuthStateEnum.logged);
       appState.add(AppStateEnum.auth);
     } catch (e) {
@@ -124,7 +136,7 @@ class AppRepository {
         types.User(
           firstName: name,
           id: user.uid,
-          imageUrl: 'https://i.pravatar.cc/300?u=$email',
+          imageUrl: '',
           //lastName: _lastName,
         ),
       );
