@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:brain_wave_2/logic/app_repository.dart';
+import 'package:brain_wave_2/services/api_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -11,7 +14,9 @@ class FirebaseAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   BehaviorSubject<User?> userUpdateState = BehaviorSubject<User?>.seeded(null);
 
-  FirebaseAuthService() : super() {
+  FirebaseAuthService()
+      :
+        super() {
     subscribeUserChanges();
   }
 
@@ -25,6 +30,7 @@ class FirebaseAuthService {
       }
     });
   }
+
   void subscribeAuthChanges() async {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       userUpdateState.add(user);
@@ -45,16 +51,41 @@ class FirebaseAuthService {
   }
 
   Future verifyEmail() async {
-    await _firebaseAuth.currentUser?.sendEmailVerification().whenComplete(() => updater());
+    await _firebaseAuth.currentUser?.sendEmailVerification().whenComplete(() =>
+        updater());
   }
 
   Future changeName(String name) async {
     try {
       await _firebaseAuth.currentUser?.updateDisplayName(name);
+      await _firebaseAuth.currentUser!.reload();
     } catch (e) {
       rethrow;
     }
+  }
 
+  Future uploadImage(File file, String imageId) async {
+    final storageRef = FirebaseStorage.instance.ref();
+    final mountainImagesRef = storageRef.child("images/$imageId");
+    try {
+      await mountainImagesRef.putFile(file);
+      final downloadUrl = await mountainImagesRef.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> changePhoto(File file) async {
+    try {
+      final url = await uploadImage(file, 'profile_${_firebaseAuth.currentUser!.uid}.png');
+      log(url);
+      await _firebaseAuth.currentUser!.updatePhotoURL(url);
+      await _firebaseAuth.currentUser!.reload();
+      return url;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future checkLoginWithFirebase() async {
@@ -78,7 +109,7 @@ class FirebaseAuthService {
 
       // Obtain the auth details from the request
       final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      await googleUser?.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
@@ -89,18 +120,6 @@ class FirebaseAuthService {
       // Once signed in, return the UserCredential
       final response = await _firebaseAuth.signInWithCredential(credential);
       final user = response.user;
-      log('---------------------------------------------');
-      log('-                                           -');
-      log('-                                           -');
-      log('-                                           -');
-      log(user!.uid.toString());
-      log(user.email.toString());
-      log(user.displayName.toString());
-      log(user.photoURL.toString());
-      log('-                                           -');
-      log('-                                           -');
-      log('-                                           -');
-      log('---------------------------------------------');
       return user;
     } catch (e) {
       rethrow;
@@ -113,18 +132,6 @@ class FirebaseAuthService {
       final response = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       final user = response.user;
-      log('---------------------------------------------');
-      log('-                                           -');
-      log('-                                           -');
-      log('-                                           -');
-      log(user!.uid.toString());
-      log(user.email.toString());
-      log(user.displayName.toString());
-      log(user.photoURL.toString());
-      log('-                                           -');
-      log('-                                           -');
-      log('-                                           -');
-      log('---------------------------------------------');
 
       return user;
     } on FirebaseAuthException catch (e) {
@@ -136,8 +143,8 @@ class FirebaseAuthService {
     }
   }
 
-  Future registerWithEmailAndPassword(
-      String email, String password, String name) async {
+  Future registerWithEmailAndPassword(String email, String password,
+      String name) async {
     try {
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
@@ -146,18 +153,7 @@ class FirebaseAuthService {
       await credential.user!.updateDisplayName(name);
 
       final user = _firebaseAuth.currentUser;
-      log('---------------------------------------------');
-      log('-                                           -');
-      log('-                                           -');
-      log('-                                           -');
-      log(user!.uid.toString());
-      log(user.email.toString());
-      log(user.displayName.toString());
-      log(user.photoURL.toString());
-      log('-                                           -');
-      log('-                                           -');
-      log('-                                           -');
-      log('---------------------------------------------');
+
 
       return user;
     } on FirebaseAuthException catch (e) {

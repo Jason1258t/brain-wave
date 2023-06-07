@@ -30,6 +30,7 @@ dependencies:
   open_filex: ^4.3.2
   cloud_firestore: ^4.8.0
   image_picker: ^0.8.7+5
+  firebase_storage: ^11.2.2
 
 
 

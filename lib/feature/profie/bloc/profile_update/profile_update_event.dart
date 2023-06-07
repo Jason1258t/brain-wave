@@ -12,3 +12,8 @@ class UpdateNameEvent extends ProfileUpdateEvent {
   String name;
   UpdateNameEvent({required this.name});
 }
+
+class UpdatePhotoEvent extends ProfileUpdateEvent {
+  File file;
+  UpdatePhotoEvent({required this.file});
+}
