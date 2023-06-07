@@ -37,6 +37,7 @@ class _NewsScreenState extends State<NewsScreen> {
             child: Column(
               children: [
                 Row(
+
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
