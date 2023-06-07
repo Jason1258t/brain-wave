@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:brain_wave_2/models/neuron_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../models/models.dart';
 
@@ -14,7 +16,12 @@ class ApiService {
   Future getUserPostsById({required String userId}) async {
     try {
       log('ы');
-      final resp = await _firestore.collection('posts').where('creator_id', isEqualTo: userId).get();
+      final resp = await _firestore
+          .collection('posts')
+          //.orderBy('createdAt', descending: true)
+          .where('creator_id', isEqualTo: userId)
+
+          .get();
       final list = resp.docs.map((e) => e.data()).toList();
 
       log(list.toString());
@@ -30,7 +37,7 @@ class ApiService {
       rethrow;
     }
   }
-  
+
   Future getUserById(String uid) async {
     try {
       final resp = await _firestore.collection('users').doc(uid).get();
@@ -40,7 +47,7 @@ class ApiService {
       rethrow;
     }
   }
-  
+
   Future<PostModel> mapToPost(Map<String, dynamic> json) async {
     final user = await getUserById(json['creator_id']);
 
@@ -49,13 +56,16 @@ class ApiService {
         description: json['description'],
         title: json['title'],
         creatorImage: user['imageUrl'] ?? '',
-        image: 'Assets/openAi.png');
+        image: json['imageUrl'] ?? '');
   }
 
   Future getAllPosts() async {
     try {
       log('ы');
-      final resp = await _firestore.collection('posts').get();
+      final resp = await _firestore
+          .collection('posts')
+          .orderBy('createdAt', descending: true)
+          .get();
       final list = resp.docs.map((e) => e.data()).toList();
 
       log(list.toString());
@@ -72,21 +82,47 @@ class ApiService {
     }
   }
 
-  Future createPost({required String uid, required String title, required String description}) async {
+  Future createPost(
+      {required String uid,
+      required String title,
+      required String description,
+      required File? image}) async {
     try {
-      await _firestore.collection('posts').add({
+      final doc = await _firestore.collection('posts').add({
         'creator_id': uid,
         'title': title,
         'description': description,
-        'imageUrl': ''
+        'imageUrl': '',
+        'createdAt': DateTime.now().millisecondsSinceEpoch
       });
-      
 
+      if (image != null) {
+        log(doc.path.toString());
+        final postId = doc.path.split('/')[1];
+
+        final imageUrl = await uploadImage(image, 'postImage_$postId.png');
+        await _firestore.collection('posts').doc(postId).set(
+          {'imageUrl': imageUrl},
+          SetOptions(merge: true),
+        );
+      }
     } catch (e) {
       rethrow;
     }
   }
 
+  Future uploadImage(File file, String imageId) async {
+    final storageRef = FirebaseStorage.instance.ref();
+    final mountainImagesRef = storageRef.child("images/$imageId");
+
+    try {
+      await mountainImagesRef.putFile(file);
+      final downloadUrl = mountainImagesRef.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   Future NeuronById({required String Id}) async {
     await Future.delayed(const Duration(milliseconds: 500));

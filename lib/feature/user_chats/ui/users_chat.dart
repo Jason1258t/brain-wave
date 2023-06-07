@@ -45,9 +45,9 @@ class _ChatUserState extends State<ChatUser> {
 
   String getTime(int ms) {
     final String hour = "${DateTime.fromMillisecondsSinceEpoch(ms).hour}";
-    final intMinute = DateTime.fromMillisecondsSinceEpoch(ms).minute > 9;
+    final intMinute = DateTime.fromMillisecondsSinceEpoch(ms).minute;
     late String minute;
-    if (intMinute) {
+    if (intMinute > 9) {
       minute = intMinute.toString();
     } else {
       minute = '0$intMinute';

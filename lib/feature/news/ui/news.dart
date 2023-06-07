@@ -24,7 +24,9 @@ class _NewsScreenState extends State<NewsScreen> {
   Widget build(BuildContext context) {
     BlocProvider.of<NewsBloc>(context).add(NewsInitialLoadEvent());
     return Scaffold(
-      floatingActionButton: const Icon(Icons.pending_actions_sharp),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Navigator.pushNamed(context, '/add_post');
+      }, backgroundColor: const Color(0xff0962B5), child: const Icon(Icons.edit, size: 27, color: Colors.white,),),
       body: Container(
         width: double.infinity,
         height: double.infinity,

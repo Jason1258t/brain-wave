@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
 import 'package:brain_wave_2/feature/profie/bloc/profile_update/profile_update_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
+import 'package:brain_wave_2/utils/animations.dart';
 import 'package:brain_wave_2/utils/colors.dart';
+import 'package:brain_wave_2/utils/dialogs.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/avatars/profile_avatar.dart';
 import 'package:brain_wave_2/widgets/snack_bar/custom_cnack_bar.dart';
@@ -108,11 +111,19 @@ class _EditProfileState extends State<EditProfile> {
       ),
       body: BlocConsumer<ProfileUpdateBloc, ProfileUpdateState>(
         listener: (context, state) {
+          if (state is UpdateLoadingState) {
+            Dialogs.showModal(context, AppAnimations.bouncingSquare);
+          }
+
           if (state is UpdateSuccessState) {
             CustomSnackBar.showSnackBar(context, 'успешно');
+            Dialogs.hide(context);
           }
-          if (state is UpdateFailState)
+          if (state is UpdateFailState) {
             CustomSnackBar.showSnackBar(context, 'что-то пошло по жопе');
+            Dialogs.hide(context);
+
+          }
         },
         builder: (context, state) {
           return Container(
@@ -128,33 +139,24 @@ class _EditProfileState extends State<EditProfile> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        ProfileAvatar(
+                    InkWell(
+                        onTap: () async {
+                          var source = ImageSource.gallery;
+                          XFile image = await imagePicker.pickImage(
+                              source: source,
+                              imageQuality: 50,
+                              preferredCameraDevice: CameraDevice.front);
+                          setState(() {
+                            _image = File(image.path);
+                            log(image.path.toString());
+                            repository.changePhoto(File(image.path));
+                          });
+
+                        },
+                        child: ProfileAvatar(
                           avatar: repository.getCurrentUser()!.photoURL ?? '',
                           name: repository.getCurrentUser()!.displayName!,
-                        ),
-                        InkWell(
-                            onTap: () async {
-                              var source = ImageSource.gallery;
-                              XFile image = await imagePicker.pickImage(
-                                  source: source,
-                                  imageQuality: 50,
-                                  preferredCameraDevice: CameraDevice.front);
-
-                              _image = File(image.path);
-                              setState(() {
-                              });
-                            },
-                            child: const Icon(
-                              Icons.edit_note,
-                              color: AppColors.lightBlueText,
-                              size: 30,
-                            )),
-                      ],
-                    ),
+                        ),),
                     Padding(
                       padding: EdgeInsets.fromLTRB(
                           paddingWidthMainSize, 20, paddingWidthMainSize, 10),

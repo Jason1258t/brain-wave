@@ -29,6 +29,7 @@ class _PostState extends State<Post> {
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,17 +79,18 @@ class _PostState extends State<Post> {
             const SizedBox(
               height: 16,
             ),
+            widget.post.image.isNotEmpty?
             Container(
               width: double.infinity,
-              height: 140,
+              height: 180,
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(7)),
                   image: DecorationImage(
-                      image: AssetImage(
+                      image: NetworkImage(
                         widget.post.image,
                       ),
                       fit: BoxFit.cover)),
-            ),
+            ) : Container(),
           ],
         ),
       ),

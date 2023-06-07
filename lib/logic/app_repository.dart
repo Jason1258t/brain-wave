@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:brain_wave_2/services/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -49,6 +50,18 @@ class AppRepository {
     changeNameState.add(LoadingStateEnum.loading);
     try {
       await _firebaseAuthService.changeName(name);
+      await FirebaseChatCore.instance.createUserInFirestore(types.User(id: getCurrentUser()!.uid, firstName: name, imageUrl: getCurrentUser()!.photoURL));
+      changeNameState.add(LoadingStateEnum.success);
+    } catch (e) {
+      changeNameState.add(LoadingStateEnum.fail);
+    }
+  }
+
+  void changePhoto(File file) async {
+    changeNameState.add(LoadingStateEnum.loading);
+    try {
+      final String url = await _firebaseAuthService.changePhoto(file);
+      await FirebaseChatCore.instance.createUserInFirestore(types.User(id: getCurrentUser()!.uid, imageUrl: url, firstName: getCurrentUser()!.displayName));
       changeNameState.add(LoadingStateEnum.success);
     } catch (e) {
       changeNameState.add(LoadingStateEnum.fail);
