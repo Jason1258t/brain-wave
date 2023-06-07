@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:brain_wave_2/feature/user_chats/ui/users_chat.dart';
+import 'package:brain_wave_2/utils/colors.dart';
+import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -108,8 +110,58 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      systemOverlayStyle: SystemUiOverlayStyle.light,
-      title: const Text('Chat'),
+      elevation: 0,
+      automaticallyImplyLeading: false,
+      backgroundColor: AppColors.appBarChat,
+      flexibleSpace: SafeArea(
+        child: Container(
+          height: 60,
+          padding: const EdgeInsets.only(right: 16),
+          child: Row(
+            children: <Widget>[
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(
+                width: 2,
+              ),
+              const CircleAvatar(
+                backgroundImage: AssetImage('Assets/chatGBT.png'),
+                maxRadius: 20,
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                    widget.room.name ?? '',
+                    style: AppTypography.font18lightBlue,
+                    ),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    const Text("Online", style: AppTypography.font13grey),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.settings,
+                color: AppColors.lightGrayText,
+              ),
+            ],
+          ),
+        ),
+      ),
     ),
     body: StreamBuilder<types.Room>(
       initialData: widget.room,

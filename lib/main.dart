@@ -15,6 +15,8 @@ import 'package:brain_wave_2/feature/profie/bloc/profile_update/profile_update_b
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/feature/profie/ui/edit_profile_screen.dart';
 import 'package:brain_wave_2/feature/user_chats/data/user_chats_repository.dart';
+import 'package:brain_wave_2/feature/user_chats/ui/user_chat_screen.dart';
+import 'package:brain_wave_2/feature/user_chats/ui/users_screen.dart';
 import 'package:brain_wave_2/logic/app_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/services/api_service.dart';
@@ -61,6 +63,7 @@ class MyApp extends StatelessWidget {
         '/neurons' : (context) => const NeuronsScreen(),
         '/neuron_chat' : (context) => const ChatNeuron(),
         '/neuron_info' : (context) => const InformationNeuron(),
+        '/chat_user' : (context) => const UsersPage(),
       },
       home: const HomePage(),
     );

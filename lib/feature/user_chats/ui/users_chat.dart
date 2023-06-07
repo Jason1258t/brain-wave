@@ -51,63 +51,10 @@ class _ChatUserState extends State<ChatUser> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            automaticallyImplyLeading: false,
-            backgroundColor: AppColors.appBarChat,
-            flexibleSpace: SafeArea(
-              child: Container(
-                height: 60,
-                padding: const EdgeInsets.only(right: 16),
-                child: Row(
-                  children: <Widget>[
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    const CircleAvatar(
-                      backgroundImage: AssetImage('Assets/chatGBT.png'),
-                      maxRadius: 20,
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const <Widget>[
-                          Text(
-                            "Chat GBT",
-                            style: AppTypography.font18lightBlue,
-                          ),
-                          SizedBox(
-                            height: 6,
-                          ),
-                          Text("Online", style: AppTypography.font13grey),
-                        ],
-                      ),
-                    ),
-                    const Icon(
-                      Icons.settings,
-                      color: AppColors.lightGrayText,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
           body: Column(
             children: [
               Expanded(
+                flex: 1,
                 child: Container(
                   width: double.infinity,
                   decoration: const BoxDecoration(
@@ -121,7 +68,8 @@ class _ChatUserState extends State<ChatUser> {
                               message: Message(
                                   createdAt:
                                       "${DateTime.fromMillisecondsSinceEpoch(e.createdAt!).hour}:${DateTime.fromMillisecondsSinceEpoch(e.createdAt!).minute > 9 ? DateTime.fromMillisecondsSinceEpoch(e.createdAt!).minute : '0${DateTime.fromMillisecondsSinceEpoch(e.createdAt!).minute}'}",
-                                  authorName: e.author.firstName ?? '',
+                                  authorName: e.author.id != widget.user.id
+                                      ? e.author.firstName ?? '' : 'Вы',
                                   authorImage: e.author.imageUrl ?? '',
                                   isReverse: e.author.id != widget.user.id,
                                   isLoad: false,
@@ -145,6 +93,7 @@ class _ChatUserState extends State<ChatUser> {
                             width: 15,
                           ),
                           Expanded(
+                            flex: 1,
                             child: TextField(
                               controller: messageController,
                               decoration: const InputDecoration(
