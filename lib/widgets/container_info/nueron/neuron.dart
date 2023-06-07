@@ -32,7 +32,25 @@ class _NeuronState extends State<Neuron> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Image.asset(widget.neuron.image),
-                Text(widget.neuron.title, style: AppTypography.font24lightBlue,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(widget.neuron.title, style: AppTypography.font24lightBlue,),
+                    Container(
+                      decoration: const BoxDecoration(
+                        color: AppColors.hashtag,
+                        borderRadius: BorderRadius.all(Radius.circular(2)),
+                      ),
+                      child: Expanded(
+                        child: Text(
+                          '#${widget.neuron.hashtag}',
+                          style: AppTypography.font12lightGray,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
                 IconButton(
                     onPressed: () {},
                     icon: Icon(widget.neuron.isLike ? FontAwesomeIcons.heartCrack : FontAwesomeIcons.heart, color: Colors.white,),
