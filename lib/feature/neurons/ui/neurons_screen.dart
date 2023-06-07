@@ -1,7 +1,6 @@
 import 'package:brain_wave_2/feature/home/bloc/navigation_bloc.dart';
 import 'package:brain_wave_2/feature/neurons/bloc/neurons/neurons_bloc.dart';
 import 'package:brain_wave_2/feature/neurons/data/main/main_neuron_repository.dart';
-import 'package:brain_wave_2/feature/news/bloc/news_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/utils/utils.dart';
 import 'package:brain_wave_2/widgets/avatars/small_avatar.dart';

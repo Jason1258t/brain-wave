@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/utils/colors.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
-import 'package:brain_wave_2/widgets/add_image_from_phone/image_from_phone.dart';
 import 'package:brain_wave_2/widgets/buttons/elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,8 +21,17 @@ class _AddPostState extends State<AddPost> {
   final _namePostController = TextEditingController(text: 'Название поста');
   final _descriptionPostController = TextEditingController(text: 'Чего нового');
 
-  Future<void> _displayTextInputDialog(
-      BuildContext context,
+  var _image;
+  var imagePicker;
+  var type;
+
+  @override
+  void initState() {
+    super.initState();
+    imagePicker = ImagePicker();
+  }
+
+  Future<void> _displayTextInputDialog(BuildContext context,
       TextEditingController controller,
       String titleAlertDialog,
       String editType) async {
@@ -59,7 +69,7 @@ class _AddPostState extends State<AddPost> {
   @override
   Widget build(BuildContext context) {
     AppRepository _appRepository =
-        RepositoryProvider.of<AppRepository>(context);
+    RepositoryProvider.of<AppRepository>(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -85,9 +95,8 @@ class _AddPostState extends State<AddPost> {
                 ),
                 CustomElevatedButton(
                   text: 'Опубликовать',
-                  callback: () async{
+                  callback: () async {
                     Navigator.pushNamed(context, '/add_image');
-
                   }, //TODo доделать добавление поста
                   width: 150,
                   height: 30,
@@ -97,87 +106,125 @@ class _AddPostState extends State<AddPost> {
           ),
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          color: AppColors.background,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(19.0),
-          child: Column(children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SmallAvatar(
-                    avatar: _appRepository.getCurrentUser()?.photoURL ?? '',
-                    name: _appRepository.getCurrentUser()?.displayName ?? ''),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            _namePostController.text,
-                            style: AppTypography.font20white,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              _displayTextInputDialog(
-                                  context,
-                                  _namePostController,
-                                  'название поездки',
-                                  'name');
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Icon(
-                                Icons.pending_actions,
-                                color: AppColors.lightBlueText,
-                              ),
+      body: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: AppColors.background,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(19.0),
+            child: Column(children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SmallAvatar(
+                      avatar: _appRepository
+                          .getCurrentUser()
+                          ?.photoURL ?? '',
+                      name: _appRepository
+                          .getCurrentUser()
+                          ?.displayName ?? ''),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              _namePostController.text,
+                              style: AppTypography.font20white,
                             ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 9,
-                      ),
-                      Text(
-                        _appRepository.getCurrentUser()?.displayName ?? 'name',
-                        style: AppTypography.font14milk,
-                      ),
-                    ],
+                            InkWell(
+                              onTap: () {
+                                _displayTextInputDialog(
+                                    context,
+                                    _namePostController,
+                                    'название поездки',
+                                    'name');
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.only(left: 8.0),
+                                child: Icon(
+                                  Icons.pending_actions,
+                                  color: AppColors.lightBlueText,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 9,
+                        ),
+                        Text(
+                          _appRepository
+                              .getCurrentUser()
+                              ?.displayName ?? 'name',
+                          style: AppTypography.font14milk,
+                        ),
+                      ],
+                    ),
                   ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ],
-            ),
-            const SizedBox(height: 20,),
-            Container(
-              decoration: BoxDecoration(
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.8,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.25,
+                child: TextField(
+                  keyboardType: TextInputType.multiline,
+                  expands: true,
+                  maxLines: null,
+                  style: AppTypography.font18lightBlue,
+                  decoration: const InputDecoration(
+                      filled: true, border: InputBorder.none),
+                  controller: _descriptionPostController,
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: InkWell(
+                  onTap: () async {
+                    var source = ImageSource.gallery;
+                    XFile image = await imagePicker.pickImage(
+                        source: source,
+                        imageQuality: 50,
+                        preferredCameraDevice: CameraDevice.front);
+                    setState(() {
+                      _image = File(image.path);
+                    });
+                    },
+                  child: _image != null ? Image.file(_image) : const Image(image: AssetImage('Assets/empty_img.png')),
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              const Divider(
+                thickness: 2,
+                indent: 19,
+                endIndent: 19,
                 color: AppColors.widgetsBackground,
-                borderRadius: BorderRadius.circular(10),
               ),
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.5,
-              child: TextField(
-                keyboardType: TextInputType.multiline,
-                expands: true,
-                maxLines: null,
-                style: AppTypography.font16lightGray,
-                decoration: const InputDecoration(filled: true, border: InputBorder.none),
-                controller: _descriptionPostController,
-              ),
-            ),
-            const SizedBox(height: 20,),
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.widgetsBackground,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.1,
-            ),
-          ]),
+            ]),
+          ),
         ),
       ),
     );
