@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:brain_wave_2/models/neuron_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,71 +12,64 @@ class ApiService {
   ApiService({required FirebaseFirestore firestore}) : _firestore = firestore;
 
   Future getUserPostsById({required String userId}) async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    try {
+      log('ы');
+      final resp = await _firestore.collection('posts').where('creator_id', isEqualTo: userId).get();
+      final list = resp.docs.map((e) => e.data()).toList();
 
-    return [
-      PostModel(
-          creatorName: 'лошара',
-          description: 'очень классное описание ток здесь дап',
-          title: 'топ 10 нейронок',
-          creatorImage: '',
-          image: 'Assets/openAi.png'),
-      PostModel(
-          creatorName: 'лошара',
-          description: 'очень классное описание ток здесь дап',
-          title: 'топ 10 нейронок',
-          creatorImage: '',
-          image: 'Assets/openAi.png'),
-      PostModel(
-          creatorName: 'лошара',
-          description: 'очень классное описание ток здесь дап',
-          title: 'топ 10 нейронок',
-          creatorImage: '',
-          image: 'Assets/openAi.png'),
-    ];
+      log(list.toString());
+
+      final List<PostModel> posts = [];
+
+      for (var i in list) {
+        posts.add(await mapToPost(i));
+      }
+      return posts;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+  
+  Future getUserById(String uid) async {
+    try {
+      final resp = await _firestore.collection('users').doc(uid).get();
+      //log(resp.data().toString());
+      return resp.data();
+    } catch (e) {
+      rethrow;
+    }
+  }
+  
+  Future<PostModel> mapToPost(Map<String, dynamic> json) async {
+    final user = await getUserById(json['creator_id']);
+
+    return PostModel(
+        creatorName: user['firstName'],
+        description: json['description'],
+        title: json['title'],
+        creatorImage: user['imageUrl'] ?? '',
+        image: 'Assets/openAi.png');
   }
 
   Future getAllPosts() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    try {
+      log('ы');
+      final resp = await _firestore.collection('posts').get();
+      final list = resp.docs.map((e) => e.data()).toList();
 
-    return [
-      PostModel(
-          creatorName: 'лошара',
-          description: 'очень классное описание ток здесь дап',
-          title: 'топ 10 нейронок',
-          creatorImage: '',
-          image: 'Assets/openAi.png'),
-      PostModel(
-          creatorName: 'лошара',
-          description: 'очень классное описание ток здесь дап',
-          title: 'топ 10 нейронок',
-          creatorImage: '',
-          image: 'Assets/openAi.png'),
-      PostModel(
-          creatorName: 'лошара',
-          description: 'очень классное описание ток здесь дап',
-          title: 'топ 10 нейронок',
-          creatorImage: '',
-          image: 'Assets/openAi.png'),
-      PostModel(
-          creatorName: 'лошара',
-          description: 'очень классное описание ток здесь дап',
-          title: 'топ 10 нейронок',
-          creatorImage: '',
-          image: 'Assets/openAi.png'),
-      PostModel(
-          creatorName: 'лошара',
-          description: 'очень классное описание ток здесь дап',
-          title: 'топ 10 нейронок',
-          creatorImage: '',
-          image: 'Assets/openAi.png'),
-      PostModel(
-          creatorName: 'лошара',
-          description: 'очень классное описание ток здесь дап',
-          title: 'топ 10 нейронок',
-          creatorImage: '',
-          image: 'Assets/openAi.png'),
-    ];
+      log(list.toString());
+
+      final List<PostModel> posts = [];
+
+      for (var i in list) {
+        posts.add(await mapToPost(i));
+      }
+      return posts;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 
   Future createPost({required String uid, required String title, required String description}) async {
