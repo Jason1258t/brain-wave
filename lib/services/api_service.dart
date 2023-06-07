@@ -1,10 +1,15 @@
 import 'dart:async';
 
 import 'package:brain_wave_2/models/neuron_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/models.dart';
 
 class ApiService {
+  final FirebaseFirestore _firestore;
+
+  ApiService({required FirebaseFirestore firestore}) : _firestore = firestore;
+
   Future getUserPostsById({required String userId}) async {
     await Future.delayed(const Duration(milliseconds: 500));
 
@@ -72,6 +77,22 @@ class ApiService {
           image: 'Assets/openAi.png'),
     ];
   }
+
+  Future createPost({required String uid, required String title, required String description}) async {
+    try {
+      await _firestore.collection('posts').add({
+        'creator_id': uid,
+        'title': title,
+        'description': description,
+        'imageUrl': ''
+      });
+      
+
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 
   Future NeuronById({required String Id}) async {
     await Future.delayed(const Duration(milliseconds: 500));

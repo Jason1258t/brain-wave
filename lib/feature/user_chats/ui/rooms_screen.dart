@@ -23,25 +23,24 @@ class _RoomsPageState extends State<RoomsPage> {
   @override
   Widget build(BuildContext context) {
     final TextEditingController queryController = TextEditingController();
-
+    final chatCore = RepositoryProvider.of<AppRepository>(context).chatCore;
     return Scaffold(
       body: StreamBuilder<List<types.Room>>(
         stream: FirebaseChatCore.instance.rooms(),
         initialData: const [],
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(
-                bottom: 200,
-              ),
-              child: const Text(
-                'No rooms',
-                style: TextStyle(color: Colors.white),
-              ),
-            );
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return const Center(
+                child: Text(
+                  'Нет чатов',
+                  style: TextStyle(color: Colors.white),
+                ),
+              );
+            }
           }
-
           return Container(
               width: double.infinity,
               height: double.infinity,
@@ -57,7 +56,7 @@ class _RoomsPageState extends State<RoomsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        'Нейросети',
+                        'Чаты',
                         style: AppTypography.font24lightBlue,
                       ),
                       GestureDetector(
@@ -81,7 +80,7 @@ class _RoomsPageState extends State<RoomsPage> {
                     height: 15,
                   ),
                   CustomSearchField(
-                    hintText: 'Поиск нейросетей',
+                    hintText: 'Поиск чатов',
                     controller: queryController,
                     callback: (q) {},
                     width: MediaQuery.of(context).size.width * 0.8,
@@ -106,8 +105,43 @@ class _RoomsPageState extends State<RoomsPage> {
                               ),
                             );
                           },
-                          child: Users(
-                            room: room,
+                          child: StreamBuilder<types.Room>(
+                            initialData: room,
+                            stream: chatCore.room(room.id),
+                            builder: (context, snapshot) {
+                              if (snapshot.data != null) {
+                                return StreamBuilder<List<types.Message>>(
+                                    initialData: const [],
+                                    stream: chatCore
+                                        .messages(snapshot.data!),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.data != null) {
+                                        return Users(
+                                          lastMessage: snapshot.data!.first,
+                                          room: room,
+                                        );
+                                      } else {
+                                        return Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: [
+                                            AppAnimations.bouncingLine
+                                          ],
+                                        );
+                                      }
+                                    });
+                              } else {
+                                return Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                                  children: [
+                                    AppAnimations.bouncingLine
+                                  ],
+                                );
+                              }
+
+                            }
+
                           ),
                         );
                       },

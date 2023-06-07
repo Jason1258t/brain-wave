@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 class SmallAvatar extends StatelessWidget {
   String avatar;
   String name;
+  Color? color;
 
   //double size;
 
-  SmallAvatar({Key? key, required this.avatar, required this.name})
+  SmallAvatar({Key? key, required this.avatar, required this.name, this.color})
       : super(key: key);
 
   @override
@@ -18,7 +19,7 @@ class SmallAvatar extends StatelessWidget {
             radius: 25,
           )
         : CircleAvatar(
-            backgroundColor: const Color(0xff5024CE),
+            backgroundColor: color ?? const Color(0xff5024CE),
             radius: 25,
             child: Text(
               name[0].toUpperCase(),

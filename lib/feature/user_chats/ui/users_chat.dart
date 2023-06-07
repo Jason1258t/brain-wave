@@ -43,6 +43,18 @@ class _ChatUserState extends State<ChatUser> {
     );
   }
 
+  String getTime(int ms) {
+    final String hour = "${DateTime.fromMillisecondsSinceEpoch(ms).hour}";
+    final intMinute = DateTime.fromMillisecondsSinceEpoch(ms).minute > 9;
+    late String minute;
+    if (intMinute) {
+      minute = intMinute.toString();
+    } else {
+      minute = '0$intMinute';
+    }
+    return "$hour:$minute";
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MessageBloc, MessageState>(
@@ -66,10 +78,10 @@ class _ChatUserState extends State<ChatUser> {
                       children: widget.messageList
                           .map((e) => MessageWidget(
                               message: Message(
-                                  createdAt:
-                                      "${DateTime.fromMillisecondsSinceEpoch(e.createdAt!).hour}:${DateTime.fromMillisecondsSinceEpoch(e.createdAt!).minute > 9 ? DateTime.fromMillisecondsSinceEpoch(e.createdAt!).minute : '0${DateTime.fromMillisecondsSinceEpoch(e.createdAt!).minute}'}",
+                                  createdAt: getTime(e.createdAt!),
                                   authorName: e.author.id != widget.user.id
-                                      ? e.author.firstName ?? '' : 'Вы',
+                                      ? e.author.firstName ?? ''
+                                      : 'Вы',
                                   authorImage: e.author.imageUrl ?? '',
                                   isReverse: e.author.id != widget.user.id,
                                   isLoad: false,
