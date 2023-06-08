@@ -48,21 +48,19 @@ class _PostState extends State<Post> {
                     SmallAvatar(
                         avatar: widget.post.creatorImage,
                         name: widget.post.creatorName),
+                    const SizedBox(width: 5,),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          width: 220,
-                          child: Text(
-                            widget.post.title,
-                            style: AppTypography.font20white,
-                          ),
+                        Text(
+                          widget.post.creatorName,
+                          style: AppTypography.font20white,
                         ),
                         const SizedBox(
                           height: 9,
                         ),
                         Text(
-                          widget.post.creatorName,
+                          widget.post.createdAt,
                           style: AppTypography.font14milk,
                         ),
                       ],
@@ -95,10 +93,13 @@ class _PostState extends State<Post> {
             const SizedBox(
               height: 16,
             ),
-            Text(
-              widget.post.description,
-              softWrap: true,
-              style: AppTypography.font16white,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 7),
+              child: Text(
+                widget.post.description,
+                softWrap: true,
+                style: AppTypography.font16white,
+              ),
             ),
             const SizedBox(
               height: 16,
