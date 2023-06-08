@@ -22,14 +22,14 @@ class ApiService {
           .where('creator_id', isEqualTo: userId)
 
           .get();
-      final list = resp.docs.map((e) => e.data()).toList();
+      final list = resp.docs.map((e) => {'data': e.data(), 'id': e.id}).toList();
 
       log(list.toString());
 
       final List<PostModel> posts = [];
 
       for (var i in list) {
-        posts.add(await mapToPost(i));
+        posts.add(await mapToPost(i, true));
       }
       return posts;
     } catch (e) {
@@ -48,15 +48,17 @@ class ApiService {
     }
   }
 
-  Future<PostModel> mapToPost(Map<String, dynamic> json) async {
-    final user = await getUserById(json['creator_id']);
+  Future<PostModel> mapToPost(Map<String, dynamic> json, bool type) async {
+    final user = await getUserById(json['data']['creator_id']);
 
     return PostModel(
+        isOwner: type,
+        id: json['id'],
         creatorName: user['firstName'],
-        description: json['description'],
-        title: json['title'],
+        description: json['data']['description'],
+        title: json['data']['title'],
         creatorImage: user['imageUrl'] ?? '',
-        image: json['imageUrl'] ?? '');
+        image: json['data']['imageUrl'] ?? '');
   }
 
   Future getAllPosts() async {
@@ -66,20 +68,29 @@ class ApiService {
           .collection('posts')
           .orderBy('createdAt', descending: true)
           .get();
-      final list = resp.docs.map((e) => e.data()).toList();
+      final list = resp.docs.map((e) => {'data': e.data(), 'id': e.id}).toList();
 
       log(list.toString());
 
       final List<PostModel> posts = [];
 
       for (var i in list) {
-        posts.add(await mapToPost(i));
+        posts.add(await mapToPost(i, false));
       }
       return posts;
     } catch (e) {
       log(e.toString());
       rethrow;
     }
+  }
+
+  Future deletePost({required String postId}) async {
+    try {
+      await _firestore.collection('posts').doc(postId).delete();
+    } catch (e) {
+      rethrow;
+    }
+
   }
 
   Future createPost(
@@ -124,7 +135,7 @@ class ApiService {
     }
   }
 
-  Future NeuronById({required String Id}) async {
+  Future neuronById({required String Id}) async {
     await Future.delayed(const Duration(milliseconds: 500));
 
     return [

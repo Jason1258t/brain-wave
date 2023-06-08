@@ -31,4 +31,13 @@ class ProfileRepository {
       }
     }
   }
+
+  void deletePost(PostModel postModel) async {
+    try {
+      _apiService.deletePost(postId: postModel.id);
+      initialLoadPosts(f: true);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
