@@ -7,7 +7,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class Neuron extends StatefulWidget {
   NeuronModel neuron;
   double height;
-
   Neuron({Key? key, required this.neuron, this.height = 80}) : super(key: key);
 
   @override
