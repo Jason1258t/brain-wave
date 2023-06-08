@@ -25,7 +25,6 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
   var _image;
@@ -81,6 +80,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     final repository = RepositoryProvider.of<AppRepository>(context);
+    TextEditingController nameController = TextEditingController(text: repository.getCurrentUser()!.displayName);
     void updater() async {
       if (!repository.getCurrentUser()!.emailVerified) {
         CustomSnackBar.showSnackBar(
@@ -141,6 +141,7 @@ class _EditProfileState extends State<EditProfile> {
                   children: [
                     InkWell(
                         onTap: () async {
+                          setState(() {});
                           var source = ImageSource.gallery;
                           XFile image = await imagePicker.pickImage(
                               source: source,

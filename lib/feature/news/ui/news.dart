@@ -80,24 +80,24 @@ class _NewsScreenState extends State<NewsScreen> {
                   builder: (context, state) {
                     if (state is NewsSuccessState) {
                       return Expanded(
-                        child: ListView(
-                          physics: const BouncingScrollPhysics(
-                              decelerationRate: ScrollDecelerationRate.fast),
-                          clipBehavior: Clip.hardEdge,
-                          scrollDirection: Axis.vertical,
-                          children: [
-                            Column(
-                              children:
-                                  RepositoryProvider.of<NewsRepository>(context)
-                                      .getNews()
-                                      .map((e) => Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 21, 0, 21),
-                                            child: Post(post: e),
-                                          ))
-                                      .toList(),
-                            )
-                          ],
+                        child: RefreshIndicator(
+                          onRefresh: () async {RepositoryProvider.of<NewsRepository>(context).loadNews(true);},
+                          child: ListView(
+                            scrollDirection: Axis.vertical,
+                            children: [
+                              Column(
+                                children:
+                                    RepositoryProvider.of<NewsRepository>(context)
+                                        .getNews()
+                                        .map((e) => Padding(
+                                              padding: const EdgeInsets.fromLTRB(
+                                                  0, 21, 0, 21),
+                                              child: Post(post: e),
+                                            ))
+                                        .toList(),
+                              )
+                            ],
+                          ),
                         ),
                       );
                     } else if (state is NewsLoadingState) {

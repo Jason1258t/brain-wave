@@ -1,3 +1,4 @@
+import 'package:brain_wave_2/feature/news/bloc/news_bloc.dart';
 import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
@@ -6,6 +7,7 @@ import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/avatars/profile_avatar.dart';
 import 'package:brain_wave_2/widgets/buttons/icon_text_button.dart';
 import 'package:brain_wave_2/widgets/post/post.dart';
+import 'package:flutter/foundation(1).dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -188,7 +190,9 @@ class _ProfileState extends State<Profile> {
                 ),
                 IconTextButton(
                   title: 'Опубликовать',
-                  onPressed: () {Navigator.pushNamed(context, '/add_post');},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/add_post');
+                  },
                   icon: const Icon(Icons.add_circle_outline),
                   borderRadius: 15,
                   height: 60,
@@ -199,25 +203,29 @@ class _ProfileState extends State<Profile> {
                   builder: (context, state) {
                     if (state is ProfilePostsSuccessState) {
                       return Expanded(
-                        child: ListView(
-                          physics: const BouncingScrollPhysics(
-                              decelerationRate: ScrollDecelerationRate.fast),
-                          clipBehavior: Clip.hardEdge,
-                          scrollDirection: Axis.vertical,
-                          children: [
-                            Column(
-                              children:
-                                  RepositoryProvider.of<ProfileRepository>(context)
-                                      .usersPosts
-                                      .map((e) => Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 21, 0, 21),
-                                            child: Post(post: e),
-                                          ))
-                                      .toList(),
-                            )
-                          ],
-                        ),
+                          child: RefreshIndicator(
+                            onRefresh: () async{RepositoryProvider.of<ProfileRepository>(context).initialLoadPosts(f: true);}, // TODO поставить обновление
+                            child: ListView(
+                              physics: const BouncingScrollPhysics(
+                                  decelerationRate: ScrollDecelerationRate.fast),
+                              clipBehavior: Clip.hardEdge,
+                              scrollDirection: Axis.vertical,
+                              children: [
+                                Column(
+                                  children:
+                                      RepositoryProvider.of<ProfileRepository>(
+                                              context)
+                                          .usersPosts
+                                          .map((e) => Padding(
+                                                padding: const EdgeInsets.fromLTRB(
+                                                    0, 21, 0, 21),
+                                                child: Post(post: e),
+                                              ))
+                                          .toList(),
+                                )
+                              ],
+                            ),
+                          ),
                       );
                     } else if (state is ProfilePostsLoadingState) {
                       return const Padding(
@@ -237,4 +245,3 @@ class _ProfileState extends State<Profile> {
     );
   }
 }
-
