@@ -106,43 +106,43 @@ class _RoomsPageState extends State<RoomsPage> {
                             );
                           },
                           child: StreamBuilder<types.Room>(
-                            initialData: room,
-                            stream: chatCore.room(room.id),
-                            builder: (context, snapshot) {
-                              if (snapshot.data != null) {
-                                return StreamBuilder<List<types.Message>>(
-                                    initialData: const [],
-                                    stream: chatCore
-                                        .messages(snapshot.data!),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.data != null) {
-                                        return Users(
-                                          lastMessage: snapshot.data!.first,
-                                          room: room,
-                                        );
-                                      } else {
-                                        return Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          children: [
-                                            AppAnimations.bouncingLine
-                                          ],
-                                        );
-                                      }
-                                    });
-                              } else {
-                                return Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
-                                  children: [
-                                    AppAnimations.bouncingLine
-                                  ],
-                                );
-                              }
-
-                            }
-
-                          ),
+                              initialData: room,
+                              stream: chatCore.room(room.id),
+                              builder: (context, snapshot) {
+                                if (snapshot.data != null) {
+                                  return StreamBuilder<List<types.Message>>(
+                                      initialData: const [],
+                                      stream: chatCore.messages(snapshot.data!),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.data != null) {
+                                          if (snapshot.data!.isNotEmpty) {
+                                            return Users(
+                                              lastMessage: snapshot.data!.first,
+                                              room: room,
+                                            );
+                                          } else {
+                                            return Users(
+                                              lastMessage: null,
+                                              room: room,
+                                            );
+                                          }
+                                        } else {
+                                          return Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              AppAnimations.bouncingLine
+                                            ],
+                                          );
+                                        }
+                                      });
+                                } else {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [AppAnimations.bouncingLine],
+                                  );
+                                }
+                              }),
                         );
                       },
                     ),
