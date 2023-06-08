@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class Neuron extends StatefulWidget {
   NeuronModel neuron;
   double height;
+
   Neuron({Key? key, required this.neuron, this.height = 80}) : super(key: key);
 
   @override
@@ -14,12 +15,23 @@ class Neuron extends StatefulWidget {
 }
 
 class _NeuronState extends State<Neuron> {
+  List<TextSpan> _createRichText(List<String> list) {
+    List<TextSpan> richtext = [];
+    for (var i = 0; i < list.length ; i++) {
+      richtext.add(TextSpan(text: '#${list[i]}', style: AppTypography.teg));
+      richtext.add(const TextSpan(text: ' '));
+    }
+    return richtext;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 25),
       child: InkWell(
-        onTap: () {Navigator.pushNamed(context, '/neuron_info');},
+        onTap: () {
+          Navigator.pushNamed(context, '/neuron_info');
+        },
         child: Container(
           width: MediaQuery.of(context).size.width * 0.8,
           height: widget.height,
@@ -36,24 +48,32 @@ class _NeuronState extends State<Neuron> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(widget.neuron.title, style: AppTypography.font24lightBlue,),
-                    Container(
-                      decoration: const BoxDecoration(
-                        color: AppColors.hashtag,
-                        borderRadius: BorderRadius.all(Radius.circular(2)),
-                      ),
-                      child: Expanded(
-                        child: Text(
-                          '#${widget.neuron.hashtag}',
-                          style: AppTypography.font12lightGray,
+                    Text(
+                      widget.neuron.title,
+                      style: AppTypography.font24lightBlue,
+                    ),
+                    SizedBox(
+                      width: 150,
+                      height: 30,
+                      child: RichText(
+                        text: TextSpan(
+                          children: _createRichText(widget.neuron.hashtag),
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     )
                   ],
                 ),
                 IconButton(
-                    onPressed: () {},
-                    icon: Icon(widget.neuron.isLike ? FontAwesomeIcons.heartCrack : FontAwesomeIcons.heart, color: Colors.white,),
+                  onPressed: () {
+                    _createRichText(widget.neuron.hashtag);
+                  },
+                  icon: Icon(
+                    widget.neuron.isLike
+                        ? FontAwesomeIcons.heartCrack
+                        : FontAwesomeIcons.heart,
+                    color: Colors.white,
+                  ),
                 )
               ],
             ),

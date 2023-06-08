@@ -44,9 +44,14 @@ class _PostState extends State<Post> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.post.title,
-                            style: AppTypography.font20white,
+                          SizedBox(
+                            width: 200,
+                            child: Text(
+                              widget.post.title,
+                              style: AppTypography.font20white,
+                              maxLines: 2,
+                              softWrap: true,
+                            ),
                           ),
                           const SizedBox(
                             height: 9,

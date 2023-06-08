@@ -2,7 +2,7 @@ class NeuronModel {
   String title;
   String image;
   bool isLike;
-  String hashtag;
+  List<String> hashtag;
   String description;
 
   NeuronModel({

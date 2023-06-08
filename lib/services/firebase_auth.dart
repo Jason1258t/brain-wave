@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:ui';
 
-import 'package:brain_wave_2/logic/app_repository.dart';
-import 'package:brain_wave_2/services/api_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
