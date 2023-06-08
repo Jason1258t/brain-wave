@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:brain_wave_2/feature/add_neuron/ui/add_nueron_screen.dart';
 import 'package:brain_wave_2/feature/add_post/ui/add_post_screen.dart';
 import 'package:brain_wave_2/feature/home/bloc/navigation_bloc.dart';
 import 'package:brain_wave_2/feature/neurons/bloc/message/message_bloc.dart';
@@ -69,9 +70,9 @@ class MyApp extends StatelessWidget {
         '/neuron_chat' : (context) => const ChatNeuron(),
         '/neuron_info' : (context) => const InformationNeuron(),
         '/add_post' : (context) => const AddPost(),
-        '/add_image' : (context) => ImageFromGalleryEx(),
+        '/add_image' : (context) => const ImageFromGalleryEx(),
         '/chat_user' : (context) => const UsersPage(),
-
+        '/add_neuron' : (context) => const AddNeuron(),
       },
       home: const HomePage(),
     );

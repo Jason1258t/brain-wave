@@ -49,106 +49,106 @@ class _RoomsPageState extends State<RoomsPage> {
               ),
               child: SafeArea(
                   child: Padding(
-                padding: const EdgeInsets.only(top: 13, left: 30, right: 30),
-                child: Column(children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Чаты',
-                        style: AppTypography.font24lightBlue,
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          BlocProvider.of<NavigationBloc>(context)
-                              .add(ViewProfileEvent());
-                        },
-                        child: SmallAvatar(
-                            avatar:
+                    padding: const EdgeInsets.only(top: 13, left: 30, right: 30),
+                    child: Column(children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Чаты',
+                            style: AppTypography.font24lightBlue,
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              BlocProvider.of<NavigationBloc>(context)
+                                  .add(ViewProfileEvent());
+                            },
+                            child: SmallAvatar(
+                                avatar:
                                 RepositoryProvider.of<AppRepository>(context)
-                                        .getCurrentUser()!
-                                        .photoURL ??
+                                    .getCurrentUser()!
+                                    .photoURL ??
                                     '',
-                            name: RepositoryProvider.of<AppRepository>(context)
-                                .getCurrentUser()!
-                                .displayName!),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  CustomSearchField(
-                    hintText: 'Поиск чатов',
-                    controller: queryController,
-                    callback: (q) {},
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: 70,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        final room = snapshot.data![index];
+                                name: RepositoryProvider.of<AppRepository>(context)
+                                    .getCurrentUser()!
+                                    .displayName!),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      CustomSearchField(
+                        hintText: 'Поиск чатов',
+                        controller: queryController,
+                        callback: (q) {},
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: 70,
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            final room = snapshot.data![index];
 
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ChatPage(
-                                  room: room,
-                                ),
-                              ),
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatPage(
+                                      room: room,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: StreamBuilder<types.Room>(
+                                  initialData: room,
+                                  stream: chatCore.room(room.id),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.data != null) {
+                                      return StreamBuilder<List<types.Message>>(
+                                          initialData: const [],
+                                          stream: chatCore.messages(snapshot.data!),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.data != null) {
+                                              if (snapshot.data!.isNotEmpty) {
+                                                return Users(
+                                                  lastMessage: snapshot.data!.first,
+                                                  room: room,
+                                                );
+                                              } else {
+                                                return Users(
+                                                  lastMessage: null,
+                                                  room: room,
+                                                );
+                                              }
+                                            } else {
+                                              return Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                                children: [
+                                                  AppAnimations.bouncingLine
+                                                ],
+                                              );
+                                            }
+                                          });
+                                    } else {
+                                      return Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [AppAnimations.bouncingLine],
+                                      );
+                                    }
+                                  }),
                             );
                           },
-                          child: StreamBuilder<types.Room>(
-                            initialData: room,
-                            stream: chatCore.room(room.id),
-                            builder: (context, snapshot) {
-                              if (snapshot.data != null) {
-                                return StreamBuilder<List<types.Message>>(
-                                    initialData: const [],
-                                    stream: chatCore
-                                        .messages(snapshot.data!),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.data != null) {
-                                        return Users(
-                                          lastMessage: snapshot.data!.first,
-                                          room: room,
-                                        );
-                                      } else {
-                                        return Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          children: [
-                                            AppAnimations.bouncingLine
-                                          ],
-                                        );
-                                      }
-                                    });
-                              } else {
-                                return Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
-                                  children: [
-                                    AppAnimations.bouncingLine
-                                  ],
-                                );
-                              }
-
-                            }
-
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ]),
-              )));
+                        ),
+                      ),
+                    ]),
+                  )));
         },
       ),
       floatingActionButton: FloatingActionButton(

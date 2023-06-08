@@ -45,9 +45,9 @@ class _ChatUserState extends State<ChatUser> {
 
   String getTime(int ms) {
     final String hour = "${DateTime.fromMillisecondsSinceEpoch(ms).hour}";
-    final intMinute = DateTime.fromMillisecondsSinceEpoch(ms).minute > 9;
+    final intMinute = DateTime.fromMillisecondsSinceEpoch(ms).minute;
     late String minute;
-    if (intMinute) {
+    if (intMinute > 9) {
       minute = intMinute.toString();
     } else {
       minute = '0$intMinute';
@@ -98,7 +98,7 @@ class _ChatUserState extends State<ChatUser> {
                           const EdgeInsets.only(left: 10, bottom: 10, top: 10),
                       height: 60,
                       width: double.infinity,
-                      color: Colors.white,
+                      color: AppColors.chatUnderField,
                       child: Row(
                         children: <Widget>[
                           const SizedBox(
@@ -110,7 +110,7 @@ class _ChatUserState extends State<ChatUser> {
                               controller: messageController,
                               decoration: const InputDecoration(
                                   hintText: "Write message...",
-                                  hintStyle: TextStyle(color: Colors.black54),
+                                  hintStyle: AppTypography.font14lightGrey,
                                   border: InputBorder.none),
                             ),
                           ),
@@ -126,7 +126,7 @@ class _ChatUserState extends State<ChatUser> {
                                 messageController.text = '';
                               }
                             },
-                            backgroundColor: Colors.blue,
+                            backgroundColor: AppColors.purpleButton,
                             elevation: 0,
                             child: const Icon(
                               Icons.send,
