@@ -105,7 +105,12 @@ class _ProfileState extends State<Profile> {
           ]).toList(),
         ),
       ),
-      body: Container(
+      body: BlocConsumer<ProfileBloc, ProfileState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, state) {
+    return Container(
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
@@ -170,13 +175,13 @@ class _ProfileState extends State<Profile> {
                               horizontal: 20, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 'Посты:',
                                 style: AppTypography.font18lightBlue,
                               ),
                               Text(
-                                '2',
+                                RepositoryProvider.of<ProfileRepository>(context).usersPosts.length.toString(),
                                 style: AppTypography.font18lightBlue,
                               )
                             ],
@@ -233,7 +238,9 @@ class _ProfileState extends State<Profile> {
             ),
           ),
         ),
-      ),
+      );
+  },
+),
     );
   }
 }
