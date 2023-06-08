@@ -164,4 +164,16 @@ class AppRepository {
   void completeRegistration() {
     appState.add(AppStateEnum.auth);
   }
+
+  String getTime(int ms) {
+    final String hour = "${DateTime.fromMillisecondsSinceEpoch(ms).hour}";
+    final intMinute = DateTime.fromMillisecondsSinceEpoch(ms).minute;
+    late String minute;
+    if (intMinute > 9) {
+      minute = intMinute.toString();
+    } else {
+      minute = '0$intMinute';
+    }
+    return "$hour:$minute";
+  }
 }

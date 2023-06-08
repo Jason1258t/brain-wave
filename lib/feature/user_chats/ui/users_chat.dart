@@ -1,4 +1,5 @@
 import 'package:brain_wave_2/feature/neurons/bloc/message/message_bloc.dart';
+import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/models/message.dart';
 import 'package:brain_wave_2/utils/colors.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
@@ -43,18 +44,6 @@ class _ChatUserState extends State<ChatUser> {
     );
   }
 
-  String getTime(int ms) {
-    final String hour = "${DateTime.fromMillisecondsSinceEpoch(ms).hour}";
-    final intMinute = DateTime.fromMillisecondsSinceEpoch(ms).minute;
-    late String minute;
-    if (intMinute > 9) {
-      minute = intMinute.toString();
-    } else {
-      minute = '0$intMinute';
-    }
-    return "$hour:$minute";
-  }
-
   List<Widget> getMessagesList(List messageList) {
     List<Widget> l = [];
 
@@ -62,7 +51,7 @@ class _ChatUserState extends State<ChatUser> {
       try {
         l.add(MessageWidget(
             message: Message(
-                createdAt: getTime(e.createdAt!),
+                createdAt: RepositoryProvider.of<AppRepository>(context).getTime(e.createdAt!),
                 authorName: e.author.id != widget.user.id
                     ? e.author.firstName ?? ''
                     : 'Вы',
