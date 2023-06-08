@@ -102,7 +102,11 @@ class _ChatNeuronState extends State<ChatNeuron> {
                   child: ListView(
                     reverse: true,
                     controller: _controller,
-                    children: _chatRepository.messages.reversed.map((e) => MessageWidget(message: e,)).toList(),
+                    children: _chatRepository.messages.reversed
+                        .map((e) => MessageWidget(
+                              message: e,
+                            ))
+                        .toList(),
                   ),
                 ),
               ),
@@ -115,7 +119,7 @@ class _ChatNeuronState extends State<ChatNeuron> {
                           const EdgeInsets.only(left: 10, bottom: 10, top: 10),
                       height: 60,
                       width: double.infinity,
-                      color: Colors.white,
+                      color: AppColors.chatUnderField,
                       child: Row(
                         children: <Widget>[
                           const SizedBox(
@@ -124,9 +128,10 @@ class _ChatNeuronState extends State<ChatNeuron> {
                           Expanded(
                             child: TextField(
                               controller: messageController,
+                              style: AppTypography.font14lightGrey,
                               decoration: const InputDecoration(
                                   hintText: "Write message...",
-                                  hintStyle: TextStyle(color: Colors.black54),
+                                  hintStyle: AppTypography.font14lightGrey,
                                   border: InputBorder.none),
                             ),
                           ),
@@ -139,11 +144,12 @@ class _ChatNeuronState extends State<ChatNeuron> {
                               if (messageController.text.isNotEmpty) {
                                 BlocProvider.of<MessageBloc>(context).add(
                                     MessageSendEvent(
-                                        content: messageController.text.trim()));
+                                        content:
+                                            messageController.text.trim()));
                                 messageController.text = '';
                               }
                             },
-                            backgroundColor: Colors.blue,
+                            backgroundColor: AppColors.purpleButton,
                             elevation: 0,
                             child: const Icon(
                               Icons.send,

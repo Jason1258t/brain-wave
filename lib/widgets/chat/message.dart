@@ -16,7 +16,7 @@ class MessageWidget extends StatefulWidget {
 }
 
 class _MessageWidgetState extends State<MessageWidget> {
-  String addEnter(String text){
+  String addEnter(String text) {
     return text.length < 20 ? "$text      " : text;
   }
 
@@ -89,8 +89,8 @@ class _MessageWidgetState extends State<MessageWidget> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Chat GBT',
+                          Text(
+                            widget.message.authorName,
                             style: AppTypography.font13purple,
                           ),
                           Text(
@@ -100,7 +100,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                         ],
                       ),
                       Text(
-                        "${DateTime.now().hour} : ${DateTime.now().minute}",
+                        widget.message.createdAt,
                         style: AppTypography.font12lightGray,
                         textAlign: TextAlign.end,
                       ),

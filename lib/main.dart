@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:brain_wave_2/feature/add_neuron/ui/add_nueron_screen.dart';
+import 'package:brain_wave_2/feature/add_post/ui/add_post_screen.dart';
 import 'package:brain_wave_2/feature/home/bloc/navigation_bloc.dart';
 import 'package:brain_wave_2/feature/neurons/bloc/message/message_bloc.dart';
 import 'package:brain_wave_2/feature/neurons/bloc/neurons/neurons_bloc.dart';
@@ -15,15 +17,21 @@ import 'package:brain_wave_2/feature/profie/bloc/profile_update/profile_update_b
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/feature/profie/ui/edit_profile_screen.dart';
 import 'package:brain_wave_2/feature/user_chats/data/user_chats_repository.dart';
+import 'package:brain_wave_2/feature/user_chats/ui/user_chat_screen.dart';
+import 'package:brain_wave_2/feature/user_chats/ui/users_screen.dart';
 import 'package:brain_wave_2/logic/app_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/services/api_service.dart';
 import 'package:brain_wave_2/services/custom_bloc_observer.dart';
 import 'package:brain_wave_2/services/firebase_auth.dart';
+import 'package:brain_wave_2/widgets/add_image_from_phone/image_from_phone.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'feature/auth/bloc/auth_bloc/auth_bloc.dart';
 import 'feature/auth/bloc/registration_bloc/registration_bloc.dart';
 import 'feature/auth/ui/registration.dart';
@@ -61,6 +69,10 @@ class MyApp extends StatelessWidget {
         '/neurons' : (context) => const NeuronsScreen(),
         '/neuron_chat' : (context) => const ChatNeuron(),
         '/neuron_info' : (context) => const InformationNeuron(),
+        '/add_post' : (context) => const AddPost(),
+        '/add_image' : (context) => const ImageFromGalleryEx(),
+        '/chat_user' : (context) => const UsersPage(),
+        '/add_neuron' : (context) => const AddNeuron(),
       },
       home: const HomePage(),
     );
@@ -70,13 +82,13 @@ class MyApp extends StatelessWidget {
 class MyRepositoryProviders extends StatelessWidget {
   MyRepositoryProviders({Key? key}) : super(key: key);
   final firebaseAuth = FirebaseAuthService();
-  final apiService = ApiService();
-
+  final apiService = ApiService(firestore: FirebaseFirestore.instance);
+  final chatCore = FirebaseChatCore.instance;
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(providers: [
       RepositoryProvider(
-          create: (_) => AppRepository(firebaseAuthService: firebaseAuth)),
+          create: (_) => AppRepository(firebaseAuthService: firebaseAuth, chatCore: chatCore)),
       RepositoryProvider(
           create: (_) => ProfileRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => NewsRepository(apiService: apiService)),

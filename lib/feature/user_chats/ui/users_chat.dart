@@ -43,6 +43,18 @@ class _ChatUserState extends State<ChatUser> {
     );
   }
 
+  String getTime(int ms) {
+    final String hour = "${DateTime.fromMillisecondsSinceEpoch(ms).hour}";
+    final intMinute = DateTime.fromMillisecondsSinceEpoch(ms).minute;
+    late String minute;
+    if (intMinute > 9) {
+      minute = intMinute.toString();
+    } else {
+      minute = '0$intMinute';
+    }
+    return "$hour:$minute";
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MessageBloc, MessageState>(
@@ -51,63 +63,10 @@ class _ChatUserState extends State<ChatUser> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            automaticallyImplyLeading: false,
-            backgroundColor: AppColors.appBarChat,
-            flexibleSpace: SafeArea(
-              child: Container(
-                height: 60,
-                padding: const EdgeInsets.only(right: 16),
-                child: Row(
-                  children: <Widget>[
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.arrow_back,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    const CircleAvatar(
-                      backgroundImage: AssetImage('Assets/chatGBT.png'),
-                      maxRadius: 20,
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const <Widget>[
-                          Text(
-                            "Chat GBT",
-                            style: AppTypography.font18lightBlue,
-                          ),
-                          SizedBox(
-                            height: 6,
-                          ),
-                          Text("Online", style: AppTypography.font13grey),
-                        ],
-                      ),
-                    ),
-                    const Icon(
-                      Icons.settings,
-                      color: AppColors.lightGrayText,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
           body: Column(
             children: [
               Expanded(
+                flex: 1,
                 child: Container(
                   width: double.infinity,
                   decoration: const BoxDecoration(
@@ -119,9 +78,10 @@ class _ChatUserState extends State<ChatUser> {
                       children: widget.messageList
                           .map((e) => MessageWidget(
                               message: Message(
-                                  createdAt:
-                                      "${DateTime.fromMillisecondsSinceEpoch(e.createdAt!).hour}:${DateTime.fromMillisecondsSinceEpoch(e.createdAt!).minute > 9 ? DateTime.fromMillisecondsSinceEpoch(e.createdAt!).minute : '0${DateTime.fromMillisecondsSinceEpoch(e.createdAt!).minute}'}",
-                                  authorName: e.author.firstName ?? '',
+                                  createdAt: getTime(e.createdAt!),
+                                  authorName: e.author.id != widget.user.id
+                                      ? e.author.firstName ?? ''
+                                      : 'Вы',
                                   authorImage: e.author.imageUrl ?? '',
                                   isReverse: e.author.id != widget.user.id,
                                   isLoad: false,
@@ -138,18 +98,19 @@ class _ChatUserState extends State<ChatUser> {
                           const EdgeInsets.only(left: 10, bottom: 10, top: 10),
                       height: 60,
                       width: double.infinity,
-                      color: Colors.white,
+                      color: AppColors.chatUnderField,
                       child: Row(
                         children: <Widget>[
                           const SizedBox(
                             width: 15,
                           ),
                           Expanded(
+                            flex: 1,
                             child: TextField(
                               controller: messageController,
                               decoration: const InputDecoration(
                                   hintText: "Write message...",
-                                  hintStyle: TextStyle(color: Colors.black54),
+                                  hintStyle: AppTypography.font14lightGrey,
                                   border: InputBorder.none),
                             ),
                           ),
@@ -165,7 +126,7 @@ class _ChatUserState extends State<ChatUser> {
                                 messageController.text = '';
                               }
                             },
-                            backgroundColor: Colors.blue,
+                            backgroundColor: AppColors.purpleButton,
                             elevation: 0,
                             child: const Icon(
                               Icons.send,

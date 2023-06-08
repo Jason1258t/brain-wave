@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
 import 'package:brain_wave_2/feature/profie/bloc/profile_update/profile_update_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:brain_wave_2/widgets/avatars/profile_avatar.dart';
 import 'package:brain_wave_2/widgets/snack_bar/custom_cnack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../widgets/buttons/elevated_button.dart';
 
@@ -22,6 +24,16 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+
+  var _image;
+  var imagePicker;
+  var type;
+
+  @override
+  void initState() {
+    super.initState();
+    imagePicker = ImagePicker();
+  }
 
   Future<void> _displayTextInputDialog(
     BuildContext context,
@@ -99,7 +111,8 @@ class _EditProfileState extends State<EditProfile> {
           if (state is UpdateSuccessState) {
             CustomSnackBar.showSnackBar(context, 'успешно');
           }
-          if (state is UpdateFailState) CustomSnackBar.showSnackBar(context, 'что-то пошло по жопе');
+          if (state is UpdateFailState)
+            CustomSnackBar.showSnackBar(context, 'что-то пошло по жопе');
         },
         builder: (context, state) {
           return Container(
@@ -115,9 +128,32 @@ class _EditProfileState extends State<EditProfile> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ProfileAvatar(
-                      avatar: repository.getCurrentUser()!.photoURL ?? '',
-                      name: repository.getCurrentUser()!.displayName!,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        ProfileAvatar(
+                          avatar: repository.getCurrentUser()!.photoURL ?? '',
+                          name: repository.getCurrentUser()!.displayName!,
+                        ),
+                        InkWell(
+                            onTap: () async {
+                              var source = ImageSource.gallery;
+                              XFile image = await imagePicker.pickImage(
+                                  source: source,
+                                  imageQuality: 50,
+                                  preferredCameraDevice: CameraDevice.front);
+
+                              _image = File(image.path);
+                              setState(() {
+                              });
+                            },
+                            child: const Icon(
+                              Icons.edit_note,
+                              color: AppColors.lightBlueText,
+                              size: 30,
+                            )),
+                      ],
                     ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(
@@ -132,8 +168,7 @@ class _EditProfileState extends State<EditProfile> {
                         child: Column(
                           children: [
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text(
                                   'Имя:',
@@ -164,8 +199,7 @@ class _EditProfileState extends State<EditProfile> {
                               ],
                             ),
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text(
                                   'Email:',
