@@ -168,7 +168,7 @@ class _ChatPageState extends State<ChatPage> {
       body: StreamBuilder<types.Room>(
         initialData: widget.room,
         stream: chatCore.room(widget.room.id),
-        builder: (context, snapshot) => StreamBuilder<List<types.Message>>(
+        builder: (context, snapshot) => snapshot.data != null ?  StreamBuilder<List<types.Message>>(
             initialData: const [],
             stream: chatCore.messages(snapshot.data!),
             builder: (context, snapshot) => snapshot.data != null ? ChatUser(
@@ -182,7 +182,7 @@ class _ChatPageState extends State<ChatPage> {
                 id: chatCore.firebaseUser!.uid ?? '',
               ),
             ) : AppAnimations.bouncingLine
-        ),
+        ) : Container(),
       ),
     );
   }

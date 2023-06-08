@@ -57,10 +57,10 @@ class _UsersState extends State<Users> {
       }
     }
     String getLastMessageTime() {
-      if (widget.lastMessage != null) {
+      try {
         DateTime time = DateTime.fromMillisecondsSinceEpoch(widget.lastMessage!.createdAt!);
         return "${time.hour}:${time.minute > 9 ? time.minute : '0${time.minute}'}";
-      } else {
+      } catch (e) {
         return '';
       }
     }
@@ -79,32 +79,30 @@ class _UsersState extends State<Users> {
               borderRadius: BorderRadius.all(Radius.circular(20)),
               color: AppColors.widgetsBackground),
 
-          child: Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    _buildAvatar(widget.room),
-                    const SizedBox(width: 20,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.room.name ?? '',
-                          style: AppTypography.font24lightBlue,
-                        ),
-                        Text(getLastMessage(), style: AppTypography.font14lightGrey,),
-                      ],
-                    ),
-                  ],
-                ),
-                Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  Text(getLastMessageTime(), style: AppTypography.font12lightGray,)
-                ],)
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  _buildAvatar(widget.room),
+                  const SizedBox(width: 20,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.room.name ?? '',
+                        style: AppTypography.font24lightBlue,
+                      ),
+                      Text(getLastMessage(), style: AppTypography.font14lightGrey,),
+                    ],
+                  ),
+                ],
+              ),
+              Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+                Text(getLastMessageTime(), style: AppTypography.font12lightGray,)
+              ],)
+            ],
           ),
         ),
       ),

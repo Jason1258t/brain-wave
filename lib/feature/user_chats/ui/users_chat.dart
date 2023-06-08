@@ -55,6 +55,26 @@ class _ChatUserState extends State<ChatUser> {
     return "$hour:$minute";
   }
 
+  List<Widget> getMessagesList(List messageList) {
+    List<Widget> l = [];
+
+    for (var e in messageList) {
+      try {
+        l.add(MessageWidget(
+            message: Message(
+                createdAt: getTime(e.createdAt!),
+                authorName: e.author.id != widget.user.id
+                    ? e.author.firstName ?? ''
+                    : 'Вы',
+                authorImage: e.author.imageUrl ?? '',
+                isReverse: e.author.id != widget.user.id,
+                isLoad: false,
+                text: e.toJson()['text'])));
+      } catch (er) {}
+    }
+    return l;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MessageBloc, MessageState>(
@@ -75,18 +95,7 @@ class _ChatUserState extends State<ChatUser> {
                   child: ListView(
                       reverse: true,
                       controller: _controller,
-                      children: widget.messageList
-                          .map((e) => MessageWidget(
-                              message: Message(
-                                  createdAt: getTime(e.createdAt!),
-                                  authorName: e.author.id != widget.user.id
-                                      ? e.author.firstName ?? ''
-                                      : 'Вы',
-                                  authorImage: e.author.imageUrl ?? '',
-                                  isReverse: e.author.id != widget.user.id,
-                                  isLoad: false,
-                                  text: e.toJson()['text'])))
-                          .toList()),
+                      children: getMessagesList(widget.messageList)),
                 ),
               ),
               Stack(

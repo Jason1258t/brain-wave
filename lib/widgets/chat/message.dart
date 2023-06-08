@@ -37,17 +37,15 @@ class _MessageWidgetState extends State<MessageWidget> {
               alignment: (widget.message.isReverse
                   ? Alignment.topLeft
                   : Alignment.topRight),
-              child: Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: widget.message.isReverse
-                        ? AppColors.widgetsBackground
-                        : AppColors.chatYour,
-                  ),
-                  padding: const EdgeInsets.all(16),
-                  child: AppAnimations.bouncingLineChat,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: widget.message.isReverse
+                      ? AppColors.widgetsBackground
+                      : AppColors.chatYour,
                 ),
+                padding: const EdgeInsets.all(16),
+                child: AppAnimations.bouncingLineChat,
               ),
             ),
           )
@@ -65,47 +63,45 @@ class _MessageWidgetState extends State<MessageWidget> {
               alignment: (widget.message.isReverse
                   ? Alignment.topLeft
                   : Alignment.topRight),
-              child: Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: widget.message.isReverse
-                          ? Radius.zero
-                          : const Radius.circular(10),
-                      topRight: !widget.message.isReverse
-                          ? Radius.zero
-                          : const Radius.circular(10),
-                      bottomLeft: const Radius.circular(10),
-                      bottomRight: const Radius.circular(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: widget.message.isReverse
+                        ? Radius.zero
+                        : const Radius.circular(10),
+                    topRight: !widget.message.isReverse
+                        ? Radius.zero
+                        : const Radius.circular(10),
+                    bottomLeft: const Radius.circular(10),
+                    bottomRight: const Radius.circular(10),
+                  ),
+                  color: widget.message.isReverse
+                      ? AppColors.widgetsBackground
+                      : AppColors.chatYour,
+                ),
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.message.authorName,
+                          style: AppTypography.font13purple,
+                        ),
+                        Text(
+                          addEnter(widget.message.text),
+                          style: AppTypography.font24lightBlue,
+                        ),
+                      ],
                     ),
-                    color: widget.message.isReverse
-                        ? AppColors.widgetsBackground
-                        : AppColors.chatYour,
-                  ),
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.message.authorName,
-                            style: AppTypography.font13purple,
-                          ),
-                          Text(
-                            addEnter(widget.message.text),
-                            style: AppTypography.font24lightBlue,
-                          ),
-                        ],
-                      ),
-                      Text(
-                        widget.message.createdAt,
-                        style: AppTypography.font12lightGray,
-                        textAlign: TextAlign.end,
-                      ),
-                    ],
-                  ),
+                    Text(
+                      widget.message.createdAt,
+                      style: AppTypography.font12lightGray,
+                      textAlign: TextAlign.end,
+                    ),
+                  ],
                 ),
               ),
             ),

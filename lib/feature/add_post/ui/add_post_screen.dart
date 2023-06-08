@@ -146,6 +146,7 @@ class _AddPostState extends State<AddPost> {
           ),
           body: SingleChildScrollView(
             child: Container(
+              height: MediaQuery.of(context).size.height,
               width: double.infinity,
               decoration: const BoxDecoration(
                 color: AppColors.background,

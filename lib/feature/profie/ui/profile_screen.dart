@@ -88,6 +88,15 @@ class _ProfileState extends State<Profile> {
               },
             ),
             ListTile(
+              title: const Text(
+                'Создать нейронку',
+                style: AppTypography.font18lightBlue,
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/add_neuron');
+              },
+            ),
+            ListTile(
                 title: const Text(
                   'Выйти',
                   style: AppTypography.font18red,

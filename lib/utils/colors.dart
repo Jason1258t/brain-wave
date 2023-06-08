@@ -14,6 +14,7 @@ abstract class AppColors {
   static const appBarChat = Color(0xff292B57);
   static const chatYour = Color(0xff454682);
   static const hashtag = Color(0xff342A8D);
+  static const addNeuronBackgroundWidget= Color(0xff11113C);
 }
 
 const colors = [
