@@ -153,7 +153,7 @@ class ApiService {
         required String gitHub,
       required String uid,
       required File? image,
-      required String hashtag,
+      required List<String> hashtag,
       required String description}) async {
     try {
       final doc = await _firestore.collection('neurons').add({

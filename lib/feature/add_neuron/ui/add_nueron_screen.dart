@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:brain_wave_2/feature/add_neuron/bloc/add_neuron_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
+import 'package:brain_wave_2/utils/animations.dart';
+import 'package:brain_wave_2/utils/dialogs.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/buttons/elevated_button.dart';
+import 'package:brain_wave_2/widgets/snack_bar/custom_cnack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -114,7 +117,22 @@ class _AddNeuronState extends State<AddNeuron> {
           });
     }
 
-    return Scaffold(
+    return BlocListener<AddNeuronBloc, AddNeuronState>(
+  listener: (context, state) {
+    if (state is AddNeuronLoadingState) {
+      Dialogs.showModal(context, AppAnimations.bouncingSquare);
+    }
+    if (state is AddNeuronSuccessState) {
+      Dialogs.hide(context);
+      CustomSnackBar.showSnackBar(context, 'Успешно');
+      Navigator.pop(context);
+    }
+    if (state is AddNeuronFailState) {
+      Dialogs.hide(context);
+      CustomSnackBar.showSnackBar(context, 'Проблемс');
+    }
+  },
+  child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.purpleButton,
           title: const Text(
@@ -284,6 +302,7 @@ class _AddNeuronState extends State<AddNeuron> {
               ],
             ),
           ),
-        ));
+        )),
+);
   }
 }

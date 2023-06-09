@@ -73,24 +73,28 @@ class _NeuronsScreenState extends State<NeuronsScreen> {
               BlocConsumer<NeuronsBloc, NeuronsState>(
                 listener: (context, state) {},
                 builder: (context, state) {
+                  final bloc = BlocProvider.of<NeuronsBloc>(context);
+
                   if (state is NeuronsSuccessState) {
                     return Expanded(
-                      child: ListView(
-                        physics: const BouncingScrollPhysics(
-                            decelerationRate: ScrollDecelerationRate.fast),
-                        clipBehavior: Clip.hardEdge,
-                        scrollDirection: Axis.vertical,
-                        children: [
-                          Column(
-                            children: RepositoryProvider.of<NeuronsRepository>(
-                                    context)
-                                .getNeurons()
-                                .map((e) => Neuron(
-                                      neuron: e,
-                                    ))
-                                .toList(),
-                          )
-                        ],
+                      child: RefreshIndicator(
+                        onRefresh: () async {bloc.add(NeuronsInitialLoadEvent(f: true));},
+                        child: ListView(
+
+                          clipBehavior: Clip.hardEdge,
+                          scrollDirection: Axis.vertical,
+                          children: [
+                            Column(
+                              children: RepositoryProvider.of<NeuronsRepository>(
+                                      context)
+                                  .getNeurons()
+                                  .map((e) => Neuron(
+                                        neuron: e,
+                                      ))
+                                  .toList(),
+                            )
+                          ],
+                        ),
                       ),
                     );
                   } else if (state is NeuronsLoadingState) {
