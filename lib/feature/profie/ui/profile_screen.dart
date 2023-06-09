@@ -3,6 +3,7 @@ import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/utils/colors.dart';
+import 'package:brain_wave_2/utils/dialogs.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/avatars/profile_avatar.dart';
 import 'package:brain_wave_2/widgets/buttons/icon_text_button.dart';
@@ -57,7 +58,9 @@ class _ProfileState extends State<Profile> {
 
     final repository = RepositoryProvider.of<AppRepository>(context);
     final bloc = BlocProvider.of<ProfileBloc>(context);
+
     bloc.add(ProfilePostsInitialLoadEvent());
+
     final double paddingWidthMainSize =
         MediaQuery.of(context).size.width * 0.05;
     return Scaffold(
@@ -95,7 +98,14 @@ class _ProfileState extends State<Profile> {
                 style: AppTypography.font18lightBlue,
               ),
               onTap: () {
-                Navigator.pushNamed(context, '/add_neuron');
+                if (RepositoryProvider.of<AppRepository>(context)
+                    .getCurrentUser()!
+                    .emailVerified) {
+                  Navigator.pushNamed(context, '/add_neuron');
+                } else {
+                  Dialogs.shonMessage(context,
+                      'Для этого необходимо подтвердить email на вкладке настроек');
+                }
               },
             ),
             ListTile(
@@ -110,9 +120,7 @@ class _ProfileState extends State<Profile> {
       body: BlocConsumer<ProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state is ProfilePostsSuccessState) {
-            setState(() {
-
-            });
+            setState(() {});
           }
         },
         builder: (context, state) {
@@ -218,26 +226,27 @@ class _ProfileState extends State<Profile> {
                       builder: (context, state) {
                         if (state is ProfilePostsSuccessState) {
                           return Expanded(
-                            child: ListView(
-                              physics: const BouncingScrollPhysics(
-                                  decelerationRate:
-                                      ScrollDecelerationRate.fast),
-                              clipBehavior: Clip.hardEdge,
-                              scrollDirection: Axis.vertical,
-                              children: [
-                                Column(
-                                  children: RepositoryProvider.of<
-                                          ProfileRepository>(context)
-                                      .usersPosts
-                                      .map((e) => Padding(
-                                            padding:
-                                                const EdgeInsets.fromLTRB(
-                                                    0, 21, 0, 21),
-                                            child: Post(post: e),
-                                          ))
-                                      .toList(),
-                                )
-                              ],
+                            child: RefreshIndicator(
+                              onRefresh: () async {
+                                bloc.add(ProfilePostsInitialLoadEvent(f: true));
+                              },
+                              child: ListView(
+                                clipBehavior: Clip.hardEdge,
+                                scrollDirection: Axis.vertical,
+                                children: [
+                                  Column(
+                                    children: RepositoryProvider.of<
+                                            ProfileRepository>(context)
+                                        .usersPosts
+                                        .map((e) => Padding(
+                                              padding: const EdgeInsets.fromLTRB(
+                                                  0, 21, 0, 21),
+                                              child: Post(post: e),
+                                            ))
+                                        .toList(),
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         } else if (state is ProfilePostsLoadingState) {
@@ -260,4 +269,3 @@ class _ProfileState extends State<Profile> {
     );
   }
 }
-

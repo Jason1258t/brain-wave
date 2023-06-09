@@ -20,16 +20,18 @@ class ProfileRepository {
   }
 
   void initialLoadPosts({bool f = false}) async {
-    if (usersPosts.isEmpty || f) {
+    if (f) {
       postsLoading.add(LoadingStateEnum.loading);
       try {
         final posts = await _apiService.getUserPostsById(userId: _userId, type: true);
         usersPosts = posts;
-        postsLoading.add(LoadingStateEnum.success);
+
       } catch (e) {
         postsLoading.add(LoadingStateEnum.fail);
+        rethrow;
       }
     }
+    postsLoading.add(LoadingStateEnum.success);
   }
 
   void deletePost(PostModel postModel) async {

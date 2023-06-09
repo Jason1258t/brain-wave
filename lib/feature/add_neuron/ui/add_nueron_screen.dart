@@ -148,8 +148,9 @@ class _AddNeuronState extends State<AddNeuron> {
         }
         if (state is AddNeuronSuccessState) {
           Dialogs.hide(context);
+          Dialogs.shonMessage(context, 'В ближайшее вермя вам будет отправлено письмо');
           CustomSnackBar.showSnackBar(context, 'Успешно');
-          Navigator.pop(context);
+          //Navigator.pop(context);
         }
         if (state is AddNeuronFailState) {
           Dialogs.hide(context);
