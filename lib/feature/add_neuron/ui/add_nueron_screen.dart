@@ -1,12 +1,8 @@
 import 'dart:io';
 
-import 'package:brain_wave_2/feature/add_neuron/bloc/add_neuron_bloc.dart';
-import 'package:brain_wave_2/logic/app_repository.dart';
-import 'package:brain_wave_2/models/neuron_model.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/buttons/elevated_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../utils/colors.dart';
@@ -23,6 +19,13 @@ class _AddNeuronState extends State<AddNeuron> {
   final TextEditingController _gitController = TextEditingController();
   final TextEditingController _tegController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
+  void addTextSpan(String str) {
+    _richText.add(TextSpan(text: str, style: AppTypography.teg));
+    _richText.add(const TextSpan(text: ' '));
+    setState(() {});
+    print(_richText);
+  }
 
   var _image;
   var imagePicker;
@@ -150,13 +153,17 @@ class _AddNeuronState extends State<AddNeuron> {
                     decoration: const BoxDecoration(
                         color: AppColors.addNeuronBackgroundWidget,
                         borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Center(
-                      child: Text(
-                        _gitController.text != ''
-                            ? _gitController.text
-                            : 'Ссылка на Git с документацией',
-                        style: AppTypography.font18lightBlue,
-                      ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 30,),
+                        Text(
+                            _gitController.text != ''
+                                ? _gitController.text
+                                : 'Ссылка на Git с документацией',
+                            style: AppTypography.font18lightBlue,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                      ],
                     ),
                   ),
                 ),
@@ -177,12 +184,22 @@ class _AddNeuronState extends State<AddNeuron> {
                     decoration: const BoxDecoration(
                         color: AppColors.addNeuronBackgroundWidget,
                         borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Center(
-                      child: Text(
-                        "Тег: ${_tegController.text}",
+                    child: Row(children: [
+                      const SizedBox(width: 30,),
+                      const Text(
+                        'Теги: ',
                         style: AppTypography.font18lightBlue,
                       ),
-                    ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: RichText(
+                          text: TextSpan(
+                            children: List.from(_richText),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ]),
                   ),
                 ),
                 const SizedBox(
@@ -212,7 +229,9 @@ class _AddNeuronState extends State<AddNeuron> {
                     controller: _descriptionController,
                   ),
                 ),
-                const SizedBox(height: 34,),
+                const SizedBox(
+                  height: 34,
+                ),
                 CustomElevatedButton(
                   callback: () {
                     final uid = RepositoryProvider.of<AppRepository>(context)

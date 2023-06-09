@@ -41,7 +41,6 @@ class ApiService {
   Future getUserById(String uid) async {
     try {
       final resp = await _firestore.collection('users').doc(uid).get();
-      //log(resp.data().toString());
       return resp.data();
     } catch (e) {
       rethrow;
@@ -257,7 +256,7 @@ class ApiService {
           isLike: true,
           description:
               'Чат-бот с искусственным интеллектом, разработанный компанией OpenAI и способный работать в диалоговом режиме, поддерживающий запросы на естественных языках. ChatGPT - большая языковая модель, для тренировки которой использовались методы обучения с учителем и обучения с подкреплением.',
-          hashtag: 'генерация текста'),
+          hashtag: ['генерация текста', 'asdfasdf', 'sadfs']),
     ];
   }
 
@@ -269,7 +268,7 @@ class ApiService {
           name: 'Chat GBT',
           image: 'Assets/chatGBT.png',
           isLike: true,
-          hashtag: 'генерация текста',
+          hashtag: ['генерация текста', 'asdfasdf', 'sadfs'],
           description:
               'Чат-бот с искусственным интеллектом, разработанный компанией OpenAI и способный работать в диалоговом режиме, поддерживающий запросы на естественных языках. ChatGPT - большая языковая модель, для тренировки которой использовались методы обучения с учителем и обучения с подкреплением.'),
     ];
