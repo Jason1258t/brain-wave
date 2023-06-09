@@ -1,5 +1,6 @@
 class PostModel {
   String creatorName;
+  String creatorId;
   String description;
   String image;
   String creatorImage;
@@ -8,6 +9,7 @@ class PostModel {
   String createdAt;
 
   PostModel({
+    required this.creatorId,
     required this.isOwner,
     required this.id,
     required this.creatorName,

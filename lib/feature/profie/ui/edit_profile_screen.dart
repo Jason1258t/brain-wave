@@ -82,6 +82,7 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     final repository = RepositoryProvider.of<AppRepository>(context);
     final bloc = BlocProvider.of<ProfileUpdateBloc>(context);
+    TextEditingController nameController = TextEditingController(text: repository.getCurrentUser()!.displayName);
     void updater() async {
       if (!repository.getCurrentUser()!.emailVerified) {
         CustomSnackBar.showSnackBar(
@@ -123,6 +124,7 @@ class _EditProfileState extends State<EditProfile> {
           if (state is UpdateFailState) {
             CustomSnackBar.showSnackBar(context, 'что-то пошло по жопе');
             Dialogs.hide(context);
+
           }
         },
         builder: (context, state) {

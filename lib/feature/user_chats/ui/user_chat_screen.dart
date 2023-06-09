@@ -130,13 +130,18 @@ class _ChatPageState extends State<ChatPage> {
                   },
                   icon: const Icon(
                     Icons.arrow_back,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(
                   width: 2,
                 ),
-                SmallAvatar(avatar: widget.room.imageUrl ?? '', name: widget.room.name!),
+                InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/user_account_screen');
+                      },
+                    child: SmallAvatar(avatar: widget.room.imageUrl ?? '', name: widget.room.name!)
+                ),
                 const SizedBox(
                   width: 12,
                 ),

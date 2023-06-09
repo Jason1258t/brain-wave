@@ -36,44 +36,6 @@ class _AddPostState extends State<AddPost> {
     imagePicker = ImagePicker();
   }
 
-  Future<void> _displayTextInputDialog(
-      BuildContext context,
-      TextEditingController controller,
-      String titleAlertDialog,
-      String editType) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: AppColors.widgetsBackground,
-            title: Text(
-              'Изменить $titleAlertDialog',
-              style: AppTypography.font16lightGray,
-            ),
-            content: TextField(
-              style: AppTypography.font14milk,
-              onChanged: (value) {},
-              controller: controller,
-              decoration: const InputDecoration(
-                  hintText: 'Название', hintStyle: AppTypography.font14milk),
-            ),
-            actions: <Widget>[
-              MaterialButton(
-                color: AppColors.purpleButton,
-                textColor: AppColors.lightBlueText,
-                child: const Text('Сохранить'),
-                onPressed: () {
-                  setState(() {
-                    Navigator.pop(context);
-                    setState(() {});
-                  });
-                },
-              )
-            ],
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     AppRepository _appRepository =
@@ -126,14 +88,16 @@ class _AddPostState extends State<AddPost> {
                       child: CustomElevatedButton(
                         text: 'Опубликовать',
                         callback: () async {
-                          if (_descriptionPostController.text.isNotEmpty && _namePostController.text.isNotEmpty) {
+                          if (_descriptionPostController.text.isNotEmpty) {
                             bloc.add(AddPostInitialEvent(
                                 image: _image,
                                 uid: _appRepository.getCurrentUser()!.uid,
                                 description: _descriptionPostController.text,
                                 title: _namePostController.text));
                           }
-
+                          else{
+                            CustomSnackBar.showSnackBar(context, 'поля введены неверно');
+                          }
                         }, //TODo доделать добавление поста
                         width: 150,
                         height: 30,
@@ -163,38 +127,11 @@ class _AddPostState extends State<AddPost> {
                           name: _appRepository.getCurrentUser()?.displayName ??
                               ''),
                       Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    _displayTextInputDialog(
-                                        context,
-                                        _namePostController,
-                                        'Название поста',
-                                        'name');
-                                  },
-                                  child: Text(
-                                    _namePostController.text.isNotEmpty
-                                        ? _namePostController.text
-                                        : 'Название поста',
-                                    style: AppTypography.font20white,
-                                  ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 9,
-                            ),
-                            Text(
-                              _appRepository.getCurrentUser()?.displayName ??
-                                  'name',
-                              style: AppTypography.font14milk,
-                            ),
-                          ],
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _appRepository.getCurrentUser()?.displayName ??
+                              'name',
+                          style: AppTypography.font14milk,
                         ),
                       ),
                     ],
