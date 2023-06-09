@@ -52,9 +52,8 @@ class _UserAccountState extends State<UserAccount> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ProfileAvatar(
-                              avatar:
-                              mainRepository.getCurrentUser()!.photoURL ?? '',
-                              name: mainRepository.getCurrentUser()!.displayName!,
+                              avatar: state.user.imageUrl ?? '',
+                              name: state.user.name[0] ?? '',
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(10, 15, 0, 0),

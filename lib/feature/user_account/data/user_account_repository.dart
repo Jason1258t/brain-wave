@@ -21,7 +21,8 @@ class UserAccountRepository {
       _user = UserModel(
           uid: user['uid'],
           imageUrl: user['imageUrl'],
-          name: user['firstName']);
+          name: user['firstName'],
+      );
       userAccountState.add(LoadingStateEnum.success);
     } catch (e) {
       userAccountState.add(LoadingStateEnum.fail);
