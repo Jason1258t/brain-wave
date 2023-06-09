@@ -15,7 +15,7 @@ class InformationNeuron extends StatefulWidget {
 class _InformationNeuronState extends State<InformationNeuron> {
   List<TextSpan> _createRichText(List<String> list) {
     List<TextSpan> richtext = [];
-    for (var i = 0; i < list.length ; i++) {
+    for (var i = 0; i < list.length; i++) {
       richtext.add(TextSpan(text: '#${list[i]}', style: AppTypography.teg));
       richtext.add(const TextSpan(text: ' '));
     }
@@ -31,14 +31,13 @@ class _InformationNeuronState extends State<InformationNeuron> {
       } else {
         maxLines = 2;
       }
-
     });
   }
 
   @override
   Widget build(BuildContext context) {
     NeuronsRepository neuronRepository =
-        RepositoryProvider.of<NeuronsRepository>(context);
+    RepositoryProvider.of<NeuronsRepository>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Нейросеть"),
@@ -49,7 +48,10 @@ class _InformationNeuronState extends State<InformationNeuron> {
           color: AppColors.background,
         ),
         child: Padding(
-          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
+          padding: EdgeInsets.all(MediaQuery
+              .of(context)
+              .size
+              .width * 0.1),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -57,9 +59,9 @@ class _InformationNeuronState extends State<InformationNeuron> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SmallAvatar(
-                      avatar: neuronRepository.getNeurons()[0].image,
-                      name: neuronRepository.getNeurons()[0].name,
-                  radius: 40,),
+                    avatar: neuronRepository.getNeurons()[0].image,
+                    name: neuronRepository.getNeurons()[0].name,
+                    radius: 40,),
                   const SizedBox(
                     width: 16,
                   ),
@@ -70,7 +72,7 @@ class _InformationNeuronState extends State<InformationNeuron> {
                       SizedBox(
                         width: 200,
                         child: Text(neuronRepository.getNeurons()[0].name,
-                            style: AppTypography.font32white,),
+                          style: AppTypography.font32white,),
                       ),
                       const SizedBox(height: 10,),
                       InkWell(
@@ -81,8 +83,8 @@ class _InformationNeuronState extends State<InformationNeuron> {
                             softWrap: true,
                             maxLines: maxLines,
                             text: TextSpan(
-
-                              children: _createRichText(neuronRepository.getNeurons()[0].hashtag),
+                              children: _createRichText(
+                                  neuronRepository.getNeurons()[0].hashtag),
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -93,14 +95,20 @@ class _InformationNeuronState extends State<InformationNeuron> {
                 ],
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.03,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.03,
               ),
               Text(
                 neuronRepository.getNeurons()[0].description,
                 style: AppTypography.font16description,
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.1,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.1,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

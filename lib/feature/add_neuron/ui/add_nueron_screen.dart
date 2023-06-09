@@ -1,9 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:brain_wave_2/feature/add_neuron/bloc/add_neuron_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/buttons/elevated_button.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,12 +28,31 @@ class _AddNeuronState extends State<AddNeuron> {
   var _richText = [];
   List<String> tags = [];
 
+  void deleteTagByValue(String value) {
+    final ind = tags.indexOf(value);
+
+    setState(() {
+      _richText.removeAt(ind * 2);
+      _richText.removeAt(ind * 2);
+      tags.removeAt(ind);
+    });
+  }
+
   void addTextSpan(String str) {
-    _richText.add(TextSpan(text: '#$str', style: AppTypography.teg));
-    _richText.add(const TextSpan(text: ' '));
+    _richText.addAll([
+      TextSpan(
+          text: '#$str',
+          style: AppTypography.teg,
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              deleteTagByValue(str);
+            }),
+      const TextSpan(
+        text: ' ',
+      )
+    ]);
     tags.add(str);
     setState(() {});
-    print(_richText);
   }
 
   var _image;
@@ -102,10 +123,14 @@ class _AddNeuronState extends State<AddNeuron> {
                   child: const Text('Сохранить'),
                   onPressed: () {
                     setState(() {
-                      addTextSpan(controller.text);
-                      controller.text = '';
-                      Navigator.pop(context);
-                      setState(() {});
+                      if (controller.text != '') {
+                        addTextSpan(controller.text);
+                        controller.text = '';
+                        Navigator.pop(context);
+                        setState(() {});
+                      } else {
+                        Navigator.pop(context);
+                      }
                     });
                   },
                 )
@@ -152,7 +177,7 @@ class _AddNeuronState extends State<AddNeuron> {
                               _image,
                             )
                           : const Image(
-                        width: 40,
+                              width: 40,
                               image: AssetImage(
                                 'Assets/middle_empty_img.png',
                               ),
@@ -208,36 +233,43 @@ class _AddNeuronState extends State<AddNeuron> {
                 const SizedBox(
                   height: 12,
                 ),
-                InkWell(
-                  onTap: () {
-                    _displayTextInputDialogGit(
-                        context, _tegController, 'Добавте тег');
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: 35,
-                    decoration: const BoxDecoration(
-                        color: AppColors.addNeuronBackgroundWidget,
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Row(children: [
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      const Text(
-                        'Теги: ',
-                        style: AppTypography.font18lightBlue,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: RichText(
-                          text: TextSpan(
-                            children: List.from(_richText),
-                          ),
-                          overflow: TextOverflow.ellipsis,
+                Container(
+                  padding: EdgeInsets.all(8),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  decoration: const BoxDecoration(
+                      color: AppColors.addNeuronBackgroundWidget,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          width: 15,
                         ),
-                      ),
-                    ]),
-                  ),
+                        const Text(
+                          'Теги: ',
+                          style: AppTypography.font18lightBlue,
+                          textAlign: TextAlign.left,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: RichText(
+                            softWrap: true,
+                            text: TextSpan(
+                              children: List.from(_richText),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            _displayTextInputDialogGit(
+                                context, _tegController, 'Добавте тег');
+                          },
+                          child: const Icon(
+                            Icons.add,
+                            color: AppColors.lightGrayText,
+                          ),
+                        )
+                      ]),
                 ),
                 const SizedBox(
                   height: 30,

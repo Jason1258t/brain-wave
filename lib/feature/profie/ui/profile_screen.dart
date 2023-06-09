@@ -214,26 +214,29 @@ class _ProfileState extends State<Profile> {
                       builder: (context, state) {
                         if (state is ProfilePostsSuccessState) {
                           return Expanded(
-                            child: ListView(
-                              physics: const BouncingScrollPhysics(
-                                  decelerationRate:
-                                      ScrollDecelerationRate.fast),
-                              clipBehavior: Clip.hardEdge,
-                              scrollDirection: Axis.vertical,
-                              children: [
-                                Column(
-                                  children: RepositoryProvider.of<
-                                          ProfileRepository>(context)
-                                      .usersPosts
-                                      .map((e) => Padding(
-                                            padding:
-                                                const EdgeInsets.fromLTRB(
-                                                    0, 21, 0, 21),
-                                            child: Post(post: e),
-                                          ))
-                                      .toList(),
-                                )
-                              ],
+                            child: RefreshIndicator(
+                              onRefresh: () async {RepositoryProvider.of<ProfileRepository>(context).initialLoadPosts(f: true);},
+                              child: ListView(
+                                physics: const BouncingScrollPhysics(
+                                    decelerationRate:
+                                        ScrollDecelerationRate.fast),
+                                clipBehavior: Clip.hardEdge,
+                                scrollDirection: Axis.vertical,
+                                children: [
+                                  Column(
+                                    children: RepositoryProvider.of<
+                                            ProfileRepository>(context)
+                                        .usersPosts
+                                        .map((e) => Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 21, 0, 21),
+                                              child: Post(post: e),
+                                            ))
+                                        .toList(),
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         } else if (state is ProfilePostsLoadingState) {
