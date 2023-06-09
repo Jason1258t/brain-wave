@@ -99,7 +99,7 @@ class MyRepositoryProviders extends StatelessWidget {
       RepositoryProvider(create: (_) => NeuronsRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => UserChatsRepository()),
       RepositoryProvider(create: (_) => PostCreatingRepository(apiService: apiService)),
-      RepositoryProvider(create: (_) => UserAccountRepository())
+      RepositoryProvider(create: (_) => UserAccountRepository(apiService: apiService))
     ], child: const MyBlocProviders());
   }
 }
