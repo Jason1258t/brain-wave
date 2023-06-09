@@ -23,7 +23,7 @@ class ProfileRepository {
     if (usersPosts.isEmpty || f) {
       postsLoading.add(LoadingStateEnum.loading);
       try {
-        final posts = await _apiService.getUserPostsById(userId: _userId);
+        final posts = await _apiService.getUserPostsById(userId: _userId, type: true);
         usersPosts = posts;
         postsLoading.add(LoadingStateEnum.success);
       } catch (e) {

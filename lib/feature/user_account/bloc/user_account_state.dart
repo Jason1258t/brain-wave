@@ -9,7 +9,8 @@ class UserAccountLoadingState extends UserAccountState {}
 
 class UserAccountSuccessState extends UserAccountState {
   final UserModel user;
-  UserAccountSuccessState({required this.user});
+  final List<PostModel> posts;
+  UserAccountSuccessState({required this.user, required this.posts});
 }
 
 class UserAccountFailState extends UserAccountState {}
