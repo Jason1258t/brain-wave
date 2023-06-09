@@ -20,9 +20,9 @@ class ApiService {
           .collection('posts')
           //.orderBy('createdAt', descending: true)
           .where('creator_id', isEqualTo: userId)
-
           .get();
-      final list = resp.docs.map((e) => {'data': e.data(), 'id': e.id}).toList();
+      final list =
+          resp.docs.map((e) => {'data': e.data(), 'id': e.id}).toList();
 
       log(list.toString());
 
@@ -50,22 +50,33 @@ class ApiService {
 
   String? getMonthName(int month) {
     switch (month) {
-      case 1: return 'января';
-      case 2: return 'февраля';
-      case 3: return 'марта';
-      case 4: return 'апреля';
-      case 5: return 'мая';
-      case 6: return 'июня';
-      case 7: return 'июля';
-      case 8: return 'августа';
-      case 9: return 'сентября';
-      case 10: return 'октября';
-      case 11: return 'ноября';
-      case 12: return 'декабря';
+      case 1:
+        return 'января';
+      case 2:
+        return 'февраля';
+      case 3:
+        return 'марта';
+      case 4:
+        return 'апреля';
+      case 5:
+        return 'мая';
+      case 6:
+        return 'июня';
+      case 7:
+        return 'июля';
+      case 8:
+        return 'августа';
+      case 9:
+        return 'сентября';
+      case 10:
+        return 'октября';
+      case 11:
+        return 'ноября';
+      case 12:
+        return 'декабря';
     }
     return null;
   }
-
 
   String getCreatedTime(int ms) {
     final currentDate = DateTime.now();
@@ -89,13 +100,22 @@ class ApiService {
     final user = await getUserById(json['data']['creator_id']);
 
     return PostModel(
-      createdAt: getCreatedTime(json['data']['createdAt']),
+        createdAt: getCreatedTime(json['data']['createdAt']),
         isOwner: type,
         id: json['id'],
         creatorName: user['firstName'],
         description: json['data']['description'],
         creatorImage: user['imageUrl'] ?? '',
         image: json['data']['imageUrl'] ?? '');
+  }
+
+  Future<NeuronModel> mapToNeuron(Map<String, dynamic> json, bool isLiked) async {
+    return NeuronModel(
+        name: json['name'],
+        image: json['image'],
+        isLike: isLiked,
+        description: json['description'],
+        hashtag: json['hashtag']);
   }
 
   Future getAllPosts() async {
@@ -105,7 +125,8 @@ class ApiService {
           .collection('posts')
           .orderBy('createdAt', descending: true)
           .get();
-      final list = resp.docs.map((e) => {'data': e.data(), 'id': e.id}).toList();
+      final list =
+          resp.docs.map((e) => {'data': e.data(), 'id': e.id}).toList();
 
       log(list.toString());
 
@@ -127,7 +148,6 @@ class ApiService {
     } catch (e) {
       rethrow;
     }
-
   }
 
   Future createPost(
@@ -159,6 +179,61 @@ class ApiService {
     }
   }
 
+  Future createNeuron(
+      {required String name,
+        required String gitHub,
+      required String uid,
+      required File? image,
+      required String hashtag,
+      required String description}) async {
+    try {
+      final doc = await _firestore.collection('neurons').add({
+        'creator_id': uid,
+        'name': name,
+        'description': description,
+        'imageUrl': '',
+        'hashtag': hashtag,
+        'github': gitHub,
+      });
+
+      if (image != null) {
+        log(doc.path.toString());
+        final postId = doc.path.split('/')[1];
+
+        final imageUrl = await uploadImage(image, 'neuronImage_$postId.png');
+        await _firestore.collection('posts').doc(postId).set(
+          {'imageUrl': imageUrl},
+          SetOptions(merge: true),
+        );
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future loadAllNeurons() async {
+    try {
+      log('ы');
+      final resp = await _firestore
+          .collection('neurons')
+          .get();
+      final list =
+      resp.docs.map((e) => {'data': e.data(), 'id': e.id}).toList();
+
+      log(list.toString());
+
+      final List<NeuronModel> posts = [];
+
+      for (var i in list) {
+        posts.add(await mapToNeuron(i, false));
+      }
+      return posts;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
   Future uploadImage(File file, String imageId) async {
     final storageRef = FirebaseStorage.instance.ref();
     final mountainImagesRef = storageRef.child("images/$imageId");
@@ -177,7 +252,7 @@ class ApiService {
 
     return [
       NeuronModel(
-          title: 'Chat gbt',
+          name: 'Chat gbt',
           image: 'Assets/chatGBT.png',
           isLike: true,
           description:
@@ -191,7 +266,7 @@ class ApiService {
 
     return [
       NeuronModel(
-          title: 'Chat GBT',
+          name: 'Chat GBT',
           image: 'Assets/chatGBT.png',
           isLike: true,
           hashtag: 'генерация текста',

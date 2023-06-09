@@ -36,7 +36,7 @@ class _NeuronState extends State<Neuron> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(widget.neuron.title, style: AppTypography.font24lightBlue,),
+                    Text(widget.neuron.name, style: AppTypography.font24lightBlue,),
                     Container(
                       decoration: const BoxDecoration(
                         color: AppColors.hashtag,
