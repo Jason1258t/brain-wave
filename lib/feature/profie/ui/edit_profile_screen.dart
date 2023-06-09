@@ -119,6 +119,7 @@ class _EditProfileState extends State<EditProfile> {
 
           if (state is UpdateSuccessState) {
             CustomSnackBar.showSnackBar(context, 'успешно');
+            BlocProvider.of<ProfileBloc>(context).add(ProfilePostsInitialLoadEvent(f: true));
             Dialogs.hide(context);
           }
           if (state is UpdateFailState) {

@@ -50,5 +50,5 @@ abstract class AppTypography {
   static const font16description =
       TextStyle(color: AppColors.snackBarTextColor, fontSize: 16);
   static const teg = TextStyle(
-      color: AppColors.lightGrayText,fontSize: 12 , backgroundColor: AppColors.purpleButton);
+      color: AppColors.lightGrayText,fontSize: 16 , backgroundColor: AppColors.purpleButton);
 }
