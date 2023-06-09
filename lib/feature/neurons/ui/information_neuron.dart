@@ -41,7 +41,7 @@ class _InformationNeuronState extends State<InformationNeuron> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(neuronRepository.getNeurons()[0].title,
+                      Text(neuronRepository.getNeurons()[0].name,
                           style: AppTypography.font32white),
                       Container(
                         decoration: const BoxDecoration(

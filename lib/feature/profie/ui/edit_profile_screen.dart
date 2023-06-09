@@ -25,6 +25,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
   var _image;
@@ -80,6 +81,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     final repository = RepositoryProvider.of<AppRepository>(context);
+    final bloc = BlocProvider.of<ProfileUpdateBloc>(context);
     TextEditingController nameController = TextEditingController(text: repository.getCurrentUser()!.displayName);
     void updater() async {
       if (!repository.getCurrentUser()!.emailVerified) {
@@ -140,24 +142,22 @@ class _EditProfileState extends State<EditProfile> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     InkWell(
-                        onTap: () async {
-                          setState(() {});
-                          var source = ImageSource.gallery;
-                          XFile image = await imagePicker.pickImage(
-                              source: source,
-                              imageQuality: 50,
-                              preferredCameraDevice: CameraDevice.front);
-                          setState(() {
-                            _image = File(image.path);
-                            log(image.path.toString());
-                            repository.changePhoto(File(image.path));
-                          });
+                      onTap: () async {
+                        var source = ImageSource.gallery;
+                        XFile image = await imagePicker.pickImage(
+                            source: source,
+                            imageQuality: 50,
+                            preferredCameraDevice: CameraDevice.front);
 
-                        },
-                        child: ProfileAvatar(
-                          avatar: repository.getCurrentUser()!.photoURL ?? '',
-                          name: repository.getCurrentUser()!.displayName!,
-                        ),),
+                        _image = File(image.path);
+                        log(image.path.toString());
+                        bloc.add(UpdatePhotoEvent(file: _image));
+                      },
+                      child: ProfileAvatar(
+                        avatar: repository.getCurrentUser()!.photoURL ?? '',
+                        name: repository.getCurrentUser()!.displayName!,
+                      ),
+                    ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(
                           paddingWidthMainSize, 20, paddingWidthMainSize, 10),

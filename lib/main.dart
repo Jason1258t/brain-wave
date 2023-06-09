@@ -1,6 +1,8 @@
 import 'dart:developer';
 
-import 'package:brain_wave_2/add_neuron/ui/add_nueron_screen.dart';
+import 'package:brain_wave_2/feature/add_neuron/bloc/add_neuron_bloc.dart';
+import 'package:brain_wave_2/feature/add_neuron/data/neron_creating_repository.dart';
+import 'package:brain_wave_2/feature/add_neuron/ui/add_nueron_screen.dart';
 import 'package:brain_wave_2/feature/add_post/bloc/add_post_bloc.dart';
 import 'package:brain_wave_2/feature/add_post/data/creating_post_repository.dart';
 import 'package:brain_wave_2/feature/add_post/ui/add_post_screen.dart';
@@ -91,14 +93,19 @@ class MyRepositoryProviders extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(providers: [
       RepositoryProvider(
-          create: (_) => AppRepository(firebaseAuthService: firebaseAuth, chatCore: chatCore)),
+          create: (_) => AppRepository(
+              firebaseAuthService: firebaseAuth, chatCore: chatCore)),
       RepositoryProvider(
           create: (_) => ProfileRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => NewsRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => ChatRepository()),
-      RepositoryProvider(create: (_) => NeuronsRepository(apiService: apiService)),
+      RepositoryProvider(
+          create: (_) => NeuronsRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => UserChatsRepository()),
-      RepositoryProvider(create: (_) => PostCreatingRepository(apiService: apiService)),
+      RepositoryProvider(
+          create: (_) => PostCreatingRepository(apiService: apiService)),
+      RepositoryProvider(
+          create: (_) => NeuronCreatingRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => UserAccountRepository())
     ], child: const MyBlocProviders());
   }
@@ -134,24 +141,39 @@ class MyBlocProviders extends StatelessWidget {
                   RepositoryProvider.of<ProfileRepository>(context))
             ..add(ProfileSubscribeEvent())),
       BlocProvider(
-        lazy: false,
-        create: (_) => NewsBloc(
-            newsRepository: RepositoryProvider.of<NewsRepository>(context))..add(NewsSubscribeEvent())),
+          lazy: false,
+          create: (_) => NewsBloc(
+              newsRepository: RepositoryProvider.of<NewsRepository>(context))
+            ..add(NewsSubscribeEvent())),
+      BlocProvider(lazy: false, create: (_) => NavigationBloc()),
       BlocProvider(
-        lazy: false,
-        create: (_) => NavigationBloc()),
+          lazy: false,
+          create: (_) => ProfileUpdateBloc(
+              appRepository: RepositoryProvider.of<AppRepository>(context))
+            ..add(UpdatingSubscribeEvent())),
       BlocProvider(
-        lazy: false,
-        create: (_) => ProfileUpdateBloc(appRepository: RepositoryProvider.of<AppRepository>(context))),
+          lazy: false,
+          create: (_) => MessageBloc(
+              chatRepository: RepositoryProvider.of<ChatRepository>(context))
+            ..add(MessageSubscribeEvent())),
       BlocProvider(
-        lazy: false,
-        create: (_) => MessageBloc(chatRepository: RepositoryProvider.of<ChatRepository>(context))..add(MessageSubscribeEvent())),
+          lazy: false,
+          create: (_) => NeuronsBloc(
+              neuronsRepository:
+                  RepositoryProvider.of<NeuronsRepository>(context))
+            ..add(NeuronsSubscribeEvent())),
       BlocProvider(
-        lazy: false,
-        create: (_) => NeuronsBloc(neuronsRepository: RepositoryProvider.of<NeuronsRepository>(context))..add(NeuronsSubscribeEvent())),
+          lazy: false,
+          create: (_) => AddPostBloc(
+              postCreatingRepository:
+                  RepositoryProvider.of<PostCreatingRepository>(context))
+            ..add(AddPostSubscribeEvent())),
       BlocProvider(
-        lazy: false,
-        create: (_) => AddPostBloc(postCreatingRepository: RepositoryProvider.of<PostCreatingRepository>(context))..add(AddPostSubscribeEvent())),
+          lazy: false,
+          create: (_) => AddNeuronBloc(
+              neuronCreatingRepository:
+                  RepositoryProvider.of<NeuronCreatingRepository>(context))
+            ..add(AddingSubscribeEvent())),
     ], child: const MyApp());
   }
 }
