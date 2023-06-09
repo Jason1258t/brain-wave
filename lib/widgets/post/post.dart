@@ -1,4 +1,5 @@
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
+import 'package:brain_wave_2/feature/user_account/bloc/user_account_bloc.dart';
 import 'package:brain_wave_2/models/post_model.dart';
 import 'package:brain_wave_2/utils/colors.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
@@ -51,6 +52,7 @@ class _PostState extends State<Post> {
                     InkWell(
                       onTap: () {
                         if (!widget.post.isOwner) {
+                          BlocProvider.of<UserAccountBloc>(context).add(UserInitialLoadEvent(uid: widget.post.creatorId));
                           Navigator.pushNamed(context, '/user_account_screen');
                         } else {
                           return;
@@ -69,6 +71,7 @@ class _PostState extends State<Post> {
                         InkWell(
                           onTap: () {
                             if (!widget.post.isOwner) {
+                              BlocProvider.of<UserAccountBloc>(context).add(UserInitialLoadEvent(uid: widget.post.creatorId));
                               Navigator.pushNamed(
                                   context, '/user_account_screen');
                             } else {

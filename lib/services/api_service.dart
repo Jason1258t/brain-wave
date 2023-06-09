@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:brain_wave_2/models/neuron_model.dart';
+import 'package:brain_wave_2/utils/functoins.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -13,7 +14,7 @@ class ApiService {
 
   ApiService({required FirebaseFirestore firestore}) : _firestore = firestore;
 
-  Future getUserPostsById({required String userId}) async {
+  Future getUserPostsById({required String userId, required bool type}) async {
     try {
       log('ы');
       final resp = await _firestore
@@ -29,7 +30,7 @@ class ApiService {
       final List<PostModel> posts = [];
 
       for (var i in list) {
-        posts.add(await mapToPost(i, true));
+        posts.add(await mapToPost(i, type));
       }
       return posts;
     } catch (e) {
@@ -43,59 +44,13 @@ class ApiService {
       final resp = await _firestore.collection('users').doc(uid).get();
       Map<String, dynamic> data = resp.data()!;
       data['uid'] = uid;
-      return resp.data();
+      log(data.toString());
+      return data;
     } catch (e) {
       rethrow;
     }
   }
-
-  String? getMonthName(int month) {
-    switch (month) {
-      case 1:
-        return 'января';
-      case 2:
-        return 'февраля';
-      case 3:
-        return 'марта';
-      case 4:
-        return 'апреля';
-      case 5:
-        return 'мая';
-      case 6:
-        return 'июня';
-      case 7:
-        return 'июля';
-      case 8:
-        return 'августа';
-      case 9:
-        return 'сентября';
-      case 10:
-        return 'октября';
-      case 11:
-        return 'ноября';
-      case 12:
-        return 'декабря';
-    }
-    return null;
-  }
-
-  String getCreatedTime(int ms) {
-    final currentDate = DateTime.now();
-    final gotDate = DateTime.fromMillisecondsSinceEpoch(ms);
-    String pref;
-    if (currentDate.difference(gotDate).inDays == 1) {
-      pref = 'вчера';
-    } else if (currentDate.difference(gotDate).inDays == 0) {
-      pref = 'сегодня';
-    } else {
-      pref = '${gotDate.day} ${getMonthName(gotDate.month)}';
-    }
-
-    final hour = gotDate.hour;
-    final minute = gotDate.minute;
-
-    return '$pref $hour:${minute > 9 ? minute : "0$minute"}';
-  }
+  String getCreatedTime(int ms) => AppFunctions.getTImeFromMs(ms);
 
   Future<PostModel> mapToPost(Map<String, dynamic> json, bool type) async {
     final user = await getUserById(json['data']['creator_id']);

@@ -19,7 +19,6 @@ import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
 import 'package:brain_wave_2/feature/profie/bloc/profile_update/profile_update_bloc.dart';
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/feature/profie/ui/edit_profile_screen.dart';
-import 'package:brain_wave_2/feature/user_account/bloc/user_account_bloc.dart';
 import 'package:brain_wave_2/feature/user_account/data/user_account_repository.dart';
 import 'package:brain_wave_2/feature/user_account/ui/user_account_screen.dart';
 import 'package:brain_wave_2/feature/user_chats/data/user_chats_repository.dart';
@@ -149,7 +148,8 @@ class MyBlocProviders extends StatelessWidget {
       BlocProvider(
           lazy: false,
           create: (_) => ProfileUpdateBloc(
-              appRepository: RepositoryProvider.of<AppRepository>(context))),
+              appRepository: RepositoryProvider.of<AppRepository>(context))
+            ..add(UpdatingSubscribeEvent())),
       BlocProvider(
           lazy: false,
           create: (_) => MessageBloc(

@@ -40,7 +40,9 @@ class UserAccountBloc extends Bloc<UserAccountEvent, UserAccountState> {
   }
 
   _onSuccess(UserAccountSuccessEvent event, emit) {
-    emit(UserAccountSuccessState(user: _userAccountRepository.getUser()));
+    emit(UserAccountSuccessState(
+        user: _userAccountRepository.getUser(),
+        posts: _userAccountRepository.getPosts()));
   }
 
   _onFail(UserAccountFailEvent event, emit) {
