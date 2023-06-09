@@ -1,6 +1,7 @@
 import 'package:brain_wave_2/models/neuron_model.dart';
 import 'package:brain_wave_2/utils/colors.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
+import 'package:brain_wave_2/widgets/avatars/small_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -42,7 +43,7 @@ class _NeuronState extends State<Neuron> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Image.asset(widget.neuron.image),
+                SmallAvatar(avatar: widget.neuron.image, name: widget.neuron.name),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,

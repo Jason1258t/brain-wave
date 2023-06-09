@@ -22,12 +22,13 @@ class NeuronsRepository{
     if (f || neurons.isEmpty) {
       neuronsState.add(LoadingStateEnum.loading);
       try {
-        final news = await _apiService.getAllNeuron();
+        final news = await _apiService.loadAllNeurons();
         neurons = news;
 
         neuronsState.add(LoadingStateEnum.success);
       } catch (e) {
         neuronsState.add(LoadingStateEnum.fail);
+        rethrow;
       }
     }
 

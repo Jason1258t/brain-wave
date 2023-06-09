@@ -8,7 +8,8 @@ class ProfileAvatar extends StatefulWidget {
   final _image;
   int radius;
 
-  ProfileAvatar({Key? key, required this.avatar, required this.name, this.radius = 71})
+  ProfileAvatar(
+      {Key? key, required this.avatar, required this.name, this.radius = 71})
       : _image = NetworkImage(avatar),
         super(key: key);
 
@@ -21,9 +22,9 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
 
   @override
   Widget build(BuildContext context) {
-    widget._image.resolve(ImageConfiguration()).addListener(
+    widget._image.resolve(const ImageConfiguration()).addListener(
       ImageStreamListener(
-            (info, call) {
+        (info, call) {
           isLoad = false;
           setState(() {});
         },
