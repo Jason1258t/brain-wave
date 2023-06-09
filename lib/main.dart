@@ -1,6 +1,7 @@
 import 'dart:developer';
 
-import 'package:brain_wave_2/add_neuron/ui/add_nueron_screen.dart';
+import 'package:brain_wave_2/feature/add_neuron/data/neron_creating_repository.dart';
+import 'package:brain_wave_2/feature/add_neuron/ui/add_nueron_screen.dart';
 import 'package:brain_wave_2/feature/add_post/bloc/add_post_bloc.dart';
 import 'package:brain_wave_2/feature/add_post/data/creating_post_repository.dart';
 import 'package:brain_wave_2/feature/add_post/ui/add_post_screen.dart';
@@ -21,7 +22,6 @@ import 'package:brain_wave_2/feature/profie/ui/edit_profile_screen.dart';
 import 'package:brain_wave_2/feature/user_account/data/user_account_repository.dart';
 import 'package:brain_wave_2/feature/user_account/ui/user_account_screen.dart';
 import 'package:brain_wave_2/feature/user_chats/data/user_chats_repository.dart';
-import 'package:brain_wave_2/feature/user_chats/ui/user_chat_screen.dart';
 import 'package:brain_wave_2/feature/user_chats/ui/users_screen.dart';
 import 'package:brain_wave_2/logic/app_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
@@ -34,7 +34,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'feature/auth/bloc/auth_bloc/auth_bloc.dart';
 import 'feature/auth/bloc/registration_bloc/registration_bloc.dart';
 import 'feature/auth/ui/registration.dart';
@@ -91,14 +90,19 @@ class MyRepositoryProviders extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(providers: [
       RepositoryProvider(
-          create: (_) => AppRepository(firebaseAuthService: firebaseAuth, chatCore: chatCore)),
+          create: (_) => AppRepository(
+              firebaseAuthService: firebaseAuth, chatCore: chatCore)),
       RepositoryProvider(
           create: (_) => ProfileRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => NewsRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => ChatRepository()),
-      RepositoryProvider(create: (_) => NeuronsRepository(apiService: apiService)),
+      RepositoryProvider(
+          create: (_) => NeuronsRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => UserChatsRepository()),
-      RepositoryProvider(create: (_) => PostCreatingRepository(apiService: apiService)),
+      RepositoryProvider(
+          create: (_) => PostCreatingRepository(apiService: apiService)),
+      RepositoryProvider(
+          create: (_) => NeuronCreatingRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => UserAccountRepository(apiService: apiService))
     ], child: const MyBlocProviders());
   }

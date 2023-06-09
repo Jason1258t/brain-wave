@@ -15,7 +15,9 @@ class ProfileUpdateBloc extends Bloc<ProfileUpdateEvent, ProfileUpdateState> {
   ProfileUpdateBloc({required AppRepository appRepository})
       : _appRepository = appRepository,
         super(ProfileUpdateInitial()) {
+    on<UpdatingSubscribeEvent>(_subscribe);
     on<UpdateNameEvent>(_changeName);
+    on<UpdatePhotoEvent>(_changePhoto);
     on<UpdateLoadingEvent>(_onLoading);
     on<UpdateSuccessEvent>(_onSuccess);
     on<UpdateFailEvent>(_onFail);
@@ -23,6 +25,13 @@ class ProfileUpdateBloc extends Bloc<ProfileUpdateEvent, ProfileUpdateState> {
 
   _changeName(UpdateNameEvent event, emit) {
     _appRepository.changeName(event.name);
+  }
+
+  _changePhoto(UpdatePhotoEvent event, emit) {
+    _appRepository.changePhoto(event.file);
+  }
+
+  _subscribe(UpdatingSubscribeEvent event, emit) {
     _appRepository.changeNameState.stream.listen((event) {
       if (event == LoadingStateEnum.loading) add(UpdateLoadingEvent());
       if (event == LoadingStateEnum.success) {

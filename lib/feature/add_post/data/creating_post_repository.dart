@@ -14,10 +14,15 @@ class PostCreatingRepository {
   BehaviorSubject<LoadingStateEnum> creatingState =
       BehaviorSubject<LoadingStateEnum>.seeded(LoadingStateEnum.wait);
 
-  void createPost({required String title, required String description, required File? image, required String uid}) async {
+  void createPost(
+      {required String title,
+      required String description,
+      required File? image,
+      required String uid}) async {
     creatingState.add(LoadingStateEnum.loading);
     try {
-      await _apiService.createPost(uid: uid, title: title, description: description, image: image);
+      await _apiService.createPost(
+          uid: uid, title: title, description: description, image: image);
       creatingState.add(LoadingStateEnum.success);
     } catch (e) {
       creatingState.add(LoadingStateEnum.fail);

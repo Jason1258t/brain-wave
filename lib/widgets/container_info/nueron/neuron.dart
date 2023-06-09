@@ -48,7 +48,7 @@ class _NeuronState extends State<Neuron> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      widget.neuron.title,
+                      widget.neuron.name,
                       style: AppTypography.font24lightBlue,
                     ),
                     SizedBox(

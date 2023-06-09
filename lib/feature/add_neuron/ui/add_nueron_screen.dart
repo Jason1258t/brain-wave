@@ -1,10 +1,14 @@
 import 'dart:io';
 
+import 'package:brain_wave_2/feature/add_neuron/bloc/add_neuron_bloc.dart';
+import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/buttons/elevated_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../models/neuron_model.dart';
 import '../../../utils/colors.dart';
 
 class AddNeuron extends StatefulWidget {
@@ -15,10 +19,11 @@ class AddNeuron extends StatefulWidget {
 }
 
 class _AddNeuronState extends State<AddNeuron> {
-  final _richText = [];
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _gitController = TextEditingController();
   final TextEditingController _tegController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  var _richText = [];
 
   void addTextSpan(String str) {
     _richText.add(TextSpan(text: str, style: AppTypography.teg));
@@ -61,41 +66,10 @@ class _AddNeuronState extends State<AddNeuron> {
                   textColor: AppColors.lightBlueText,
                   child: const Text('Сохранить'),
                   onPressed: () {
-                    Navigator.pop(context);
-                    setState(() {});
-                  },
-                )
-              ],
-            );
-          });
-    }
-
-    Future<void> _displayTextInputDialogTeg(BuildContext context,
-        TextEditingController controller, String title) async {
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: AppColors.widgetsBackground,
-              title: Text(
-                title,
-                style: AppTypography.font16lightGray,
-              ),
-              content: TextField(
-                style: AppTypography.font14milk,
-                onChanged: (value) {},
-                controller: controller,
-              ),
-              actions: <Widget>[
-                MaterialButton(
-                  color: AppColors.purpleButton,
-                  textColor: AppColors.lightBlueText,
-                  child: const Text('Сохранить'),
-                  onPressed: () {
-                    addTextSpan('#${controller.text}');
-                    controller.text = '';
-                    Navigator.pop(context);
-                    setState(() {});
+                    setState(() {
+                      Navigator.pop(context);
+                      setState(() {});
+                    });
                   },
                 )
               ],
@@ -122,48 +96,46 @@ class _AddNeuronState extends State<AddNeuron> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    ClipRRect(
-                      child: SizedBox.fromSize(
-                        size: const Size.fromRadius(60), // Image radius
-                        child: _image != null
-                            ? Image.file(
-                                _image,
-                              )
-                            : const Image(
-                                image: AssetImage(
-                                  'Assets/middle_empty_img.png',
-                                ),
-                              ),
-                      ),
-                    ),
-                    InkWell(
-                        onTap: () async {
-                          var source = ImageSource.gallery;
-                          XFile image = await imagePicker.pickImage(
-                              source: source,
-                              imageQuality: 50,
-                              preferredCameraDevice: CameraDevice.front);
+                InkWell(
+                  onTap: () async {
+                    var source = ImageSource.gallery;
+                    XFile image = await imagePicker.pickImage(
+                        source: source,
+                        imageQuality: 50,
+                        preferredCameraDevice: CameraDevice.front);
 
-                          _image = File(image.path);
-                          setState(() {});
-                        },
-                        child: const Icon(
-                          Icons.edit_note,
-                          color: AppColors.lightBlueText,
-                          size: 30,
-                        )),
-                  ],
+                    _image = File(image.path);
+                    setState(() {});
+                  },
+                  child: ClipRRect(
+                    child: SizedBox.fromSize(
+                      size: const Size.fromRadius(60), // Image radius
+                      child: _image != null
+                          ? Image.file(
+                              _image,
+                            )
+                          : const Image(
+                              image: AssetImage(
+                                'Assets/small_empty_img.png',
+                              ),
+                            ),
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 19,
                 ),
-                const Text(
-                  'Название',
-                  style: AppTypography.font32white,
+                InkWell(
+                  onTap: () {
+                    _displayTextInputDialog(
+                        context, _gitController, 'Название');
+                  },
+                  child: Text(
+                    _nameController.text.isNotEmpty
+                        ? _nameController.text
+                        : 'Введите название',
+                    style: AppTypography.font32white,
+                  ),
                 ),
                 const SizedBox(
                   height: 19,
@@ -181,14 +153,16 @@ class _AddNeuronState extends State<AddNeuron> {
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     child: Row(
                       children: [
-                        const SizedBox(width: 30,),
+                        const SizedBox(
+                          width: 30,
+                        ),
                         Text(
-                            _gitController.text != ''
-                                ? _gitController.text
-                                : 'Ссылка на Git с документацией',
-                            style: AppTypography.font18lightBlue,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          _gitController.text != ''
+                              ? _gitController.text
+                              : 'Ссылка на Git с документацией',
+                          style: AppTypography.font18lightBlue,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ],
                     ),
                   ),
@@ -198,7 +172,7 @@ class _AddNeuronState extends State<AddNeuron> {
                 ),
                 InkWell(
                   onTap: () {
-                    _displayTextInputDialogTeg(
+                    _displayTextInputDialog(
                         context, _tegController, 'Добавте тег');
                   },
                   child: Container(
@@ -208,7 +182,9 @@ class _AddNeuronState extends State<AddNeuron> {
                         color: AppColors.addNeuronBackgroundWidget,
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     child: Row(children: [
-                      const SizedBox(width: 30,),
+                      const SizedBox(
+                        width: 30,
+                      ),
                       const Text(
                         'Теги: ',
                         style: AppTypography.font18lightBlue,
@@ -250,7 +226,21 @@ class _AddNeuronState extends State<AddNeuron> {
                   height: 34,
                 ),
                 CustomElevatedButton(
-                  callback: () {}, //TODo добавление в fireBAse
+                  callback: () {
+                    final uid = RepositoryProvider.of<AppRepository>(context)
+                        .getCurrentUser()!
+                        .uid;
+                    BlocProvider.of<AddNeuronBloc>(context).add(AddInitialEvent(
+                        uid: uid,
+                        image: _image,
+                        neuronModel: NeuronModel(
+                            name: _nameController.text,
+                            description: _descriptionController.text,
+                            hashtag: [_tegController.text],
+                            image: '',
+                            isLike: false),
+                        gitHub: _gitController.text));
+                  },
                   text: 'Отправить на проверку',
                 ),
               ],
