@@ -227,7 +227,6 @@ class _EditProfileState extends State<EditProfile> {
                       height: MediaQuery.of(context).size.height * 0.1,
                     ),
                     if (!repository.getCurrentUser()!.emailVerified) ...[
-                      // TODO тут должна быть проверка
                       Padding(
                         padding: EdgeInsets.only(
                             left: MediaQuery.of(context).size.width * 0.1),

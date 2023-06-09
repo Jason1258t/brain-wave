@@ -26,7 +26,7 @@ class _AddNeuronState extends State<AddNeuron> {
   var _richText = [];
 
   void addTextSpan(String str) {
-    _richText.add(TextSpan(text: str, style: AppTypography.teg));
+    _richText.add(TextSpan(text: '#$str', style: AppTypography.teg));
     _richText.add(const TextSpan(text: ' '));
     setState(() {});
     print(_richText);
@@ -67,6 +67,41 @@ class _AddNeuronState extends State<AddNeuron> {
                   child: const Text('Сохранить'),
                   onPressed: () {
                     setState(() {
+                      Navigator.pop(context);
+                      setState(() {});
+                    });
+                  },
+                )
+              ],
+            );
+          });
+    }
+
+    Future<void> _displayTextInputDialogGit(BuildContext context,
+        TextEditingController controller, String title) async {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              backgroundColor: AppColors.widgetsBackground,
+              title: Text(
+                title,
+                style: AppTypography.font16lightGray,
+              ),
+              content: TextField(
+                style: AppTypography.font14milk,
+                onChanged: (value) {},
+                controller: controller,
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  color: AppColors.purpleButton,
+                  textColor: AppColors.lightBlueText,
+                  child: const Text('Сохранить'),
+                  onPressed: () {
+                    setState(() {
+                      addTextSpan(controller.text);
+                      controller.text = '';
                       Navigator.pop(context);
                       setState(() {});
                     });
@@ -173,7 +208,7 @@ class _AddNeuronState extends State<AddNeuron> {
                 ),
                 InkWell(
                   onTap: () {
-                    _displayTextInputDialog(
+                    _displayTextInputDialogGit(
                         context, _tegController, 'Добавте тег');
                   },
                   child: Container(

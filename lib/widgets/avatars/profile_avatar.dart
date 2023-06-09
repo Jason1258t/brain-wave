@@ -1,12 +1,23 @@
+import 'package:brain_wave_2/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProfileAvatar extends StatelessWidget {
   String avatar;
   String name;
+  final _image;
   int radius;
 
   ProfileAvatar({Key? key, required this.avatar, required this.name, this.radius = 71})
-      : super(key: key);
+      : _image = NetworkImage(avatar),
+        super(key: key);
+
+  @override
+  State<ProfileAvatar> createState() => _ProfileAvatarState();
+}
+
+class _ProfileAvatarState extends State<ProfileAvatar> {
+  bool isLoad = true;
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +26,26 @@ class ProfileAvatar extends StatelessWidget {
       radius: radius.toDouble(),
       child: CircleAvatar(
         backgroundColor: const Color(0xff131124),
-        radius: radius - 2,
-        child: avatar.isNotEmpty
-            ? CircleAvatar(
-                backgroundImage: NetworkImage(avatar),
-                backgroundColor: Colors.white,
-                radius: radius - 9,
-              )
+        radius: widget.radius - 2,
+        child: widget.avatar.isNotEmpty
+            ? isLoad
+                ? Shimmer.fromColors(
+                    baseColor: AppColors.background,
+                    highlightColor: AppColors.purpleButton,
+                    child: CircleAvatar(
+                      backgroundImage: widget._image,
+                      radius: widget.radius - 9,
+                    ),
+                  )
+                : CircleAvatar(
+                    backgroundImage: widget._image,
+                    radius: widget.radius - 9,
+                  )
             : CircleAvatar(
                 backgroundColor: const Color(0xff5024CE),
-                radius: radius - 9,
+                radius: widget.radius - 9,
                 child: Text(
-                  name[0].toUpperCase(),
+                  widget.name[0].toUpperCase(),
                   style: const TextStyle(fontSize: 64, color: Colors.white),
                 ),
               ),
