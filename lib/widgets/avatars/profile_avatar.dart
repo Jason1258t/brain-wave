@@ -2,7 +2,7 @@ import 'package:brain_wave_2/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-class ProfileAvatar extends StatelessWidget {
+class ProfileAvatar extends StatefulWidget {
   String avatar;
   String name;
   final _image;
@@ -21,9 +21,18 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
 
   @override
   Widget build(BuildContext context) {
+    widget._image.resolve(ImageConfiguration()).addListener(
+      ImageStreamListener(
+            (info, call) {
+          isLoad = false;
+          setState(() {});
+        },
+      ),
+    );
+
     return CircleAvatar(
       backgroundColor: const Color(0xff0057FF),
-      radius: radius.toDouble(),
+      radius: widget.radius.toDouble(),
       child: CircleAvatar(
         backgroundColor: const Color(0xff131124),
         radius: widget.radius - 2,

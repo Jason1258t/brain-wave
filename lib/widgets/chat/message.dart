@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 var now = DateTime.now();
 
+// ignore: must_be_immutable
 class MessageWidget extends StatefulWidget {
   Message message;
 

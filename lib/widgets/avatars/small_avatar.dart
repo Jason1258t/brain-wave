@@ -3,10 +3,12 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../utils/colors.dart';
 
+// ignore: must_be_immutable
 class SmallAvatar extends StatefulWidget {
   String avatar;
   String name;
   Color? color;
+  // ignore: prefer_typing_uninitialized_variables
   final _image;
 
   SmallAvatar({Key? key, required this.avatar, required this.name, this.color})
@@ -18,12 +20,32 @@ class SmallAvatar extends StatefulWidget {
 }
 
 class _SmallAvatarState extends State<SmallAvatar> {
+  bool isLoad = true;
+
   @override
   Widget build(BuildContext context) {
+    widget._image.resolve(const ImageConfiguration()).addListener(
+      ImageStreamListener(
+        (info, call) {
+          isLoad = false;
+          setState(() {});
+        },
+      ),
+    );
+
     return widget.avatar.isNotEmpty
+        ? !isLoad
             ? CircleAvatar(
                 backgroundImage: widget._image,
                 radius: 25,
+              )
+            : Shimmer.fromColors(
+                baseColor: AppColors.background,
+                highlightColor: AppColors.purpleButton,
+                child: CircleAvatar(
+                  backgroundImage: widget._image,
+                  radius: 25,
+                ),
               )
         : CircleAvatar(
             backgroundColor: widget.color ?? const Color(0xff5024CE),
