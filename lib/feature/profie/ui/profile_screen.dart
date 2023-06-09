@@ -109,7 +109,11 @@ class _ProfileState extends State<Profile> {
       ),
       body: BlocConsumer<ProfileBloc, ProfileState>(
         listener: (context, state) {
-          // TODO: implement listener
+          if (state is ProfilePostsSuccessState) {
+            setState(() {
+
+            });
+          }
         },
         builder: (context, state) {
           return Container(

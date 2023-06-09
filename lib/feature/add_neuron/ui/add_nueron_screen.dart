@@ -1,10 +1,12 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:brain_wave_2/feature/add_neuron/bloc/add_neuron_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
+import 'package:brain_wave_2/utils/animations.dart';
+import 'package:brain_wave_2/utils/dialogs.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/buttons/elevated_button.dart';
+import 'package:brain_wave_2/widgets/snack_bar/custom_cnack_bar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +14,8 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../models/neuron_model.dart';
 import '../../../utils/colors.dart';
+import '../../../utils/dialogs.dart';
+import '../../../widgets/snack_bar/custom_cnack_bar.dart';
 
 class AddNeuron extends StatefulWidget {
   const AddNeuron({Key? key}) : super(key: key);
@@ -28,31 +32,12 @@ class _AddNeuronState extends State<AddNeuron> {
   var _richText = [];
   List<String> tags = [];
 
-  void deleteTagByValue(String value) {
-    final ind = tags.indexOf(value);
-
-    setState(() {
-      _richText.removeAt(ind * 2);
-      _richText.removeAt(ind * 2);
-      tags.removeAt(ind);
-    });
-  }
-
   void addTextSpan(String str) {
-    _richText.addAll([
-      TextSpan(
-          text: '#$str',
-          style: AppTypography.teg,
-          recognizer: TapGestureRecognizer()
-            ..onTap = () {
-              deleteTagByValue(str);
-            }),
-      const TextSpan(
-        text: ' ',
-      )
-    ]);
+    _richText.add(TextSpan(text: '#$str', style: AppTypography.teg));
+    _richText.add(const TextSpan(text: ' '));
     tags.add(str);
     setState(() {});
+    print(_richText);
   }
 
   var _image;
@@ -139,183 +124,194 @@ class _AddNeuronState extends State<AddNeuron> {
           });
     }
 
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.purpleButton,
-          title: const Text(
-            'Доабвление нейронной сети',
-            style: AppTypography.font20fff,
-          ),
-          centerTitle: true,
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height - 60,
-            decoration: const BoxDecoration(
-              color: AppColors.background,
+    return BlocListener<AddNeuronBloc, AddNeuronState>(
+      listener: (context, state) {
+        if (state is AddNeuronLoadingState) {
+          Dialogs.showModal(context, AppAnimations.bouncingSquare);
+        }
+        if (state is AddNeuronSuccessState) {
+          Dialogs.hide(context);
+          CustomSnackBar.showSnackBar(context, 'Успешно');
+          Navigator.pop(context);
+        }
+        if (state is AddNeuronFailState) {
+          Dialogs.hide(context);
+          CustomSnackBar.showSnackBar(context, 'Проблемс');
+        }
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: AppColors.purpleButton,
+            title: const Text(
+              'Доабвление нейронной сети',
+              style: AppTypography.font20fff,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: () async {
-                    var source = ImageSource.gallery;
-                    XFile image = await imagePicker.pickImage(
-                        source: source,
-                        imageQuality: 50,
-                        preferredCameraDevice: CameraDevice.front);
+            centerTitle: true,
+          ),
+          body: SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height - 60,
+              decoration: const BoxDecoration(
+                color: AppColors.background,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      var source = ImageSource.gallery;
+                      XFile image = await imagePicker.pickImage(
+                          source: source,
+                          imageQuality: 50,
+                          preferredCameraDevice: CameraDevice.front);
 
-                    _image = File(image.path);
-                    setState(() {});
-                  },
-                  child: ClipRRect(
-                    child: SizedBox.fromSize(
-                      size: const Size.fromRadius(60), // Image radius
-                      child: _image != null
-                          ? Image.file(
-                              _image,
-                            )
-                          : const Image(
-                              width: 40,
-                              image: AssetImage(
-                                'Assets/middle_empty_img.png',
+                      _image = File(image.path);
+                      setState(() {});
+                    },
+                    child: ClipRRect(
+                      child: SizedBox.fromSize(
+                        size: const Size.fromRadius(60), // Image radius
+                        child: _image != null
+                            ? CircleAvatar(
+                          radius: 50,
+                          backgroundImage: FileImage(_image),
+                        )
+                            : const Image(
+                                width: 40,
+                                image: AssetImage(
+                                  'Assets/middle_empty_img.png',
+                                ),
                               ),
-                            ),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 19,
-                ),
-                InkWell(
-                  onTap: () {
-                    _displayTextInputDialog(
-                        context, _nameController, 'Название');
-                  },
-                  child: Text(
-                    _nameController.text.isNotEmpty
-                        ? _nameController.text
-                        : 'Введите название',
-                    style: AppTypography.font32white,
+                  const SizedBox(
+                    height: 19,
                   ),
-                ),
-                const SizedBox(
-                  height: 19,
-                ),
-                InkWell(
-                  onTap: () {
-                    _displayTextInputDialog(context, _gitController,
-                        'Ссылка на Git с документацией');
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: 35,
-                    decoration: const BoxDecoration(
-                        color: AppColors.addNeuronBackgroundWidget,
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Row(
-                      children: [
+                  InkWell(
+                    onTap: () {
+                      _displayTextInputDialog(
+                          context, _nameController, 'Название');
+                    },
+                    child: Text(
+                      _nameController.text.isNotEmpty
+                          ? _nameController.text
+                          : 'Введите название',
+                      style: AppTypography.font32white,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 19,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      _displayTextInputDialog(context, _gitController,
+                          'Ссылка на Git с документацией');
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: 35,
+                      decoration: const BoxDecoration(
+                          color: AppColors.addNeuronBackgroundWidget,
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            width: 30,
+                          ),
+                          Text(
+                            _gitController.text != ''
+                                ? _gitController.text
+                                : 'Ссылка на Git с документацией',
+                            style: AppTypography.font18lightBlue,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      _displayTextInputDialogGit(
+                          context, _tegController, 'Добавте тег');
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: 35,
+                      decoration: const BoxDecoration(
+                          color: AppColors.addNeuronBackgroundWidget,
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: Row(children: [
                         const SizedBox(
                           width: 30,
-                        ),
-                        Text(
-                          _gitController.text != ''
-                              ? _gitController.text
-                              : 'Ссылка на Git с документацией',
-                          style: AppTypography.font18lightBlue,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  padding: EdgeInsets.all(8),
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  decoration: const BoxDecoration(
-                      color: AppColors.addNeuronBackgroundWidget,
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          width: 15,
                         ),
                         const Text(
                           'Теги: ',
                           style: AppTypography.font18lightBlue,
-                          textAlign: TextAlign.left,
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.5,
                           child: RichText(
-                            softWrap: true,
                             text: TextSpan(
                               children: List.from(_richText),
                             ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        InkWell(
-                          onTap: () {
-                            _displayTextInputDialogGit(
-                                context, _tegController, 'Добавте тег');
-                          },
-                          child: const Icon(
-                            Icons.add,
-                            color: AppColors.lightGrayText,
-                          ),
-                        )
                       ]),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.addNeuronBackgroundWidget,
-                    borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                  padding: const EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  child: TextField(
-                    keyboardType: TextInputType.multiline,
-                    expands: true,
-                    maxLines: null,
-                    style: AppTypography.font18lightBlue,
-                    decoration: const InputDecoration(
-                        filled: true, border: InputBorder.none),
-                    controller: _descriptionController,
+                  const SizedBox(
+                    height: 30,
                   ),
-                ),
-                const SizedBox(
-                  height: 34,
-                ),
-                CustomElevatedButton(
-                  callback: () {
-                    final uid = RepositoryProvider.of<AppRepository>(context)
-                        .getCurrentUser()!
-                        .uid;
-                    BlocProvider.of<AddNeuronBloc>(context).add(AddInitialEvent(
-                        uid: uid,
-                        image: _image,
-                        neuronModel: NeuronModel(
-                            name: _nameController.text,
-                            description: _descriptionController.text,
-                            hashtag: tags,
-                            image: '',
-                            isLike: false),
-                        gitHub: _gitController.text));
-                  },
-                  text: 'Отправить на проверку',
-                ),
-              ],
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.addNeuronBackgroundWidget,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.all(10),
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      expands: true,
+                      maxLines: null,
+                      style: AppTypography.font18lightBlue,
+                      decoration: const InputDecoration(
+                          filled: true, border: InputBorder.none),
+                      controller: _descriptionController,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 34,
+                  ),
+                  CustomElevatedButton(
+                    callback: () {
+                      final uid = RepositoryProvider.of<AppRepository>(context)
+                          .getCurrentUser()!
+                          .uid;
+                      BlocProvider.of<AddNeuronBloc>(context).add(
+                          AddInitialEvent(
+                              uid: uid,
+                              image: _image,
+                              neuronModel: NeuronModel(
+                                  name: _nameController.text,
+                                  description: _descriptionController.text,
+                                  hashtag: tags,
+                                  image: '',
+                                  isLike: false),
+                              gitHub: _gitController.text));
+                    },
+                    text: 'Отправить на проверку',
+                  ),
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }

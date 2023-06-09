@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:brain_wave_2/feature/add_neuron/bloc/add_neuron_bloc.dart';
 import 'package:brain_wave_2/feature/add_neuron/data/neron_creating_repository.dart';
 import 'package:brain_wave_2/feature/add_neuron/ui/add_nueron_screen.dart';
 import 'package:brain_wave_2/feature/add_post/bloc/add_post_bloc.dart';
@@ -174,6 +175,12 @@ class MyBlocProviders extends StatelessWidget {
               accountRepository:
                   RepositoryProvider.of<UserAccountRepository>(context))
             ..add(UserSubscribeEvent())),
+      BlocProvider(
+          lazy: false,
+          create: (_) => AddNeuronBloc(
+              neuronCreatingRepository:
+                  RepositoryProvider.of<NeuronCreatingRepository>(context))
+            ..add(AddingSubscribeEvent())),
     ], child: const MyApp());
   }
 }
