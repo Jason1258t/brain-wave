@@ -3,7 +3,6 @@ import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/utils/colors.dart';
-import 'package:brain_wave_2/utils/dialogs.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/avatars/profile_avatar.dart';
 import 'package:brain_wave_2/widgets/buttons/icon_text_button.dart';
@@ -58,9 +57,7 @@ class _ProfileState extends State<Profile> {
 
     final repository = RepositoryProvider.of<AppRepository>(context);
     final bloc = BlocProvider.of<ProfileBloc>(context);
-
     bloc.add(ProfilePostsInitialLoadEvent());
-
     final double paddingWidthMainSize =
         MediaQuery.of(context).size.width * 0.05;
     return Scaffold(
@@ -98,14 +95,7 @@ class _ProfileState extends State<Profile> {
                 style: AppTypography.font18lightBlue,
               ),
               onTap: () {
-                if (RepositoryProvider.of<AppRepository>(context)
-                    .getCurrentUser()!
-                    .emailVerified) {
-                  Navigator.pushNamed(context, '/add_neuron');
-                } else {
-                  Dialogs.shonMessage(context,
-                      'Для этого необходимо подтвердить email на вкладке настроек');
-                }
+                Navigator.pushNamed(context, '/add_neuron');
               },
             ),
             ListTile(
@@ -120,7 +110,9 @@ class _ProfileState extends State<Profile> {
       body: BlocConsumer<ProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state is ProfilePostsSuccessState) {
-            setState(() {});
+            setState(() {
+
+            });
           }
         },
         builder: (context, state) {
@@ -172,7 +164,7 @@ class _ProfileState extends State<Profile> {
                                   horizontal: 20, vertical: 10),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: const [
                                   Text(
                                     'Избранные нейронки:',
@@ -190,7 +182,7 @@ class _ProfileState extends State<Profile> {
                                   horizontal: 20, vertical: 10),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
                                     'Посты:',
@@ -198,7 +190,7 @@ class _ProfileState extends State<Profile> {
                                   ),
                                   Text(
                                     RepositoryProvider.of<ProfileRepository>(
-                                            context)
+                                        context)
                                         .usersPosts
                                         .length
                                         .toString(),
@@ -227,22 +219,24 @@ class _ProfileState extends State<Profile> {
                         if (state is ProfilePostsSuccessState) {
                           return Expanded(
                             child: RefreshIndicator(
-                              onRefresh: () async {
-                                bloc.add(ProfilePostsInitialLoadEvent(f: true));
-                              },
+                              onRefresh: () async {RepositoryProvider.of<ProfileRepository>(context).initialLoadPosts(f: true);},
                               child: ListView(
+                                physics: const BouncingScrollPhysics(
+                                    decelerationRate:
+                                    ScrollDecelerationRate.fast),
                                 clipBehavior: Clip.hardEdge,
                                 scrollDirection: Axis.vertical,
                                 children: [
                                   Column(
                                     children: RepositoryProvider.of<
-                                            ProfileRepository>(context)
+                                        ProfileRepository>(context)
                                         .usersPosts
                                         .map((e) => Padding(
-                                              padding: const EdgeInsets.fromLTRB(
-                                                  0, 21, 0, 21),
-                                              child: Post(post: e),
-                                            ))
+                                      padding:
+                                      const EdgeInsets.fromLTRB(
+                                          0, 21, 0, 21),
+                                      child: Post(post: e),
+                                    ))
                                         .toList(),
                                   )
                                 ],

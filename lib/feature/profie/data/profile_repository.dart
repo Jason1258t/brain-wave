@@ -11,7 +11,7 @@ class ProfileRepository {
       : _apiService = apiService;
 
   BehaviorSubject<LoadingStateEnum> postsLoading =
-      BehaviorSubject<LoadingStateEnum>.seeded(LoadingStateEnum.wait);
+  BehaviorSubject<LoadingStateEnum>.seeded(LoadingStateEnum.wait);
   List<PostModel> usersPosts = [];
 
 
@@ -20,18 +20,16 @@ class ProfileRepository {
   }
 
   void initialLoadPosts({bool f = false}) async {
-    if (f) {
+    if (usersPosts.isEmpty || f) {
       postsLoading.add(LoadingStateEnum.loading);
       try {
         final posts = await _apiService.getUserPostsById(userId: _userId, type: true);
         usersPosts = posts;
-
+        postsLoading.add(LoadingStateEnum.success);
       } catch (e) {
         postsLoading.add(LoadingStateEnum.fail);
-        rethrow;
       }
     }
-    postsLoading.add(LoadingStateEnum.success);
   }
 
   void deletePost(PostModel postModel) async {
