@@ -24,10 +24,12 @@ class _AddNeuronState extends State<AddNeuron> {
   final TextEditingController _tegController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   var _richText = [];
+  List<String> tags = [];
 
   void addTextSpan(String str) {
     _richText.add(TextSpan(text: '#$str', style: AppTypography.teg));
     _richText.add(const TextSpan(text: ' '));
+    tags.add(str);
     setState(() {});
     print(_richText);
   }
@@ -272,7 +274,7 @@ class _AddNeuronState extends State<AddNeuron> {
                         neuronModel: NeuronModel(
                             name: _nameController.text,
                             description: _descriptionController.text,
-                            hashtag: [_tegController.text],
+                            hashtag: tags,
                             image: '',
                             isLike: false),
                         gitHub: _gitController.text));
