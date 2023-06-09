@@ -2,7 +2,6 @@ import 'package:brain_wave_2/feature/neurons/bloc/message/message_bloc.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/models/message.dart';
 import 'package:brain_wave_2/utils/colors.dart';
-import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/chat/message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,6 +34,7 @@ class ChatUser extends StatefulWidget {
 class _ChatUserState extends State<ChatUser> {
   TextEditingController messageController = TextEditingController();
   final ScrollController _controller = ScrollController();
+  List<String> listMess = [];
 
   void scrollDown() {
     _controller.animateTo(
@@ -46,6 +46,7 @@ class _ChatUserState extends State<ChatUser> {
 
   List<Widget> getMessagesList(List messageList) {
     List<Widget> l = [];
+    var count = 0;
 
     for (var e in messageList) {
       try {
@@ -59,6 +60,8 @@ class _ChatUserState extends State<ChatUser> {
                 isReverse: e.author.id != widget.user.id,
                 isLoad: false,
                 text: e.toJson()['text'])));
+        listMess.add(e.toJson()['text']);
+        count++;
       } catch (er) {}
     }
     return l;
@@ -66,6 +69,7 @@ class _ChatUserState extends State<ChatUser> {
 
   @override
   Widget build(BuildContext context) {
+    print(listMess);
     return BlocConsumer<MessageBloc, MessageState>(
       listener: (context, state) {
         scrollDown();
@@ -81,10 +85,11 @@ class _ChatUserState extends State<ChatUser> {
                   decoration: const BoxDecoration(
                     color: AppColors.background,
                   ),
-                  child: ListView(
+                  child: ListView.builder(
+                      itemCount: getMessagesList(widget.messageList).length,
                       reverse: true,
                       controller: _controller,
-                      children: getMessagesList(widget.messageList)),
+                      itemBuilder: (_, i) => getMessagesList(widget.messageList)[i]),
                 ),
               ),
               Stack(

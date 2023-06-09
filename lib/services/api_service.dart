@@ -92,6 +92,7 @@ class ApiService {
         isOwner: type,
         id: json['id'],
         creatorName: user['firstName'],
+        creatorId: json['data']['creator_id'],
         description: json['data']['description'],
         creatorImage: user['imageUrl'] ?? '',
         image: json['data']['imageUrl'] ?? '');

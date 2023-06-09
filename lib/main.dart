@@ -18,6 +18,8 @@ import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
 import 'package:brain_wave_2/feature/profie/bloc/profile_update/profile_update_bloc.dart';
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/feature/profie/ui/edit_profile_screen.dart';
+import 'package:brain_wave_2/feature/user_account/data/user_account_repository.dart';
+import 'package:brain_wave_2/feature/user_account/ui/user_account_screen.dart';
 import 'package:brain_wave_2/feature/user_chats/data/user_chats_repository.dart';
 import 'package:brain_wave_2/feature/user_chats/ui/user_chat_screen.dart';
 import 'package:brain_wave_2/feature/user_chats/ui/users_screen.dart';
@@ -73,7 +75,7 @@ class MyApp extends StatelessWidget {
         '/add_post' : (context) => const AddPost(),
         '/chat_user' : (context) => const UsersPage(),
         '/add_neuron' : (context) => const AddNeuron(),
-
+        '/user_account_screen' : (context) => const UserAccount(),
       },
       home: const HomePage(),
     );
@@ -97,6 +99,7 @@ class MyRepositoryProviders extends StatelessWidget {
       RepositoryProvider(create: (_) => NeuronsRepository(apiService: apiService)),
       RepositoryProvider(create: (_) => UserChatsRepository()),
       RepositoryProvider(create: (_) => PostCreatingRepository(apiService: apiService)),
+      RepositoryProvider(create: (_) => UserAccountRepository())
     ], child: const MyBlocProviders());
   }
 }

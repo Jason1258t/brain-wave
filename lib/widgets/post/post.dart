@@ -21,13 +21,16 @@ class Post extends StatefulWidget {
 
 class _PostState extends State<Post> {
   final List<String> postOptions = ['Удалить', 'Редактировать'];
+
   @override
   Widget build(BuildContext context) {
     void menuHandler(String? event) {
       if (event == 'Удалить') {
-        RepositoryProvider.of<ProfileRepository>(context).deletePost(widget.post);
+        RepositoryProvider.of<ProfileRepository>(context)
+            .deletePost(widget.post);
       } else if (event == 'Редактировать') {}
     }
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       decoration: const BoxDecoration(
@@ -45,16 +48,37 @@ class _PostState extends State<Post> {
               children: [
                 Row(
                   children: [
-                    SmallAvatar(
-                        avatar: widget.post.creatorImage,
-                        name: widget.post.creatorName),
-                    const SizedBox(width: 5,),
+                    InkWell(
+                      onTap: () {
+                        if (!widget.post.isOwner) {
+                          Navigator.pushNamed(context, '/user_account_screen');
+                        } else {
+                          return;
+                        }
+                      },
+                      child: SmallAvatar(
+                          avatar: widget.post.creatorImage,
+                          name: widget.post.creatorName),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          widget.post.creatorName,
-                          style: AppTypography.font20white,
+                        InkWell(
+                          onTap: () {
+                            if (!widget.post.isOwner) {
+                              Navigator.pushNamed(
+                                  context, '/user_account_screen');
+                            } else {
+                              return;
+                            }
+                          },
+                          child: Text(
+                            widget.post.creatorName,
+                            style: AppTypography.font20white,
+                          ),
                         ),
                         const SizedBox(
                           height: 9,
@@ -67,27 +91,28 @@ class _PostState extends State<Post> {
                     ),
                   ],
                 ),
-                if (widget.post.isOwner)...[DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    isExpanded: true,
-                    buttonStyleData: const ButtonStyleData(width: 30),
-                    dropdownStyleData:
-                    const DropdownStyleData(offset: Offset(-130, 0), width: 150),
-                    customButton: const Icon(
-                      Icons.more_vert,
-                      color: Colors.white,
+                if (widget.post.isOwner) ...[
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      isExpanded: true,
+                      buttonStyleData: const ButtonStyleData(width: 30),
+                      dropdownStyleData: const DropdownStyleData(
+                          offset: Offset(-130, 0), width: 150),
+                      customButton: const Icon(
+                        Icons.more_vert,
+                        color: Colors.white,
+                      ),
+                      items: postOptions
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value, style: AppTypography.font14milk),
+                        );
+                      }).toList(),
+                      onChanged: menuHandler,
                     ),
-                    items: postOptions
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value, style: AppTypography.font14milk),
-                      );
-                    }).toList(),
-                    onChanged: menuHandler,
-                  ),
-                )]
-
+                  )
+                ]
               ],
             ),
             const SizedBox(
