@@ -67,12 +67,17 @@ class ApiService {
   }
 
   Future<NeuronModel> mapToNeuron(Map<String, dynamic> json, bool isLiked) async {
-    return NeuronModel(
-        name: json['name'],
-        image: json['image'],
-        isLike: isLiked,
-        description: json['description'],
-        hashtag: json['hashtag']);
+    try {
+      return NeuronModel(
+          name: json['data']['name'] ?? 'багануло',
+          image: json['data']['imageUrl'] ?? '',
+          isLike: isLiked,
+          description: json['data']['description'],
+          hashtag: [json['data']['hashtag']]);
+    } catch (e) {
+      rethrow;
+    }
+
   }
 
   Future getAllPosts() async {
@@ -94,7 +99,6 @@ class ApiService {
       }
       return posts;
     } catch (e) {
-      log(e.toString());
       rethrow;
     }
   }
@@ -184,11 +188,17 @@ class ApiService {
       for (var i in list) {
         posts.add(await mapToNeuron(i, false));
       }
+
+      for (var i in posts) {
+        log(i.toString());
+      }
+
       return posts;
     } catch (e) {
-      log(e.toString());
       rethrow;
     }
+
+
   }
 
   Future uploadImage(File file, String imageId) async {
