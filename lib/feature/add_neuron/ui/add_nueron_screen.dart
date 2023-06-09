@@ -115,8 +115,9 @@ class _AddNeuronState extends State<AddNeuron> {
                               _image,
                             )
                           : const Image(
+                        width: 40,
                               image: AssetImage(
-                                'Assets/small_empty_img.png',
+                                'Assets/middle_empty_img.png',
                               ),
                             ),
                     ),
@@ -128,7 +129,7 @@ class _AddNeuronState extends State<AddNeuron> {
                 InkWell(
                   onTap: () {
                     _displayTextInputDialog(
-                        context, _gitController, 'Название');
+                        context, _nameController, 'Название');
                   },
                   child: Text(
                     _nameController.text.isNotEmpty

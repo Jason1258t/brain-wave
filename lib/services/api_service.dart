@@ -41,6 +41,8 @@ class ApiService {
   Future getUserById(String uid) async {
     try {
       final resp = await _firestore.collection('users').doc(uid).get();
+      Map<String, dynamic> data = resp.data()!;
+      data['uid'] = uid;
       return resp.data();
     } catch (e) {
       rethrow;
