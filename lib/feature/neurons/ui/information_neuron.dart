@@ -22,6 +22,19 @@ class _InformationNeuronState extends State<InformationNeuron> {
     return richtext;
   }
 
+  int maxLines = 2;
+
+  void changeMaxLines() {
+    setState(() {
+      if (maxLines == 2) {
+        maxLines = 90;
+      } else {
+        maxLines = 2;
+      }
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     NeuronsRepository neuronRepository =
@@ -60,14 +73,19 @@ class _InformationNeuronState extends State<InformationNeuron> {
                             style: AppTypography.font32white,),
                       ),
                       const SizedBox(height: 10,),
-                      SizedBox(
-                        width: 150,
-                        height: 30,
-                        child: RichText(
-                          text: TextSpan(
-                            children: _createRichText(neuronRepository.getNeurons()[0].hashtag),
+                      InkWell(
+                        onTap: changeMaxLines,
+                        child: SizedBox(
+                          width: 150,
+                          child: RichText(
+                            softWrap: true,
+                            maxLines: maxLines,
+                            text: TextSpan(
+
+                              children: _createRichText(neuronRepository.getNeurons()[0].hashtag),
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
                       )
                     ],

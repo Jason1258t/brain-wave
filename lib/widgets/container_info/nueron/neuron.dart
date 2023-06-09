@@ -43,15 +43,16 @@ class _NeuronState extends State<Neuron> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                SmallAvatar(avatar: widget.neuron.image, name: widget.neuron.name),
+                SmallAvatar(avatar: widget.neuron.image, name: widget.neuron.name, radius: 30,),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       widget.neuron.name,
                       style: AppTypography.font24lightBlue,
                     ),
+                    const SizedBox(height: 10,),
                     SizedBox(
                       width: 150,
                       height: 30,
