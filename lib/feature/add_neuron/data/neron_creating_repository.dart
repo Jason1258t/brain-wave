@@ -26,7 +26,7 @@ class NeuronCreatingRepository {
           uid: uid,
           gitHub: gitHub,
           image: image,
-          hashtag: neuronModel.hashtag,
+          hashtag: neuronModel.hashtag.toString(),
           description: neuronModel.description);
 
       creatingState.add(LoadingStateEnum.success);

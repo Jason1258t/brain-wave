@@ -1,5 +1,8 @@
 import 'dart:developer';
 
+import 'package:brain_wave_2/feature/add_neuron/bloc/add_neuron_bloc.dart';
+import 'package:brain_wave_2/feature/add_neuron/data/neron_creating_repository.dart';
+import 'package:brain_wave_2/feature/add_neuron/ui/add_nueron_screen.dart';
 import 'package:brain_wave_2/feature/add_post/bloc/add_post_bloc.dart';
 import 'package:brain_wave_2/feature/add_post/data/creating_post_repository.dart';
 import 'package:brain_wave_2/feature/add_post/ui/add_post_screen.dart';

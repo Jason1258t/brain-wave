@@ -1,10 +1,14 @@
 import 'dart:io';
 
+import 'package:brain_wave_2/feature/add_neuron/bloc/add_neuron_bloc.dart';
+import 'package:brain_wave_2/logic/app_repository.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/buttons/elevated_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../models/neuron_model.dart';
 import '../../../utils/colors.dart';
 
 class AddNeuron extends StatefulWidget {
@@ -19,6 +23,7 @@ class _AddNeuronState extends State<AddNeuron> {
   final TextEditingController _gitController = TextEditingController();
   final TextEditingController _tegController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  var _richText = [];
 
   void addTextSpan(String str) {
     _richText.add(TextSpan(text: str, style: AppTypography.teg));
@@ -83,14 +88,8 @@ class _AddNeuronState extends State<AddNeuron> {
         ),
         body: SingleChildScrollView(
           child: Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
-            height: MediaQuery
-                .of(context)
-                .size
-                .height - 60,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height - 60,
             decoration: const BoxDecoration(
               color: AppColors.background,
             ),
@@ -113,29 +112,31 @@ class _AddNeuronState extends State<AddNeuron> {
                       size: const Size.fromRadius(60), // Image radius
                       child: _image != null
                           ? Image.file(
-                        _image,
-                      )
+                              _image,
+                            )
                           : const Image(
-                        image: AssetImage(
-                          'Assets/small_empty_img.png',
-                        ),
-                      ),
+                              image: AssetImage(
+                                'Assets/small_empty_img.png',
+                              ),
+                            ),
                     ),
-                  ),),
+                  ),
+                ),
                 const SizedBox(
                   height: 19,
                 ),
                 InkWell(
                   onTap: () {
-                    _displayTextInputDialog(context, _gitController,
-                        'Название');
+                    _displayTextInputDialog(
+                        context, _gitController, 'Название');
                   },
                   child: Text(
-                    _nameController.text,
+                    _nameController.text.isNotEmpty
+                        ? _nameController.text
+                        : 'Введите название',
                     style: AppTypography.font32white,
                   ),
                 ),
-
                 const SizedBox(
                   height: 19,
                 ),
@@ -145,24 +146,23 @@ class _AddNeuronState extends State<AddNeuron> {
                         'Ссылка на Git с документацией');
                   },
                   child: Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     height: 35,
                     decoration: const BoxDecoration(
                         color: AppColors.addNeuronBackgroundWidget,
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     child: Row(
                       children: [
-                        const SizedBox(width: 30,),
+                        const SizedBox(
+                          width: 30,
+                        ),
                         Text(
-                            _gitController.text != ''
-                                ? _gitController.text
-                                : 'Ссылка на Git с документацией',
-                            style: AppTypography.font18lightBlue,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          _gitController.text != ''
+                              ? _gitController.text
+                              : 'Ссылка на Git с документацией',
+                          style: AppTypography.font18lightBlue,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ],
                     ),
                   ),
@@ -176,16 +176,15 @@ class _AddNeuronState extends State<AddNeuron> {
                         context, _tegController, 'Добавте тег');
                   },
                   child: Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     height: 35,
                     decoration: const BoxDecoration(
                         color: AppColors.addNeuronBackgroundWidget,
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     child: Row(children: [
-                      const SizedBox(width: 30,),
+                      const SizedBox(
+                        width: 30,
+                      ),
                       const Text(
                         'Теги: ',
                         style: AppTypography.font18lightBlue,
@@ -211,14 +210,8 @@ class _AddNeuronState extends State<AddNeuron> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.all(10),
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.8,
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.4,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.4,
                   child: TextField(
                     keyboardType: TextInputType.multiline,
                     expands: true,
@@ -240,9 +233,10 @@ class _AddNeuronState extends State<AddNeuron> {
                     BlocProvider.of<AddNeuronBloc>(context).add(AddInitialEvent(
                         uid: uid,
                         image: _image,
-                        neuronModel: NeuronModel(name: _nameController.text,
+                        neuronModel: NeuronModel(
+                            name: _nameController.text,
                             description: _descriptionController.text,
-                            hashtag: _tegController.text,
+                            hashtag: [_tegController.text],
                             image: '',
                             isLike: false),
                         gitHub: _gitController.text));
