@@ -83,4 +83,3 @@ class _NeuronState extends State<Neuron> {
     );
   }
 }
-
