@@ -13,6 +13,15 @@ class InformationNeuron extends StatefulWidget {
 }
 
 class _InformationNeuronState extends State<InformationNeuron> {
+  List<TextSpan> _createRichText(List<String> list) {
+    List<TextSpan> richtext = [];
+    for (var i = 0; i < list.length ; i++) {
+      richtext.add(TextSpan(text: '#${list[i]}', style: AppTypography.teg));
+      richtext.add(const TextSpan(text: ' '));
+    }
+    return richtext;
+  }
+
   @override
   Widget build(BuildContext context) {
     NeuronsRepository neuronRepository =
@@ -51,16 +60,14 @@ class _InformationNeuronState extends State<InformationNeuron> {
                             style: AppTypography.font32white,),
                       ),
                       const SizedBox(height: 10,),
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: AppColors.hashtag,
-                          borderRadius: BorderRadius.all(Radius.circular(2)),
-                        ),
-                        child: Expanded(
-                          child: Text(
-                            '#${neuronRepository.getNeurons()[0].hashtag}',
-                            style: AppTypography.font12lightGray,
+                      SizedBox(
+                        width: 150,
+                        height: 30,
+                        child: RichText(
+                          text: TextSpan(
+                            children: _createRichText(neuronRepository.getNeurons()[0].hashtag),
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       )
                     ],

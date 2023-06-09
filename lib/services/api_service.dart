@@ -68,12 +68,20 @@ class ApiService {
 
   Future<NeuronModel> mapToNeuron(Map<String, dynamic> json, bool isLiked) async {
     try {
+      List<String> tags = [];
+
+      for (var i in json['data']['hashtag']) {
+        try {
+          tags.add(i);
+        } catch (er) {}
+      }
+
       return NeuronModel(
           name: json['data']['name'] ?? 'багануло',
           image: json['data']['imageUrl'] ?? '',
           isLike: isLiked,
           description: json['data']['description'],
-          hashtag: [json['data']['hashtag']]);
+          hashtag: tags);
     } catch (e) {
       rethrow;
     }
