@@ -33,7 +33,7 @@ class _PostState extends State<Post> {
     }
 
     return Container(
-      width: MediaQuery.of(context).size.width * 0.85,
+      width: MediaQuery.of(context).size.width * 0.9,
       decoration: const BoxDecoration(
         color: AppColors.widgetsBackground,
         borderRadius: BorderRadius.all(Radius.circular(14)),

@@ -7,15 +7,12 @@ import 'package:brain_wave_2/utils/dialogs.dart';
 import 'package:brain_wave_2/utils/fonts.dart';
 import 'package:brain_wave_2/widgets/buttons/elevated_button.dart';
 import 'package:brain_wave_2/widgets/snack_bar/custom_cnack_bar.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../models/neuron_model.dart';
 import '../../../utils/colors.dart';
-import '../../../utils/dialogs.dart';
-import '../../../widgets/snack_bar/custom_cnack_bar.dart';
 
 class AddNeuron extends StatefulWidget {
   const AddNeuron({Key? key}) : super(key: key);
@@ -29,7 +26,7 @@ class _AddNeuronState extends State<AddNeuron> {
   final TextEditingController _gitController = TextEditingController();
   final TextEditingController _tegController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  var _richText = [];
+  final _richText = [];
   List<String> tags = [];
 
   void addTextSpan(String str) {
@@ -37,7 +34,6 @@ class _AddNeuronState extends State<AddNeuron> {
     _richText.add(const TextSpan(text: ' '));
     tags.add(str);
     setState(() {});
-    print(_richText);
   }
 
   var _image;
@@ -211,7 +207,7 @@ class _AddNeuronState extends State<AddNeuron> {
                           'Ссылка на Git с документацией');
                     },
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      width: MediaQuery.of(context).size.width * 0.9,
                       height: 35,
                       decoration: const BoxDecoration(
                           color: AppColors.addNeuronBackgroundWidget,
@@ -241,7 +237,7 @@ class _AddNeuronState extends State<AddNeuron> {
                           context, _tegController, 'Добавте тег');
                     },
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      width: MediaQuery.of(context).size.width * 0.9,
                       height: 35,
                       decoration: const BoxDecoration(
                           color: AppColors.addNeuronBackgroundWidget,
@@ -275,7 +271,7 @@ class _AddNeuronState extends State<AddNeuron> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.all(10),
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     height: MediaQuery.of(context).size.height * 0.4,
                     child: TextField(
                       keyboardType: TextInputType.multiline,
@@ -291,6 +287,7 @@ class _AddNeuronState extends State<AddNeuron> {
                     height: 34,
                   ),
                   CustomElevatedButton(
+                    width: MediaQuery.of(context).size.width * 0.9,
                     callback: () {
                       final uid = RepositoryProvider.of<AppRepository>(context)
                           .getCurrentUser()!

@@ -1,4 +1,3 @@
-import 'package:brain_wave_2/feature/news/bloc/news_bloc.dart';
 import 'package:brain_wave_2/feature/profie/bloc/profile_bloc.dart';
 import 'package:brain_wave_2/feature/profie/data/profile_repository.dart';
 import 'package:brain_wave_2/logic/app_repository.dart';
@@ -151,7 +150,7 @@ class _ProfileState extends State<Profile> {
                       padding: EdgeInsets.fromLTRB(
                           paddingWidthMainSize, 10, paddingWidthMainSize, 10),
                       child: Container(
-                        width: MediaQuery.of(context).size.width * 0.85,
+                        width: MediaQuery.of(context).size.width * 0.9,
                         height: 85,
                         decoration: BoxDecoration(
                           color: const Color(0xff272850),
@@ -204,6 +203,7 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     IconTextButton(
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                       title: 'Опубликовать',
                       onPressed: () {
                         Navigator.pushNamed(context, '/add_post');

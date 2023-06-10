@@ -163,7 +163,7 @@ class _EditProfileState extends State<EditProfile> {
                       padding: EdgeInsets.fromLTRB(
                           paddingWidthMainSize, 20, paddingWidthMainSize, 10),
                       child: Container(
-                        width: MediaQuery.of(context).size.width * 0.8,
+                        width: MediaQuery.of(context).size.width * 0.9,
                         padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
                         decoration: BoxDecoration(
                           color: const Color(0xff272850),
@@ -230,9 +230,9 @@ class _EditProfileState extends State<EditProfile> {
                     if (!repository.getCurrentUser()!.emailVerified) ...[
                       Padding(
                         padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.1),
+                            left: 1),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Text(
                               'Подтверждение email',
@@ -242,6 +242,7 @@ class _EditProfileState extends State<EditProfile> {
                               height: 25,
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
                                 Icon(
                                   Icons.close,
@@ -258,12 +259,12 @@ class _EditProfileState extends State<EditProfile> {
                             ),
                             verificationInProcess
                                 ? Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.8,
+                                                0.9,
                                         height: 50,
                                         decoration: const BoxDecoration(
                                             color: AppColors.purpleButton,
@@ -284,7 +285,7 @@ class _EditProfileState extends State<EditProfile> {
                                   )
                                 : CustomElevatedButton(
                                     width:
-                                        MediaQuery.of(context).size.width * 0.8,
+                                        MediaQuery.of(context).size.width * 0.9,
                                     callback: updater,
                                     text: 'подтвердите почту',
                                     styleText: AppTypography.font24lightBlue,

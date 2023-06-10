@@ -72,7 +72,7 @@ class _UsersState extends State<Users> {
           Navigator.push(context, MaterialPageRoute(builder: (_) => ChatPage(room: widget.room)));
         },
         child: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
+          width: MediaQuery.of(context).size.width * 0.9,
           height: 80,
           padding: const EdgeInsets.all(15),
           decoration: const BoxDecoration(

@@ -33,7 +33,7 @@ class _NeuronState extends State<Neuron> {
           Navigator.pushNamed(context, '/neuron_info');
         },
         child: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
+          width: MediaQuery.of(context).size.width * 0.9,
           height: widget.height,
           decoration: const BoxDecoration(
             color: AppColors.widgetsBackground,

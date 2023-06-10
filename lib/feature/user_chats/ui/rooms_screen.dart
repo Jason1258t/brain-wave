@@ -83,7 +83,7 @@ class _RoomsPageState extends State<RoomsPage> {
                     hintText: 'Поиск чатов',
                     controller: queryController,
                     callback: (q) {},
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     height: 70,
                   ),
                   const SizedBox(
