@@ -11,7 +11,7 @@ class ProfileRepository {
       : _apiService = apiService;
 
   BehaviorSubject<LoadingStateEnum> postsLoading =
-      BehaviorSubject<LoadingStateEnum>.seeded(LoadingStateEnum.wait);
+  BehaviorSubject<LoadingStateEnum>.seeded(LoadingStateEnum.wait);
   List<PostModel> usersPosts = [];
 
 

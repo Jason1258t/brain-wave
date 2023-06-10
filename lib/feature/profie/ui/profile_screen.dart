@@ -164,7 +164,7 @@ class _ProfileState extends State<Profile> {
                                   horizontal: 20, vertical: 10),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: const [
                                   Text(
                                     'Избранные нейронки:',
@@ -182,7 +182,7 @@ class _ProfileState extends State<Profile> {
                                   horizontal: 20, vertical: 10),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
                                     'Посты:',
@@ -190,7 +190,7 @@ class _ProfileState extends State<Profile> {
                                   ),
                                   Text(
                                     RepositoryProvider.of<ProfileRepository>(
-                                            context)
+                                        context)
                                         .usersPosts
                                         .length
                                         .toString(),
@@ -223,20 +223,20 @@ class _ProfileState extends State<Profile> {
                               child: ListView(
                                 physics: const BouncingScrollPhysics(
                                     decelerationRate:
-                                        ScrollDecelerationRate.fast),
+                                    ScrollDecelerationRate.fast),
                                 clipBehavior: Clip.hardEdge,
                                 scrollDirection: Axis.vertical,
                                 children: [
                                   Column(
                                     children: RepositoryProvider.of<
-                                            ProfileRepository>(context)
+                                        ProfileRepository>(context)
                                         .usersPosts
                                         .map((e) => Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      0, 21, 0, 21),
-                                              child: Post(post: e),
-                                            ))
+                                      padding:
+                                      const EdgeInsets.fromLTRB(
+                                          0, 21, 0, 21),
+                                      child: Post(post: e),
+                                    ))
                                         .toList(),
                                   )
                                 ],
@@ -263,4 +263,3 @@ class _ProfileState extends State<Profile> {
     );
   }
 }
-

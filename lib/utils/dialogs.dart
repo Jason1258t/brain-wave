@@ -1,6 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+import 'utils.dart';
+
 class Dialogs {
   static bool open = false;
 
@@ -34,5 +36,26 @@ class Dialogs {
       Navigator.of(context, rootNavigator: true).pop();
       open = false;
     }
+  }
+
+  static Future shonMessage(BuildContext context, String message) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+                backgroundColor: AppColors.widgetsBackground,
+                title: const Text(
+                  'Уведомление',
+                  style: AppTypography.font16lightGray,
+                ),
+                content: Text(
+                  message,
+                  style: AppTypography.font16description,
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Ок'),
+                    onPressed: () => Navigator.pop(context),
+                  )
+                ]));
   }
 }
